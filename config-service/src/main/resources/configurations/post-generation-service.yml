@@ -1,0 +1,22 @@
+spring:
+  ai:
+    openai:
+      api-key: API_KEY_HERE
+      chat:
+        enabled: true
+        options:
+          model: MODEL_HERE (should be chosen by user) gpt-4o, gpt-4, gpt-4o-mini
+          response-format: json_object
+          temperature: 0.8
+      image:
+        enabled: true
+        options:
+          n: 1
+          model: MODEL_HERE (should be chosen by user) dall-e-3, dall-e-2
+          quality: QUALITY_HERE (should be chosen by user)
+          response-format: b64_json
+          size: 1024x1024
+          style: STYLE_HERE (should be chosen by user)
+
+server:
+  port: 8000
