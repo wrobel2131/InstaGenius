@@ -36,6 +36,10 @@ jobs:
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        services:
+          - config-service
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -46,9 +50,13 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: |
+          cd ${{ matrix.service }}
+          mvn -B package --file pom.xml
       - name: Run unit tests
-        run: mvn test
+        run: |
+          cd ${{ matrix.service }}
+          mvn test
   analyze:
     name: Analyze with SonarCloud
     runs-on: ubuntu-latest
@@ -79,54 +87,54 @@ jobs:
           distribution: 'temurin'
       - name: Deploy
         run: echo "Deploying application..."
-  release:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    needs: deploy
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: 'temurin'
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-      - name: Extract version from pom.xml
-        id: extract_version
-        run: |
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
-      - name: Check if tag already exists
-        id: check_tag
-        run: |
-          TAG="v${{ env.VERSION }}"
-          EXISTING_TAG=$(git tag -l "${TAG}")
-          if [ -n "${EXISTING_TAG}" ]; then
-            echo "Tag ${TAG} already exists. Skipping tag creation and release."
-            echo "TAG_EXISTS=true" >> $GITHUB_ENV
-          else
-            echo "TAG_EXISTS=false" >> $GITHUB_ENV
-          fi
-      - name: Create Tag
-        if: env.TAG_EXISTS == 'false'
-        id: create_tag
-        run: |
-          echo "Tag does not exist, let's create the tag v${{ env.VERSION }}"
-          TAG="v${{ env.VERSION }}"
-          git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
-          git config --global user.name "${{ secrets.GIT_USER_NAME }}"
-          git tag -a "${TAG}" -m "Release ${TAG}"
-          git push origin "${TAG}"
-          echo "TAG=${TAG}" >> $GITHUB_ENV
-      - name: Create Release
-        if: env.TAG_EXISTS == 'false'
-        id: create_release
-        run: |
-          echo "Let's create release for tag: ${{env.TAG}}"
-          gh release create "${TAG}" --verify-tag=true --latest=true --title "Release ${TAG}" --generate-notes=true  ./target/*.jar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#  release:
+#    if: github.ref == 'refs/heads/main'
+#    runs-on: ubuntu-latest
+#    needs: deploy
+#    permissions:
+#      contents: write
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v4
+#      - name: Set up JDK 21
+#        uses: actions/setup-java@v4
+#        with:
+#          java-version: 21
+#          distribution: 'temurin'
+#      - name: Build with Maven
+#        run: mvn -B package --file pom.xml
+#      - name: Extract version from pom.xml
+#        id: extract_version
+#        run: |
+#          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+#          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+#      - name: Check if tag already exists
+#        id: check_tag
+#        run: |
+#          TAG="v${{ env.VERSION }}"
+#          EXISTING_TAG=$(git tag -l "${TAG}")
+#          if [ -n "${EXISTING_TAG}" ]; then
+#            echo "Tag ${TAG} already exists. Skipping tag creation and release."
+#            echo "TAG_EXISTS=true" >> $GITHUB_ENV
+#          else
+#            echo "TAG_EXISTS=false" >> $GITHUB_ENV
+#          fi
+#      - name: Create Tag
+#        if: env.TAG_EXISTS == 'false'
+#        id: create_tag
+#        run: |
+#          echo "Tag does not exist, let's create the tag v${{ env.VERSION }}"
+#          TAG="v${{ env.VERSION }}"
+#          git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
+#          git config --global user.name "${{ secrets.GIT_USER_NAME }}"
+#          git tag -a "${TAG}" -m "Release ${TAG}"
+#          git push origin "${TAG}"
+#          echo "TAG=${TAG}" >> $GITHUB_ENV
+#      - name: Create Release
+#        if: env.TAG_EXISTS == 'false'
+#        id: create_release
+#        run: |
+#          echo "Let's create release for tag: ${{env.TAG}}"
+#          gh release create "${TAG}" --verify-tag=true --latest=true --title "Release ${TAG}" --generate-notes=true  ./target/*.jar
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
