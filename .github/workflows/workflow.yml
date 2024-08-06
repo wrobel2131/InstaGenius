@@ -23,11 +23,9 @@ jobs:
     steps:
       - name: Check Source Branch
         run: |
-        # Extract the source branch name and target branch
           source_branch=${{ github.head_ref }}
           target_branch=${{ github.base_ref }}
 
-        # Define allowed branch patterns
           if [ "$target_branch" == "main" ]; then
             allowed_patterns="^release/|^hotfix/"
             error_message="Error: For 'main' branch, source branch must be 'release/*' or 'hotfix/*'"
@@ -39,12 +37,11 @@ jobs:
             exit 0
           fi
 
-        # Validate the source branch
           if echo "$source_branch" | grep -E "$allowed_patterns" > /dev/null; then
             echo "Valid branch name, job succeeded"
           else
             echo "$error_message"
-          exit 1
+            exit 1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build-and-test:
