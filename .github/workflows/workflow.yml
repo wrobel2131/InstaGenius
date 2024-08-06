@@ -17,20 +17,34 @@ permissions:
   pull-requests: read
 jobs:
   pr-check:
-    name: Check Source Branch If Can Push To Main
+    name: Check Source Branch If Can Push To Main or Dev
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Check Source Branch
         run: |
-          # Extract the source branch name
-          source_branch=$(echo "${{ github.head_ref }}" | grep -E '^release/|^hotfix/')
+        # Extract the source branch name and target branch
+          source_branch=${{ github.head_ref }}
+          target_branch=${{ github.base_ref }}
 
-          if [ -z "$source_branch" ]; then
-            echo "Error: Pull request source branch must be 'release/*' or 'hotfix/*'"
-            exit 1
+        # Define allowed branch patterns
+          if [ "$target_branch" == "main" ]; then
+            allowed_patterns="^release/|^hotfix/"
+            error_message="Error: For 'main' branch, source branch must be 'release/*' or 'hotfix/*'"
+          elif [ "$target_branch" == "dev" ]; then
+            allowed_patterns="^hotfix/|^feature/"
+            error_message="Error: For 'dev' branch, source branch must be 'hotfix/*' or 'feature/*'"
+          else
+            echo "Target branch is neither 'main' nor 'dev'. No validation needed."
+            exit 0
           fi
-          echo "Valid branch name, job succeded"
+
+        # Validate the source branch
+          if echo "$source_branch" | grep -E "$allowed_patterns" > /dev/null; then
+            echo "Valid branch name, job succeeded"
+          else
+            echo "$error_message"
+          exit 1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build-and-test:
