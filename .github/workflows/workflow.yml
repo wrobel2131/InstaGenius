@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        services:
+        service:
           - config-service
     steps:
       - name: Checkout code
@@ -63,6 +63,15 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: maven
+      - name: 'Debug: Print current directory'
+        run: pwd
+      - name: 'Debug: List files in repository root'
+        run: ls -la
+      - name: 'Debug: List all files in service directory'
+        run: |
+          cd ${{ matrix.service}}
+          ls -la
+
       - name: Build with Maven
         run: |
           cd ${{ matrix.service }}
