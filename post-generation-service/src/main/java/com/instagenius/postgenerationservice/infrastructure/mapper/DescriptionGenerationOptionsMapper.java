@@ -1,6 +1,6 @@
-package com.instagenius.postgenerationservice.architecture.mapper;
+package com.instagenius.postgenerationservice.infrastructure.mapper;
 
-import com.instagenius.postgenerationservice.architecture.dto.DescriptionGenerationOptionsDto;
+import com.instagenius.postgenerationservice.infrastructure.dto.DescriptionGenerationOptionsDto;
 import com.instagenius.postgenerationservice.domain.DescriptionGenerationOptions;
 import com.instagenius.postgenerationservice.domain.vo.GPTModel;
 import org.mapstruct.Mapper;

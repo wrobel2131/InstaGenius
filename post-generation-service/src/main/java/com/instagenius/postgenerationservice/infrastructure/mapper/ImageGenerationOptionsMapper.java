@@ -1,6 +1,6 @@
-package com.instagenius.postgenerationservice.architecture.mapper;
+package com.instagenius.postgenerationservice.infrastructure.mapper;
 
-import com.instagenius.postgenerationservice.architecture.dto.ImageGenerationOptionsDto;
+import com.instagenius.postgenerationservice.infrastructure.dto.ImageGenerationOptionsDto;
 import com.instagenius.postgenerationservice.domain.vo.DALLEModel;
 import com.instagenius.postgenerationservice.domain.ImageGenerationOptions;
 import com.instagenius.postgenerationservice.domain.vo.ImageQuality;

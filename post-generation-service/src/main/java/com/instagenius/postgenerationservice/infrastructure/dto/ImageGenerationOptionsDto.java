@@ -1,4 +1,4 @@
-package com.instagenius.postgenerationservice.architecture.dto;
+package com.instagenius.postgenerationservice.infrastructure.dto;
 
 import jakarta.validation.constraints.NotNull;
 

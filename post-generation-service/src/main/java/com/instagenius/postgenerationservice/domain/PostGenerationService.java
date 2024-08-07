@@ -2,8 +2,6 @@ package com.instagenius.postgenerationservice.domain;
 
 import com.instagenius.postgenerationservice.application.PostGenerationOutputPort;
 import com.instagenius.postgenerationservice.application.PostGenerationUseCase;
-import com.instagenius.postgenerationservice.architecture.dto.GeneratedDescriptionResponseDto;
-import com.instagenius.postgenerationservice.architecture.dto.GeneratedImageResponseDto;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

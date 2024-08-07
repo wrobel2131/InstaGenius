@@ -1,4 +1,4 @@
-package com.instagenius.postgenerationservice.architecture.adapter;
+package com.instagenius.postgenerationservice.infrastructure.adapter;
 
 import com.instagenius.postgenerationservice.application.PostGenerationOutputPort;
 import com.instagenius.postgenerationservice.domain.DescriptionGenerationOptions;

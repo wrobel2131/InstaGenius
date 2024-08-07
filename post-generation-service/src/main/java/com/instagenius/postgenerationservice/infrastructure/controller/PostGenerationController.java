@@ -1,13 +1,13 @@
-package com.instagenius.postgenerationservice.architecture.controller;
+package com.instagenius.postgenerationservice.infrastructure.controller;
 
 
 import com.instagenius.postgenerationservice.application.PostGenerationUseCase;
-import com.instagenius.postgenerationservice.architecture.dto.DescriptionGenerationOptionsDto;
-import com.instagenius.postgenerationservice.architecture.dto.GeneratedDescriptionResponseDto;
-import com.instagenius.postgenerationservice.architecture.dto.ImageGenerationOptionsDto;
-import com.instagenius.postgenerationservice.architecture.dto.GeneratedImageResponseDto;
-import com.instagenius.postgenerationservice.architecture.mapper.DescriptionGenerationOptionsMapper;
-import com.instagenius.postgenerationservice.architecture.mapper.ImageGenerationOptionsMapper;
+import com.instagenius.postgenerationservice.infrastructure.dto.DescriptionGenerationOptionsDto;
+import com.instagenius.postgenerationservice.infrastructure.dto.GeneratedDescriptionResponseDto;
+import com.instagenius.postgenerationservice.infrastructure.dto.ImageGenerationOptionsDto;
+import com.instagenius.postgenerationservice.infrastructure.dto.GeneratedImageResponseDto;
+import com.instagenius.postgenerationservice.infrastructure.mapper.DescriptionGenerationOptionsMapper;
+import com.instagenius.postgenerationservice.infrastructure.mapper.ImageGenerationOptionsMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
