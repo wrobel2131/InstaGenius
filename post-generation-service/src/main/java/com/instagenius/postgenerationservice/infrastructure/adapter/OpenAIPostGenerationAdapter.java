@@ -8,15 +8,18 @@ import com.instagenius.postgenerationservice.domain.ImageGenerationOptions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.image.ImageModel;
+import org.springframework.ai.image.ImagePrompt;
+import org.springframework.ai.openai.OpenAiImageOptions;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 
 @Component
 @RequiredArgsConstructor
-public class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
+class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
     private final ChatClient chatClient;
     private final ImageModel imageModel;
+    private static final Integer NUMBER_OF_GENERATED_IMAGES = 1;
 
     @Override
     public GeneratedDescription generateDescription(DescriptionGenerationOptions descriptionGenerationOptions) {
@@ -29,11 +32,38 @@ public class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
 
     @Override
     public GeneratedImage generateImage(ImageGenerationOptions imageGenerationOptions) {
-        return imageModel
-                .call()
+        OpenAiImageOptions.Builder imageOptionsBuilder = OpenAiImageOptions
+                .builder()
+                .withModel(imageGenerationOptions.model().model())
+                .withHeight(imageGenerationOptions.size().height())
+                .withWidth(imageGenerationOptions.size().width())
+                .withN(NUMBER_OF_GENERATED_IMAGES);
+        // for model DALL-E-2 generate image without style and quality params
+        if(imageGenerationOptions.model().model().equals("dall-e-2")) {
+            return new GeneratedImage(
+              imageModel
+                      .call(
+                              new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder.build()
+                              )
+                      )
+                      .getResult()
+                      .getOutput()
+                      .getB64Json()
+                      .getBytes()
+            );
+        }
+
+        return new GeneratedImage(imageModel
+                .call(
+                       new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder
+                               .withStyle(imageGenerationOptions.style().style())
+                               .withQuality(imageGenerationOptions.quality().quality())
+                               .build()
+                       )
+                )
                 .getResult()
                 .getOutput()
                 .getB64Json()
-                .getBytes(StandardCharsets.UTF_8);
+                .getBytes(StandardCharsets.UTF_8));
     }
 }
