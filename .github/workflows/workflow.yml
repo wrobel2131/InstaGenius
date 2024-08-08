@@ -53,6 +53,7 @@ jobs:
         service:
           - config-service
           - discovery-service
+          - post-generation-service
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

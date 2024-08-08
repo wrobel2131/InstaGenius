@@ -1,0 +1,10 @@
+spring:
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        enabled: true
+      image:
+        enabled: true
+server:
+  port: 8000
