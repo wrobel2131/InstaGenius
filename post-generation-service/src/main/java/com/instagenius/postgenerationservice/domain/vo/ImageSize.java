@@ -13,7 +13,6 @@ public record ImageSize(Integer width, Integer height) {
             Map.entry(1024, 1024),
 
             //Allowed sizes for DALL-E 3
-            Map.entry(1024, 1024),
             Map.entry(1792, 1024),
             Map.entry(1024, 1792)
             );

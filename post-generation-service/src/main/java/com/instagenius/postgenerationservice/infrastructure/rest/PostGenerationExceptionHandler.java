@@ -40,6 +40,7 @@ class PostGenerationExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
+        System.out.println(ex.getMessage());
         return new ResponseEntity<>(new ErrorResponse("Server Internal Error!", LocalDateTime.now(), List.of()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }

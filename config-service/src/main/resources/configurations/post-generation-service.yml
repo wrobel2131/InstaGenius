@@ -1,20 +1,10 @@
 spring:
   ai:
     openai:
-      api-key: YOUR_API_KEY_HERE
+      api-key: ${OPENAI_API_KEY}
       chat:
         enabled: true
-        options:
-          model: gpt-4o-mini
-          response-format: json_object
-          temperature: 0.8
       image:
         enabled: true
-        options:
-          n: 1
-          model: dall-e-2
-          response-format: b64_json
-          size: 1024x1024
-
 server:
   port: 8000

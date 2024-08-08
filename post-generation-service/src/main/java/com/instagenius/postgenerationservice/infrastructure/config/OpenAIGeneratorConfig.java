@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class OpenAIGeneratorConfig {
 
+    @Value("${spring.ai.openai.api-key}")
+    private String openAIApiKey;
+
     @Bean
     public ChatClient chatClient(ChatClient.Builder chatClientBuilder) {
         return chatClientBuilder
@@ -30,7 +33,7 @@ class OpenAIGeneratorConfig {
     }
 
     @Bean
-    public ImageModel imageModel(@Value("$spring.ai.openai.api-key") String openAIApiKey) {
+    public ImageModel imageModel() {
         return new OpenAiImageModel(new OpenAiImageApi(openAIApiKey));
     }
 }
