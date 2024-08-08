@@ -25,7 +25,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
     public GeneratedDescription generateDescription(DescriptionGenerationOptions descriptionGenerationOptions) {
         return chatClient
                 .prompt()
-                .user("")
+                .user(descriptionGenerationOptions.userPrompt())
                 .call()
                 .entity(GeneratedDescription.class);
     }

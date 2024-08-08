@@ -5,7 +5,7 @@ import com.instagenius.postgenerationservice.application.PostGenerationUseCase;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-class PostGenerationService implements PostGenerationUseCase {
+public class PostGenerationService implements PostGenerationUseCase {
     private final PostGenerationOutputPort postGenerationOutputPort;
 
     @Override

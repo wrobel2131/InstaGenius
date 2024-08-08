@@ -12,15 +12,25 @@ import org.springframework.context.annotation.Configuration;
 class OpenAIGeneratorConfig {
 
     @Bean
-    ChatClient chatClient(ChatClient.Builder chatClientBuilder) {
+    public ChatClient chatClient(ChatClient.Builder chatClientBuilder) {
         return chatClientBuilder
-                .defaultSystem("") //Instruction how chat should respond, structure of the response, https://platform.openai.com/docs/guides/prompt-engineering/six-strategies-for-getting-better-results
+                .defaultSystem(
+                        """
+                                You are a specialist in creating high-engagement Instagram posts. Your role is to generate professional captions that maximize reach, likes, and comments based on the user's input. Structure your responses as follows:
+                        
+                                1. Start with an attention-grabbing statement or question.
+                                2. Provide context, share the main message, or tell a brief story related to the user’s input.
+                                3. to Action: Encourage interaction, such as liking, commenting, or sharing.
+                                4. Suggest relevant hashtags that boost discoverability.
+                        
+                                Ensure each section is crafted based on the specific input provided by the user. Match the tone to the brand, and vary the style to suit different campaign goals. Keep your suggestions clear, concise, and aimed at evoking strong engagement from followers.
+                        """)
 //                .defaultAdvisors() //advisor, which will search in vector database based on the user query
                 .build();
     }
 
     @Bean
-    ImageModel imageModel(@Value("$spring.ai.openai.api-key") String openAIApiKey) {
+    public ImageModel imageModel(@Value("$spring.ai.openai.api-key") String openAIApiKey) {
         return new OpenAiImageModel(new OpenAiImageApi(openAIApiKey));
     }
 }
