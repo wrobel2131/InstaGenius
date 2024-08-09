@@ -2,19 +2,15 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/post_management
-    username: ${POST_MANAGEMENT_DB_USERNAME}
-    password: ${POST_MANAGEMENT_DB_PASSWORD}
+    username: post_management_service_user
+    password: password
   jpa:
-    hibernate: #TODO sprawdzic czy to jest prawdidlwoe na intellij ultimate
+    hibernate:
       ddl-auto: validate
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-  flyway: #TODO sprawdzic do czego dokladnie sluzy flyway
-    baseline-on-migrate: true
-    enabled: true
-    baseline-description: "init"
-    baseline-version: 0
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
 server:
   port: 8020
+application:
+  config:
+    post-generation-url: http://localhost:8000/api/v1/post-generation #TODO change after  to post of cloud gateway

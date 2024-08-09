@@ -7,7 +7,7 @@ public record ImageStyle(String style) {
 
     public ImageStyle {
         if(style != null && !ALLOWED_STYLES.contains(style)) {
-            throw new IllegalArgumentException("Invalid image style!");
+            throw new IllegalArgumentException("Invalid b64Image style!");
         }
     }
 }
