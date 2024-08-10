@@ -5,31 +5,33 @@ import com.instagenius.postgenerationservice.domain.DescriptionGenerationOptions
 import com.instagenius.postgenerationservice.domain.GeneratedDescription;
 import com.instagenius.postgenerationservice.domain.GeneratedImage;
 import com.instagenius.postgenerationservice.domain.ImageGenerationOptions;
+import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.image.ImageModel;
 import org.springframework.ai.image.ImagePrompt;
-import org.springframework.ai.image.ImageResponse;
 import org.springframework.ai.openai.OpenAiImageOptions;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
 @Component
 @RequiredArgsConstructor
+@Slf4j
 class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
+    private static final Logger log = LoggerFactory.getLogger(OpenAIPostGenerationAdapter.class);
     private final ChatClient chatClient;
     private final ImageModel imageModel;
     private static final Integer NUMBER_OF_GENERATED_IMAGES = 1;
 
     @Override
     public GeneratedDescription generateDescription(DescriptionGenerationOptions descriptionGenerationOptions) {
-        return chatClient
+        return new GeneratedDescription(chatClient
                 .prompt()
                 .user(descriptionGenerationOptions.userPrompt())
                 .call()
-                .entity(GeneratedDescription.class);
+                .content()
+        );
     }
 
     @Override
@@ -65,7 +67,4 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .getB64Json());
     }
 
-//    private byte[] decodeBase64(String encoded) {
-//        return Base64.getDecoder().decode(encoded);
-//    }
 }

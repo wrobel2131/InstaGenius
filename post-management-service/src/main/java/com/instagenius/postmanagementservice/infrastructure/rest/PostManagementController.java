@@ -3,7 +3,7 @@ package com.instagenius.postmanagementservice.infrastructure.rest;
 
 import com.instagenius.postmanagementservice.application.PostManagementUseCase;
 import com.instagenius.postmanagementservice.infrastructure.dto.CreatePostDto;
-import com.instagenius.postmanagementservice.infrastructure.dto.CreatePostResponseDto;
+import com.instagenius.postmanagementservice.infrastructure.dto.PostResponseDto;
 import com.instagenius.postmanagementservice.infrastructure.mapper.DescriptionGenerationOptionsMapper;
 import com.instagenius.postmanagementservice.infrastructure.mapper.ImageGenerationOptionsMapper;
 import com.instagenius.postmanagementservice.infrastructure.mapper.PostMapper;
@@ -25,13 +25,13 @@ public class PostManagementController {
     private static final PostMapper postMapper = PostMapper.INSTANCE;
 
     @PostMapping(value = "/users/{userId}/create-post", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CreatePostResponseDto> createPost(@PathVariable("userId") UUID userId, @Valid @RequestBody CreatePostDto createPostDto) {
+    ResponseEntity<PostResponseDto> createPost(@PathVariable("userId") UUID userId, @Valid @RequestBody CreatePostDto createPostDto) {
         return ResponseEntity.ok(
                 postMapper.toCreatePostDto(
                         postManagementUseCase.createPost(
                                 userId,
-                                descriptionGenerationOptionsMapper.toDescriptionGenerationOptions(createPostDto.description()),
-                                imageGenerationOptionsMapper.toImageGenerationOptions(createPostDto.image()),
+                                descriptionGenerationOptionsMapper.toDescriptionGenerationOptions(createPostDto.descriptionOptions()),
+                                imageGenerationOptionsMapper.toImageGenerationOptions(createPostDto.imageOptions()),
                                 createPostDto.title())
                                 )
                 );

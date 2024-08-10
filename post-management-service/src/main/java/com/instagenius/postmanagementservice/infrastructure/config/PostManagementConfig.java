@@ -1,6 +1,7 @@
 package com.instagenius.postmanagementservice.infrastructure.config;
 
 
+import com.instagenius.postmanagementservice.application.FileStoragePort;
 import com.instagenius.postmanagementservice.application.PostGenerationPort;
 import com.instagenius.postmanagementservice.application.PostManagementUseCase;
 import com.instagenius.postmanagementservice.application.PostPersistencePort;
@@ -14,9 +15,10 @@ import org.springframework.context.annotation.Configuration;
 public class PostManagementConfig {
     private final PostPersistencePort postPersistencePort;
     private final PostGenerationPort postGenerationPort;
+    private final FileStoragePort fileStoragePort;
 
     @Bean
     PostManagementUseCase postManagementUseCase() {
-        return new PostManagementService(postPersistencePort, postGenerationPort);
+        return new PostManagementService(postPersistencePort, postGenerationPort, fileStoragePort);
     }
 }

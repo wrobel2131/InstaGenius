@@ -2,15 +2,21 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/post_management
-    username: post_management_service_user
-    password: password
+    username: ${POST_MANAGEMENT_DB_USERNAME}
+    password: ${POST_MANAGEMENT_DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 server:
   port: 8020
 application:
   config:
-    post-generation-url: http://localhost:8000/api/v1/post-generation #TODO change after  to post of cloud gateway
+    post-generation-url: http://localhost:8000/api/v1/post-generation
+aws:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-access-key: ${AWS_SECRET_ACCESS_KEY}
+  region: ${AWS_REGION}
+  s3:
+    bucket-name: ${AWS_S3_BUCKET_NAME}
