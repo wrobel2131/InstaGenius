@@ -5,7 +5,6 @@ import java.util.Base64;
 import java.util.UUID;
 
 public class Post {
-
     private final Long id;
     private final UUID userId;
     private final String title;
@@ -33,7 +32,6 @@ public class Post {
     public void setGeneratedImage(GeneratedImage generatedImage) {
         this.generatedImage = generatedImage;
     }
-
 
     public Long getId() {
         return id;

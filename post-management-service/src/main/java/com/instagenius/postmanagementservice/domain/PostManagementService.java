@@ -5,10 +5,13 @@ import com.instagenius.postmanagementservice.application.PostGenerationPort;
 import com.instagenius.postmanagementservice.application.PostManagementUseCase;
 import com.instagenius.postmanagementservice.application.PostPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class PostManagementService implements PostManagementUseCase {
@@ -18,38 +21,66 @@ public class PostManagementService implements PostManagementUseCase {
 
     @Override
     public Post createPost(UUID userId, DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions, String title) {
-        //Call to generate description
         GeneratedDescription generatedDescription = postGenerationPort.generateDescription(descriptionGenerationOptions);
-        //Call to generate image
+
         GeneratedImage generatedImage = postGenerationPort.generateImage(imageGenerationOptions);
 
-        //Upload image to file  store
         FileKeyName imageKeyName = new FileKeyName(userId);
         fileStoragePort.uploadFile(imageKeyName, generatedImage);
 
-        //Store generated post with keyname coresponding to file storage
         Post post = postPersistencePort.save(new Post(null, userId, title, imageKeyName, generatedImage, generatedDescription, null, null));
         post.setGeneratedImage(generatedImage);
+
         return post;
     }
 
     @Override
-    public List<Post> getPosts() {
-        return List.of();
+    public List<Post> getPosts(UUID userId) {
+        List<Post> posts = postPersistencePort.getPostsByUserId(userId);
+
+        List<FileKeyName> imageKeyNames = posts
+                .stream()
+                .map(Post::getImageKeyName)
+                .toList();
+
+        Map<FileKeyName, String> b64ImagesMap = imageKeyNames
+                .parallelStream()
+                .collect(Collectors.toMap(
+                        keyName -> keyName, keyName -> Base64.getEncoder().encodeToString(fileStoragePort.downloadFile(keyName)))
+                );
+
+        for (Post post: posts) {
+            FileKeyName imageKeyName = post.getImageKeyName();
+            String b64Image = b64ImagesMap.get(imageKeyName);
+            post.setGeneratedImage(new GeneratedImage(b64Image));
+        }
+
+        return posts;
     }
 
     @Override
-    public Post getPostById() {
-        return null;
+    public Post getPostById(UUID userId, Long id) {
+        Post post = postPersistencePort.getPostByUserIdAndPostId(userId, id);
+
+        String b64Image = Base64.getEncoder().encodeToString(fileStoragePort.downloadFile(post.getImageKeyName()));
+
+        post.setGeneratedImage(new GeneratedImage(b64Image));
+
+        return post;
     }
 
-    @Override
-    public Post updatePost() {
-        return null;
-    }
+//    @Override
+//    public Post updatePost() {
+//        return null;
+//    }
 
+    @Transactional
     @Override
-    public void deletePost() {
+    public void deletePost(UUID userId, Long id) {
+        Post post = postPersistencePort.getPostByUserIdAndPostId(userId, id);
 
+        fileStoragePort.deleteFile(post.getImageKeyName());
+
+        postPersistencePort.deletePostByUserIdAndPostId(userId, id);
     }
 }

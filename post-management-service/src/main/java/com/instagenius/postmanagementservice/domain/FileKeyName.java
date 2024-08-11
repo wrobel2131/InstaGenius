@@ -9,7 +9,7 @@ public record FileKeyName(String keyName) {
 
     private static String createKeyName(UUID userId) {
         if (userId == null) {
-            throw new IllegalArgumentException("UserId cannot be null");
+            throw new IllegalArgumentException("User ID cannot be null");
         }
         return userId.toString() + '/' + UUID.randomUUID();
     }

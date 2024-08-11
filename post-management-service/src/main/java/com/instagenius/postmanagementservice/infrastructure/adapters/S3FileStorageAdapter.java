@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -35,17 +38,38 @@ public class S3FileStorageAdapter implements FileStoragePort {
         try (InputStream inputStream = new ByteArrayInputStream(image)) {
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputStream, image.length));
         } catch (IOException e) {
-            throw new RuntimeException("Failed to upload file", e); //TODO create my own exception
+            throw new RuntimeException("Failed to upload the file", e); //TODO create my own exception
         }
     }
 
     @Override
     public byte[] downloadFile(FileKeyName fileKeyName) {
-        return new byte[0];
+        GetObjectRequest getObjectRequest = GetObjectRequest
+                .builder()
+                .bucket(bucketName)
+                .key(fileKeyName.keyName())
+                .build();
+        try(InputStream inputStream = s3Client.getObject(getObjectRequest)) {
+            return inputStream.readAllBytes();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to download the file", e); //TODO create my own exception
+
+        } catch (S3Exception e) {
+            throw new RuntimeException("Error with S3 client: " + e.getLocalizedMessage()); //TODO create my own exception
+        }
     }
 
     @Override
     public void deleteFile(FileKeyName fileKeyName) {
-
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest
+                .builder()
+                .bucket(bucketName)
+                .key(fileKeyName.keyName())
+                .build();
+        try {
+            s3Client.deleteObject(deleteObjectRequest);
+        } catch (S3Exception e) {
+            throw new RuntimeException("Error with S3 client: " + e.getLocalizedMessage()); //TODO create my own exception
+        }
     }
 }
