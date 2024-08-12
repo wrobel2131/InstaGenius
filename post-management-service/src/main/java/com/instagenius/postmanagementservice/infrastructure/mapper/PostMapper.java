@@ -5,7 +5,6 @@ import com.instagenius.postmanagementservice.domain.GeneratedDescription;
 import com.instagenius.postmanagementservice.domain.Post;
 import com.instagenius.postmanagementservice.infrastructure.adapters.PostEntity;
 import com.instagenius.postmanagementservice.infrastructure.dto.PostResponseDto;
-import jdk.jfr.Name;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -19,7 +18,7 @@ public interface PostMapper {
     @Mapping(source = "generatedDescription.description", target = "description")
     @Mapping(source = "generatedImage.b64Image", target = "b64Image")
     @Mapping(source = "title", target = "title")
-    PostResponseDto toCreatePostDto(Post post);
+    PostResponseDto toPostResponseDto(Post post);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "userId", target = "userId")
