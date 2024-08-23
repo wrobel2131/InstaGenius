@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Base64;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -33,24 +35,26 @@ class PostGenerationController {
     @PostMapping(value = "/generate-image", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
             MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<GeneratedImageResponseDto> generateImage(@Valid @RequestBody ImageGenerationOptionsDto imageGenerationOptionsDto) {
-        return ResponseEntity.ok(
-                generatedImageMapper.toGeneratedImageResponseDto(
-                        postGenerationUseCase.generateImage(
-                                imageGenerationOptionsMapper.toImageGenerationOptions(imageGenerationOptionsDto)
-                        )
-                )
-        );
+        return ResponseEntity.ok(new GeneratedImageResponseDto(Base64.getEncoder().encodeToString(new byte[3])));
+//        return ResponseEntity.ok(
+//                generatedImageMapper.toGeneratedImageResponseDto(
+//                        postGenerationUseCase.generateImage(
+//                                imageGenerationOptionsMapper.toImageGenerationOptions(imageGenerationOptionsDto)
+//                        )
+//                )
+//        );
     }
 
     @PostMapping(value = "/generate-description", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<GeneratedDescriptionResponseDto> generateDescription(@Valid @RequestBody DescriptionGenerationOptionsDto descriptionGenerationOptionsDto) {
-        return ResponseEntity.ok(
-                generatedDescriptionMapper.toGeneratedDescriptionResponseDto(
-                        postGenerationUseCase.generateDescription(
-                                descriptionGenerationOptionsMapper.toDescriptionGenerationOptions(descriptionGenerationOptionsDto)
-                        )
-                )
-        );
+        return ResponseEntity.ok(new GeneratedDescriptionResponseDto("description mock"));
+//        return ResponseEntity.ok(
+//                generatedDescriptionMapper.toGeneratedDescriptionResponseDto(
+//                        postGenerationUseCase.generateDescription(
+//                                descriptionGenerationOptionsMapper.toDescriptionGenerationOptions(descriptionGenerationOptionsDto)
+//                        )
+//                )
+//        );
     }
 }

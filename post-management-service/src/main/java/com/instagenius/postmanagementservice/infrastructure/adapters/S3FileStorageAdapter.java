@@ -39,6 +39,8 @@ public class S3FileStorageAdapter implements FileStoragePort {
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputStream, image.length));
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload the file", e); //TODO create my own exception
+        } catch (S3Exception e) {
+            throw new RuntimeException("Failed to upload the file: ", e);
         }
     }
 

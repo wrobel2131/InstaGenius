@@ -26,6 +26,7 @@ public class S3Config {
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(accessKeyId, secretAccessKey)
                 ))
+//                .forcePathStyle(true)
                 .region(Region.of(region))
                 .build();
 

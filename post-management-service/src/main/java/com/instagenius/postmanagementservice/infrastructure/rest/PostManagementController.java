@@ -26,7 +26,7 @@ public class PostManagementController {
     private static final PostMapper postMapper = PostMapper.INSTANCE;
 
 
-    @GetMapping(value = "/users/{userId}/posts", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/users/{userId}/posts", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PostsResponseDto> getAllPostsByUserId(@PathVariable("userId") UUID userId) {
         return ResponseEntity.ok(
                 new PostsResponseDto(
@@ -39,7 +39,7 @@ public class PostManagementController {
         );
     }
 
-    @GetMapping(value = "/users/{userId}/posts/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/users/{userId}/posts/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PostResponseDto> getPostByUserIdAndId(@PathVariable("userId") UUID userId, @PathVariable("postId") Long postId) {
         return ResponseEntity.ok(
                 postMapper.toPostResponseDto(postManagementUseCase.getPostByUserIdAndId(userId, postId))
