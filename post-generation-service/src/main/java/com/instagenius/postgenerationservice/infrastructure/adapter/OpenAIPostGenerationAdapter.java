@@ -9,12 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.image.ImageModel;
 import org.springframework.ai.image.ImagePrompt;
-import org.springframework.ai.image.ImageResponse;
 import org.springframework.ai.openai.OpenAiImageOptions;
 import org.springframework.stereotype.Component;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 @Component
 @RequiredArgsConstructor
@@ -25,11 +21,12 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
 
     @Override
     public GeneratedDescription generateDescription(DescriptionGenerationOptions descriptionGenerationOptions) {
-        return chatClient
+        return new GeneratedDescription(chatClient
                 .prompt()
                 .user(descriptionGenerationOptions.userPrompt())
                 .call()
-                .entity(GeneratedDescription.class);
+                .content()
+        );
     }
 
     @Override
@@ -41,18 +38,20 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .withWidth(imageGenerationOptions.size().width())
                 .withResponseFormat("b64_json")
                 .withN(NUMBER_OF_GENERATED_IMAGES);
-        // for model DALL-E-2 generate image without style and quality params
+        // for model DALL-E-2 generate b64Image without style and quality params
         if(imageGenerationOptions.model().model().equals("dall-e-2")) {
-
-            return new GeneratedImage(decodeBase64(imageModel.call(new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder.build()
-                    ))
-                    .getResult()
-                    .getOutput()
-                    .getB64Json())
+            return new GeneratedImage(
+                    imageModel.call(
+                            new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder.build()
+                            )
+                    )
+                            .getResult()
+                            .getOutput()
+                            .getB64Json()
             );
         }
 
-        return new GeneratedImage(decodeBase64(imageModel
+        return new GeneratedImage(imageModel
                 .call(
                         new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder
                                 .withStyle(imageGenerationOptions.style().style())
@@ -62,10 +61,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 )
                 .getResult()
                 .getOutput()
-                .getB64Json()));
+                .getB64Json());
     }
 
-    private byte[] decodeBase64(String encoded) {
-        return Base64.getDecoder().decode(encoded);
-    }
 }

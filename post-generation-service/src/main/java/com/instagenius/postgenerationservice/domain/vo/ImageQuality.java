@@ -7,7 +7,7 @@ public record ImageQuality(String quality) {
 
     public ImageQuality {
         if(quality != null && !ALLOWED_QUALITIES.contains(quality)) {
-            throw new IllegalArgumentException("Invalid image quality!");
+            throw new IllegalArgumentException("Invalid b64Image quality!");
         }
     }
 }

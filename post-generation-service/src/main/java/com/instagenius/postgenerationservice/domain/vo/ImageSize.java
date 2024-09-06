@@ -19,7 +19,7 @@ public record ImageSize(Integer width, Integer height) {
 
     public ImageSize {
         if(!ALLOWED_SIZES.contains(Map.entry(width, height))) {
-            throw new IllegalArgumentException("Invalid image size.");
+            throw new IllegalArgumentException("Invalid b64Image size.");
         }
     }
 }

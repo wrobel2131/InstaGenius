@@ -27,6 +27,8 @@ class OpenAIGeneratorConfig {
                                 4. Suggest relevant hashtags that boost discoverability.
                         
                                 Ensure each section is crafted based on the specific input provided by the user. Match the tone to the brand, and vary the style to suit different campaign goals. Keep your suggestions clear, concise, and aimed at evoking strong engagement from followers.
+                        
+                                Note: Do not include the specific numbers or steps (1, 2, 3, 4) in your response. Instead, present the text in a smooth, continuous flow.
                         """)
 //                .defaultAdvisors() //advisor, which will search in vector database based on the user query
                 .build();

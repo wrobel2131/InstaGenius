@@ -9,6 +9,6 @@ import org.mapstruct.factory.Mappers;
 public interface GeneratedImageMapper {
     GeneratedImageMapper INSTANCE = Mappers.getMapper(GeneratedImageMapper.class);
 
-    @Mapping(source = "image", target = "image")
+    @Mapping(source = "b64Image", target = "b64Image")
     GeneratedImageResponseDto toGeneratedImageResponseDto(GeneratedImage generatedImage);
 }
