@@ -39,40 +39,28 @@ class PostGenerationController {
     @PostMapping(value = "/generate-image", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
             MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<GeneratedImageResponseDto> generateImage(@Valid @RequestBody ImageGenerationOptionsDto imageGenerationOptionsDto) {
-//        return ResponseEntity.ok(new GeneratedImageResponseDto(Base64.getEncoder().encodeToString(new byte[3])));
-        long startTime = System.nanoTime();
-
-        GeneratedImage generatedImage = postGenerationUseCase.generateImage(
-                imageGenerationOptionsMapper.toImageGenerationOptions(imageGenerationOptionsDto)
-        );
-
-        long endTime = System.nanoTime();
-
-        long elapsedTime = endTime - startTime;
-        log.info("elapsed time of generateImage method: {}", elapsedTime);
-        return ResponseEntity.ok(
-                generatedImageMapper.toGeneratedImageResponseDto(
-                        generatedImage
-                )
-        );
+        return ResponseEntity.ok(new GeneratedImageResponseDto(Base64.getEncoder().encodeToString(new byte[3])));
+//        GeneratedImage generatedImage = postGenerationUseCase.generateImage(
+//                imageGenerationOptionsMapper.toImageGenerationOptions(imageGenerationOptionsDto)
+//        );
+//        return ResponseEntity.ok(
+//                generatedImageMapper.toGeneratedImageResponseDto(
+//                        generatedImage
+//                )
+//        );
     }
 
     @PostMapping(value = "/generate-description", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<GeneratedDescriptionResponseDto> generateDescription(@Valid @RequestBody DescriptionGenerationOptionsDto descriptionGenerationOptionsDto) {
-//        return ResponseEntity.ok(new GeneratedDescriptionResponseDto("description mock"));
-        long startTime = System.nanoTime();
-        GeneratedDescription generatedDescription = postGenerationUseCase.generateDescription(
-                descriptionGenerationOptionsMapper.toDescriptionGenerationOptions(descriptionGenerationOptionsDto)
-        );
-        long endTime = System.nanoTime();
-        long elapsedTime = endTime - startTime;
-        log.info("elapsed time of generateDescription method: {}", elapsedTime);
-
-        return ResponseEntity.ok(
-                generatedDescriptionMapper.toGeneratedDescriptionResponseDto(
-                        generatedDescription
-                )
-        );
+        return ResponseEntity.ok(new GeneratedDescriptionResponseDto("description mock"));
+//        GeneratedDescription generatedDescription = postGenerationUseCase.generateDescription(
+//                descriptionGenerationOptionsMapper.toDescriptionGenerationOptions(descriptionGenerationOptionsDto)
+//        );
+//        return ResponseEntity.ok(
+//                generatedDescriptionMapper.toGeneratedDescriptionResponseDto(
+//                        generatedDescription
+//                )
+//        );
     }
 }

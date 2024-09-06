@@ -52,17 +52,12 @@ public class PostManagementController {
 
     @PostMapping(value = "/users/{userId}/posts/create-post", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PostResponseDto> createPost(@PathVariable("userId") UUID userId, @Valid @RequestBody CreatePostRequestDto createPostRequestDto) {
-        long startTime = System.nanoTime();
         Post post =  postManagementUseCase.createPost(
                 userId,
                 descriptionGenerationOptionsMapper.toDescriptionGenerationOptions(createPostRequestDto.descriptionOptions()),
                 imageGenerationOptionsMapper.toImageGenerationOptions(createPostRequestDto.imageOptions()),
                 createPostRequestDto.title()
         );
-
-        long endTime = System.nanoTime();
-        long elapsedTime = endTime - startTime;
-        log.info("Created post {} in {} ms", post.getId(), elapsedTime);
         return ResponseEntity.ok(
                 postMapper.toPostResponseDto(
                        post
@@ -72,7 +67,6 @@ public class PostManagementController {
 
     @DeleteMapping(value = "/users/{userId}/posts/{postId}")
     ResponseEntity<Void> deletePost(@PathVariable("userId") UUID userId, @PathVariable("postId") Long postId) {
-
         postManagementUseCase.deletePost(userId, postId);
         return ResponseEntity.noContent().build();
     }

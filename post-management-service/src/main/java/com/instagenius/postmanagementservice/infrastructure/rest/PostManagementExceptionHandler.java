@@ -1,5 +1,7 @@
 package com.instagenius.postmanagementservice.infrastructure.rest;
 
+import com.instagenius.postmanagementservice.infrastructure.exception.ImageStorageException;
+import com.instagenius.postmanagementservice.infrastructure.exception.PostGenerationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -34,6 +36,18 @@ class PostManagementExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), LocalDateTime.now(), List.of()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PostGenerationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ResponseEntity<ErrorResponse> handlePostGenerationException(PostGenerationException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), LocalDateTime.now(), List.of()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ImageStorageException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    ResponseEntity<ErrorResponse> handleImageStorageException(ImageStorageException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), LocalDateTime.now(), List.of()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // Handler for overall exception thrown by this service, i

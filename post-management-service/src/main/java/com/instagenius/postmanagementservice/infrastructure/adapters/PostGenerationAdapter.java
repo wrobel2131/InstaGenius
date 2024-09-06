@@ -1,8 +1,6 @@
 package com.instagenius.postmanagementservice.infrastructure.adapters;
 
-import com.instagenius.postmanagementservice.infrastructure.dto.CreateDescriptionDto;
-import com.instagenius.postmanagementservice.infrastructure.dto.GeneratedDescriptionDto;
-import com.instagenius.postmanagementservice.infrastructure.exception.GenerationException;
+import com.instagenius.postmanagementservice.infrastructure.exception.PostGenerationException;
 import com.instagenius.postmanagementservice.infrastructure.mapper.DescriptionGenerationOptionsMapper;
 import com.instagenius.postmanagementservice.infrastructure.mapper.GeneratedDescriptionMapper;
 import com.instagenius.postmanagementservice.infrastructure.mapper.GeneratedImageMapper;
@@ -30,7 +28,7 @@ public class PostGenerationAdapter implements PostGenerationPort {
         return generatedDescriptionMapper.toGeneratedDescription(
                 postGenerationClient.generateDescription(
                         descriptionGenerationOptionsMapper.toCreateDescriptionDto(descriptionGenerationOptions)
-                ).orElseThrow(() -> new GenerationException("Error while generating description!"))
+                ).orElseThrow(() -> new PostGenerationException("Error while generating description!"))
         );
     }
 
@@ -39,7 +37,7 @@ public class PostGenerationAdapter implements PostGenerationPort {
         return generatedImageMapper.toGeneratedImage(
                 postGenerationClient.generateImage(
                         imageGenerationOptionsMapper.toCreateImageDto(imageGenerationOptions)
-                ).orElseThrow(() -> new GenerationException("Error while generating image!"))
+                ).orElseThrow(() -> new PostGenerationException("Error while generating image!"))
         );
     }
 }

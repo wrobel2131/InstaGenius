@@ -3,6 +3,7 @@ package com.instagenius.postmanagementservice.infrastructure.adapters;
 import com.instagenius.postmanagementservice.application.FileStoragePort;
 import com.instagenius.postmanagementservice.domain.FileKeyName;
 import com.instagenius.postmanagementservice.domain.GeneratedImage;
+import com.instagenius.postmanagementservice.infrastructure.exception.ImageStorageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -37,10 +38,9 @@ public class S3FileStorageAdapter implements FileStoragePort {
 
         try (InputStream inputStream = new ByteArrayInputStream(image)) {
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputStream, image.length));
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to upload the file", e); //TODO create my own exception
-        } catch (S3Exception e) {
-            throw new RuntimeException("Failed to upload the file: ", e);
+        } catch (IOException | S3Exception e) {
+            System.out.println(e.getMessage());
+            throw new ImageStorageException("Failed to upload the file!");
         }
     }
 
@@ -53,11 +53,9 @@ public class S3FileStorageAdapter implements FileStoragePort {
                 .build();
         try(InputStream inputStream = s3Client.getObject(getObjectRequest)) {
             return inputStream.readAllBytes();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to download the file", e); //TODO create my own exception
-
-        } catch (S3Exception e) {
-            throw new RuntimeException("Error with S3 client: " + e.getLocalizedMessage()); //TODO create my own exception
+        } catch (IOException | S3Exception e) {
+            System.out.println(e.getMessage());
+            throw new ImageStorageException("Failed to download the file!");
         }
     }
 
@@ -71,7 +69,8 @@ public class S3FileStorageAdapter implements FileStoragePort {
         try {
             s3Client.deleteObject(deleteObjectRequest);
         } catch (S3Exception e) {
-            throw new RuntimeException("Error with S3 client: " + e.getLocalizedMessage()); //TODO create my own exception
+            System.out.println(e.getMessage());
+            throw new ImageStorageException("Failed to delete the file!");
         }
     }
 }
