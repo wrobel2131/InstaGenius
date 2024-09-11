@@ -55,6 +55,7 @@ jobs:
           - discovery-service
           - post-generation-service
           - post-management-service
+          - coin-management-service
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
