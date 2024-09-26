@@ -29,8 +29,8 @@ public class PostManagementController {
     private static final PostMapper postMapper = PostMapper.INSTANCE;
 
 
-    @GetMapping(value = "/users/{userId}/posts", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PostsResponseDto> getAllPostsByUserId(@PathVariable("userId") UUID userId) {
+    @GetMapping(value = "/posts", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<PostsResponseDto> getAllPostsByUserId(@AuthenticationPrincipal JwtAuthenticationToken authentication) {
         return ResponseEntity.ok(
                 new PostsResponseDto(
                         postManagementUseCase
