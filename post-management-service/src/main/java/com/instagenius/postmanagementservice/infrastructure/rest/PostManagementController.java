@@ -30,7 +30,8 @@ public class PostManagementController {
 
 
     @GetMapping(value = "/posts", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PostsResponseDto> getAllPostsByUserId(@AuthenticationPrincipal JwtAuthenticationToken authentication) {
+    ResponseEntity<PostsResponseDto> getAllPostsByUserId() {
+        UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
         return ResponseEntity.ok(
                 new PostsResponseDto(
                         postManagementUseCase
@@ -42,16 +43,18 @@ public class PostManagementController {
         );
     }
 
-    @GetMapping(value = "/users/{userId}/posts/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PostResponseDto> getPostByUserIdAndId(@PathVariable("userId") UUID userId, @PathVariable("postId") Long postId) {
+    @GetMapping(value = "/posts/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<PostResponseDto> getPostByUserIdAndId(@PathVariable("postId") Long postId) {
+        UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
         return ResponseEntity.ok(
                 postMapper.toPostResponseDto(postManagementUseCase.getPostByUserIdAndId(userId, postId))
         );
     }
 
 
-    @PostMapping(value = "/users/{userId}/posts/create-post", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PostResponseDto> createPost(@PathVariable("userId") UUID userId, @Valid @RequestBody CreatePostRequestDto createPostRequestDto) {
+    @PostMapping(value = "/posts/create-post", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<PostResponseDto> createPost(@Valid @RequestBody CreatePostRequestDto createPostRequestDto) {
+        UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
         Post post =  postManagementUseCase.createPost(
                 userId,
                 descriptionGenerationOptionsMapper.toDescriptionGenerationOptions(createPostRequestDto.descriptionOptions()),
@@ -65,13 +68,11 @@ public class PostManagementController {
         );
     }
 
-    @DeleteMapping(value = "/users/{userId}/posts/{postId}")
-    ResponseEntity<Void> deletePost(@PathVariable("userId") UUID userId, @PathVariable("postId") Long postId) {
+    @DeleteMapping(value = "/posts/{postId}")
+    ResponseEntity<Void> deletePost(@PathVariable("postId") Long postId) {
+        UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
         postManagementUseCase.deletePost(userId, postId);
         return ResponseEntity.noContent().build();
     }
-
-
-
 
 }

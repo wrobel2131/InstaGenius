@@ -13,11 +13,16 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public class PostManagementService implements PostManagementUseCase {
     private final PostPersistencePort postPersistencePort;
     private final PostGenerationPort postGenerationPort;
     private final FileStoragePort fileStoragePort;
+
+    public PostManagementService(PostPersistencePort postPersistencePort, PostGenerationPort postGenerationPort, FileStoragePort fileStoragePort) {
+        this.postPersistencePort = postPersistencePort;
+        this.postGenerationPort = postGenerationPort;
+        this.fileStoragePort = fileStoragePort;
+    }
 
     //TODO check how to ensure, that all or operations here are transactional
     @Override
