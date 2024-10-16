@@ -6,14 +6,14 @@ import java.util.UUID;
 
 public class CoinTransaction {
     private final Long id;
-    private final UUID user_id;
+    private final UUID userId;
     private final CoinAmount amount;
     private final TransactionType type;
     private final LocalDateTime createdAt;
 
-    public CoinTransaction(Long id, UUID user_id, int amount, TransactionType type, LocalDateTime createdAt) {
+    public CoinTransaction(Long id, UUID userId, int amount, TransactionType type, LocalDateTime createdAt) {
         this.id = id;
-        this.user_id = user_id;
+        this.userId = userId;
         this.amount = new CoinAmount(amount);
         this.type = type;
         this.createdAt = createdAt;
@@ -23,8 +23,8 @@ public class CoinTransaction {
         return id;
     }
 
-    public UUID getUser_id() {
-        return user_id;
+    public UUID getUserId() {
+        return userId;
     }
 
     public CoinAmount getAmount() {

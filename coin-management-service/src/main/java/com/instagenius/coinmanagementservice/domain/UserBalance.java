@@ -3,6 +3,7 @@ package com.instagenius.coinmanagementservice.domain;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+
 public class UserBalance {
     private final Long id;
     private final UUID userId;
