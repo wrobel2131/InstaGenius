@@ -74,5 +74,4 @@ public class PostManagementController {
         postManagementUseCase.deletePost(userId, postId);
         return ResponseEntity.noContent().build();
     }
-
 }

@@ -20,8 +20,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CoinManagementController {
     private final CoinManagementUseCase coinManagementUseCase;
-    private final CoinTransactionMapper coinTransactionMapper = CoinTransactionMapper.INSTANCE;
-    private final UserBalanceMapper userBalanceMapper = UserBalanceMapper.INSTANCE;
+    private static final CoinTransactionMapper coinTransactionMapper = CoinTransactionMapper.INSTANCE;
+    private static final UserBalanceMapper userBalanceMapper = UserBalanceMapper.INSTANCE;
 
 
     @GetMapping(value = "/coins/balance", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -37,7 +37,7 @@ public class CoinManagementController {
     @PutMapping(value = "/coins/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> addCoins(@Valid @RequestBody AddCoinsDto addCoinsDto) {
         UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
-        coinManagementUseCase.addCoins(userId, addCoinsDto.coins());
+        coinManagementUseCase.addCoins(userId, addCoinsDto.coins(), addCoinsDto.type());
         return ResponseEntity.noContent().build();
     }
 

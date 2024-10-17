@@ -3,7 +3,9 @@ package com.instagenius.coinmanagementservice.domain;
 import com.instagenius.coinmanagementservice.application.CoinManagementUseCase;
 import com.instagenius.coinmanagementservice.application.CoinTransactionPersistencePort;
 import com.instagenius.coinmanagementservice.application.UserBalancePersistencePort;
+import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,21 +20,37 @@ public class CoinManagementService implements CoinManagementUseCase {
 
     @Override
     public UserBalance getBalance(UUID userId) {
-        return null;
+        return userBalancePersistencePort.findUserBalanceByUserId(userId);
     }
 
     @Override
     public List<CoinTransaction> getCoinTransactions(UUID userId) {
-        return List.of();
+        return coinTransactionPersistencePort.findCoinTransactionsByUserId(userId);
+    }
+
+    @Transactional
+    @Override
+    public void addCoins(UUID userId, int amount, TransactionType type) {
+        /* Adding coins to user balance */
+        UserBalance userBalance = userBalancePersistencePort.findUserBalanceByUserId(userId);
+        userBalance.setBalance(new Balance(userBalance.getBalance().balance() + amount));
+        userBalancePersistencePort.save(userBalance);
+
+        /* Saving coin transaction */
+        CoinTransaction coinTransaction = new CoinTransaction(null, userId, amount, type, LocalDateTime.now());
+        coinTransactionPersistencePort.save(coinTransaction);
     }
 
     @Override
-    public void addCoins(UUID userId, int amount) {
-
-    }
-
-    @Override
+    @Transactional
     public void deductCoins(UUID userId, int amount) {
+        /* Deducting coins from user balance */
+        UserBalance userBalance = userBalancePersistencePort.findUserBalanceByUserId(userId);
+        userBalance.setBalance(new Balance(userBalance.getBalance().balance() - amount));
+        userBalancePersistencePort.save(userBalance);
 
+        /* Saving coin transaction */
+        CoinTransaction coinTransaction = new CoinTransaction(null, userId, amount, TransactionType.SPEND, LocalDateTime.now());
+        coinTransactionPersistencePort.save(coinTransaction);
     }
 }

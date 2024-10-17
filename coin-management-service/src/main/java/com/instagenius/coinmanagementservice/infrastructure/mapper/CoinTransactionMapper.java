@@ -22,7 +22,6 @@ public interface CoinTransactionMapper {
     @Mapping(source = "createdAt", target = "createdAt")
     CoinTransaction toCoinTransaction(CoinTransactionEntity coinTransactionEntity);
 
-    @Mapping(source = "id", target = "id")
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "amount", target = "amount", qualifiedByName = "coinAmountToInt")
     @Mapping(source = "type", target = "type")

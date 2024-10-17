@@ -1,8 +1,5 @@
 package com.instagenius.coinmanagementservice.domain;
 
-import jakarta.persistence.Embeddable;
-
-@Embeddable
 public record Balance(int balance) {
 
     public Balance {

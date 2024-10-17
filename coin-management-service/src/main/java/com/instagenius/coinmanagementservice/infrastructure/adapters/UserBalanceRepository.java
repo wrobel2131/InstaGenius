@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserBalanceRepository implements UserBalancePersistencePort {
     private final JpaUserBalanceRepository jpaUserBalanceRepository;
-    private final UserBalanceMapper userBalanceMapper = UserBalanceMapper.INSTANCE;
+    private static final UserBalanceMapper userBalanceMapper = UserBalanceMapper.INSTANCE;
 
     @Override
     public UserBalance findUserBalanceByUserId(UUID userId) {

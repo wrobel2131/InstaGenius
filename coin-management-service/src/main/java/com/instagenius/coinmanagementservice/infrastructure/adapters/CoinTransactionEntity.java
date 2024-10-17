@@ -1,6 +1,5 @@
 package com.instagenius.coinmanagementservice.infrastructure.adapters;
 
-import com.instagenius.coinmanagementservice.domain.CoinAmount;
 import com.instagenius.coinmanagementservice.domain.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;

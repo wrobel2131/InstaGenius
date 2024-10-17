@@ -20,7 +20,6 @@ public interface UserBalanceMapper {
     @Mapping(source = "updatedAt", target = "updatedAt")
     UserBalance toUserBalance(UserBalanceEntity userBalanceEntity);
 
-    @Mapping(source = "id", target = "id")
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "balance", target = "balance", qualifiedByName = "balanceToInt")
     @Mapping(source = "updatedAt", target = "updatedAt")

@@ -20,7 +20,6 @@ public interface PostMapper {
     @Mapping(source = "title", target = "title")
     PostResponseDto toPostResponseDto(Post post);
 
-    @Mapping(source = "id", target = "id")
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "imageKeyName.keyName", target = "imageKeyName")
     @Mapping(source = "title", target = "title")
