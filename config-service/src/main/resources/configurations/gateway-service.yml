@@ -1,0 +1,24 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/{{SOME_REALM}}  #TODO: Replace with your realm
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: post-management-service
+          uri: lb://http://POST-MANAGEMENT-SERVICE
+          predicates:
+            - Path=/api/v1/posts/**
+        - id: coin-management-service
+          uri: lb://http://COIN-MANAGEMENT-SERVICE
+          predicates:
+            - Path=/api/v1/coins/**
+      default-filters:
+        - TokenRelay=
+server:
+  port: 8100

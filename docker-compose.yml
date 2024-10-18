@@ -1,0 +1,34 @@
+networks:
+  instagenius-net:
+    driver: bridge
+
+services:
+  postgres_posts:
+    image: postgres
+    container_name: postgres_posts
+    environment:
+      POSTGRES_USER: {{DB_USERNAME}} #TODO: Replace with your username
+      POSTGRES_PASSWORD: {{DB_PASSWORD}} #TODO: Replace with your password
+      POSTGRES_DB: db_posts
+    volumes:
+      - postgres_posts:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - instagenius-net
+    restart: unless-stopped
+
+  postgres_coins:
+    image: postgres
+    container_name: postgres_coins
+    environment:
+      POSTGRES_USER: {{DB_USERNAME}} #TODO: Replace with your username
+      POSTGRES_PASSWORD: {{DB_PASSWORD}} #TODO: Replace your password
+      POSTGRES_DB: db_coins
+    volumes:
+      - postgres_coins:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - instagenius-net
+    restart: unless-stopped

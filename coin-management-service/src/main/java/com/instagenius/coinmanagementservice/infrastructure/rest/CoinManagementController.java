@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/coin-management")
+@RequestMapping("/api/v1/coins")
 @RequiredArgsConstructor
 public class CoinManagementController {
     private final CoinManagementUseCase coinManagementUseCase;
@@ -24,7 +24,7 @@ public class CoinManagementController {
     private static final UserBalanceMapper userBalanceMapper = UserBalanceMapper.INSTANCE;
 
 
-    @GetMapping(value = "/coins/balance", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/balance", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<UserBalanceResponseDto> getBalance() {
         UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
         return ResponseEntity.ok(
@@ -34,21 +34,21 @@ public class CoinManagementController {
         );
     }
 
-    @PutMapping(value = "/coins/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> addCoins(@Valid @RequestBody AddCoinsDto addCoinsDto) {
         UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
         coinManagementUseCase.addCoins(userId, addCoinsDto.coins(), addCoinsDto.type());
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/coins/deduct", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/deduct", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> deductCoins(@Valid @RequestBody DeductCoinsDto deductCoinsDto) {
         UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
         coinManagementUseCase.deductCoins(userId, deductCoinsDto.coins());
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/coins/transactions", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/transactions", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CoinTransactionsResponseDto> getCoinTransactions() {
         UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
         return ResponseEntity.ok(

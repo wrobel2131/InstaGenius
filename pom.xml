@@ -11,9 +11,13 @@
 	<groupId>com</groupId>
 	<artifactId>instagenius</artifactId>
 	<version>0.1.0</version>
-	<name>instagenius</name>
+    <packaging>pom</packaging>
+    <name>instagenius</name>
 	<description>Backend for InstaGenius</description>
-	<properties>
+    <modules>
+        <module>gateway</module>
+    </modules>
+    <properties>
 		<sonar.organization>wrobel2131</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
