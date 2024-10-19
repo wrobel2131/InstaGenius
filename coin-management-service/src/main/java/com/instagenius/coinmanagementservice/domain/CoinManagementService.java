@@ -18,9 +18,15 @@ public class CoinManagementService implements CoinManagementUseCase {
         this.userBalancePersistencePort = userBalancePersistencePort;
     }
 
+
     @Override
     public UserBalance getBalance(UUID userId) {
         return userBalancePersistencePort.findUserBalanceByUserId(userId);
+    }
+
+    @Override
+    public UserBalance createBalance(UUID userId, int initialBalance) {
+        return userBalancePersistencePort.save(new UserBalance(null, userId, new Balance(initialBalance), null, null, 0));
     }
 
     @Override
@@ -33,11 +39,12 @@ public class CoinManagementService implements CoinManagementUseCase {
     public void addCoins(UUID userId, int amount, TransactionType type) {
         /* Adding coins to user balance */
         UserBalance userBalance = userBalancePersistencePort.findUserBalanceByUserId(userId);
+        System.out.println("userBalance: " + userBalance);
         userBalance.setBalance(new Balance(userBalance.getBalance().balance() + amount));
         userBalancePersistencePort.save(userBalance);
 
         /* Saving coin transaction */
-        CoinTransaction coinTransaction = new CoinTransaction(null, userId, amount, type, LocalDateTime.now());
+        CoinTransaction coinTransaction = new CoinTransaction(null, userId, new CoinAmount(amount), type, null);
         coinTransactionPersistencePort.save(coinTransaction);
     }
 
@@ -50,7 +57,7 @@ public class CoinManagementService implements CoinManagementUseCase {
         userBalancePersistencePort.save(userBalance);
 
         /* Saving coin transaction */
-        CoinTransaction coinTransaction = new CoinTransaction(null, userId, amount, TransactionType.SPEND, LocalDateTime.now());
+        CoinTransaction coinTransaction = new CoinTransaction(null, userId, new CoinAmount(amount), TransactionType.SPEND, null);
         coinTransactionPersistencePort.save(coinTransaction);
     }
 }

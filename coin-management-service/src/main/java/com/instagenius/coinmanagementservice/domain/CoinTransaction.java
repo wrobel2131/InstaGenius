@@ -11,10 +11,10 @@ public class CoinTransaction {
     private final TransactionType type;
     private final LocalDateTime createdAt;
 
-    public CoinTransaction(Long id, UUID userId, int amount, TransactionType type, LocalDateTime createdAt) {
+    public CoinTransaction(Long id, UUID userId, CoinAmount amount, TransactionType type, LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
-        this.amount = new CoinAmount(amount);
+        this.amount = amount;
         this.type = type;
         this.createdAt = createdAt;
     }
@@ -37,5 +37,16 @@ public class CoinTransaction {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "CoinTransaction{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", amount=" + amount +
+                ", type=" + type +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

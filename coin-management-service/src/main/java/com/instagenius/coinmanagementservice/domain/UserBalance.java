@@ -9,13 +9,17 @@ public class UserBalance {
     private final UUID userId;
     private Balance balance;
     private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
+    private int version;
 
 
-    public UserBalance(Long id, UUID userId, Balance balance, LocalDateTime updatedAt) {
+    public UserBalance(Long id, UUID userId, Balance balance, LocalDateTime updatedAt, LocalDateTime createdAt, int version) {
         this.id = id;
         this.userId = userId;
         this.balance = balance;
         this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
+        this.version = version;
     }
 
     public void setBalance(Balance balance) {
@@ -40,5 +44,25 @@ public class UserBalance {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    @Override
+    public String toString() {
+        return "UserBalance{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", balance=" + balance +
+                ", updatedAt=" + updatedAt +
+                ", createdAt=" + createdAt +
+                ", version=" + version +
+                '}';
     }
 }

@@ -7,5 +7,4 @@ import java.util.UUID;
 public interface UserBalancePersistencePort {
     UserBalance findUserBalanceByUserId(UUID userId);
     UserBalance save(UserBalance userBalance);
-
 }

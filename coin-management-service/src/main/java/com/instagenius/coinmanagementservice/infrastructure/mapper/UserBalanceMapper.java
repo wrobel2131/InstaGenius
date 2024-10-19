@@ -18,11 +18,16 @@ public interface UserBalanceMapper {
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "balance", target = "balance", qualifiedByName = "intToBalance")
     @Mapping(source = "updatedAt", target = "updatedAt")
+    @Mapping(source = "createdAt", target = "createdAt")
+    @Mapping(source = "version", target = "version")
     UserBalance toUserBalance(UserBalanceEntity userBalanceEntity);
 
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "balance", target = "balance", qualifiedByName = "balanceToInt")
     @Mapping(source = "updatedAt", target = "updatedAt")
+    @Mapping(source = "createdAt", target = "createdAt")
+    @Mapping(source = "version", target = "version")
     UserBalanceEntity toUserBalanceEntity(UserBalance userBalance);
 
     @Mapping(source = "balance", target = "balance", qualifiedByName = "balanceToInt")

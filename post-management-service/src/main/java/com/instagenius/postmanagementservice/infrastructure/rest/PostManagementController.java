@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/post-management")
+@RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 @Slf4j
 public class PostManagementController {
@@ -29,7 +29,7 @@ public class PostManagementController {
     private static final PostMapper postMapper = PostMapper.INSTANCE;
 
 
-    @GetMapping(value = "/posts", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PostsResponseDto> getAllPostsByUserId() {
         UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
         return ResponseEntity.ok(
@@ -43,7 +43,7 @@ public class PostManagementController {
         );
     }
 
-    @GetMapping(value = "/posts/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PostResponseDto> getPostByUserIdAndId(@PathVariable("postId") Long postId) {
         UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
         return ResponseEntity.ok(
@@ -52,7 +52,7 @@ public class PostManagementController {
     }
 
 
-    @PostMapping(value = "/posts/create-post", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create-post", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PostResponseDto> createPost(@Valid @RequestBody CreatePostRequestDto createPostRequestDto) {
         UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
         Post post =  postManagementUseCase.createPost(
