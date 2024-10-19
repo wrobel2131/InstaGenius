@@ -24,6 +24,12 @@ public class CoinManagementService implements CoinManagementUseCase {
         return userBalancePersistencePort.findUserBalanceByUserId(userId);
     }
 
+    @Transactional
+    @Override
+    public void deleteBalance(UUID userId) {
+        userBalancePersistencePort.deleteUserBalanceByUserId(userId);
+    }
+
     @Override
     public UserBalance createBalance(UUID userId, int initialBalance) {
         return userBalancePersistencePort.save(new UserBalance(null, userId, new Balance(initialBalance), null, null, 0));

@@ -46,6 +46,13 @@ public class CoinManagementController {
         );
     }
 
+    @DeleteMapping(value = "/balance")
+    ResponseEntity<Void> deleteBalance() {
+        UUID userId = testUUID; //TODO
+        coinManagementUseCase.deleteBalance(userId);
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> addCoins(@Valid @RequestBody AddCoinsDto addCoinsDto) {
 //        UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN

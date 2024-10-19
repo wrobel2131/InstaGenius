@@ -40,9 +40,15 @@ public class UserBalanceRepository implements UserBalancePersistencePort {
 //                jpaUserBalanceRepository.save(userBalanceMapper.toUserBalanceEntity(userBalance))
 //        );
     }
+
+    @Override
+    public void deleteUserBalanceByUserId(UUID userId) {
+        jpaUserBalanceRepository.deleteUserBalanceEntityByUserId(userId);
+    }
 }
 
 @Repository
 interface JpaUserBalanceRepository extends JpaRepository<UserBalanceEntity, Long> {
     Optional<UserBalanceEntity> findUserBalanceEntityByUserId(UUID userId);
+    void deleteUserBalanceEntityByUserId(UUID userId);
 }
