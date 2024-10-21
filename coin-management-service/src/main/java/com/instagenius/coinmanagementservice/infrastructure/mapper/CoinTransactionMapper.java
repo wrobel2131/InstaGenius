@@ -22,6 +22,7 @@ public interface CoinTransactionMapper {
     @Mapping(source = "createdAt", target = "createdAt")
     CoinTransaction toCoinTransaction(CoinTransactionEntity coinTransactionEntity);
 
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "amount", target = "amount", qualifiedByName = "coinAmountToInt")
     @Mapping(source = "type", target = "type")
@@ -34,17 +35,17 @@ public interface CoinTransactionMapper {
     CoinTransactionResponseDto toCoinTransactionResponseDto(CoinTransaction coinTransaction);
 
     @Named("transactionTypeToString")
-    default String transactionTypeToString(TransactionType transactionType) {
-        return transactionType.name();
+    default String transactionTypeToString(TransactionType type) {
+        return type.name();
     }
 
     @Named("coinAmountToInt")
-    default int coinAmountToInt(CoinAmount coinAmount) {
-        return coinAmount.amount();
+    default int mapCoinAmountToIny(CoinAmount amount) {
+        return amount.amount();
     }
 
     @Named("intToCoinAmount")
-    default CoinAmount intToCoinAmount(int amount) {
+    default CoinAmount mapIntToCoinAmount(int amount) {
         return new CoinAmount(amount);
     }
 

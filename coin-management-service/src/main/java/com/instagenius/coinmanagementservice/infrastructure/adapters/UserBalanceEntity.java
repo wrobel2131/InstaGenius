@@ -11,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Builder
 @Table(name = "user_balance")
 public class UserBalanceEntity {
@@ -18,13 +19,14 @@ public class UserBalanceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "userId")
+    @Column(nullable = false, name = "userId", unique = true)
     private UUID userId;
 
     @Column(nullable = false, name = "balance")
     private int balance;
 
     private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
 
     @Version
     private Long version;
@@ -33,4 +35,10 @@ public class UserBalanceEntity {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
 }
