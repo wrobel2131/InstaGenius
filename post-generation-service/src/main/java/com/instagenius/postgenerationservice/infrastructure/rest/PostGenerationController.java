@@ -27,7 +27,7 @@ import java.util.Base64;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/post-generation")
+@RequestMapping("/api/v1/generation")
 @Slf4j
 class PostGenerationController {
     private final PostGenerationUseCase postGenerationUseCase;

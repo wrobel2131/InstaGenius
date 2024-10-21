@@ -4,9 +4,12 @@ import com.instagenius.postgenerationservice.application.PostGenerationOutputPor
 import com.instagenius.postgenerationservice.application.PostGenerationUseCase;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class PostGenerationService implements PostGenerationUseCase {
     private final PostGenerationOutputPort postGenerationOutputPort;
+
+    public PostGenerationService(PostGenerationOutputPort postGenerationOutputPort) {
+        this.postGenerationOutputPort = postGenerationOutputPort;
+    }
 
     @Override
     public GeneratedDescription generateDescription(DescriptionGenerationOptions descriptionGenerationOptions) {

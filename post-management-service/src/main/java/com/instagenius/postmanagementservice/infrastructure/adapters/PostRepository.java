@@ -2,8 +2,8 @@ package com.instagenius.postmanagementservice.infrastructure.adapters;
 
 import com.instagenius.postmanagementservice.application.PostPersistencePort;
 import com.instagenius.postmanagementservice.domain.Post;
+import com.instagenius.postmanagementservice.infrastructure.exception.PostNotFoundException;
 import com.instagenius.postmanagementservice.infrastructure.mapper.PostMapper;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -42,7 +42,7 @@ public class PostRepository implements PostPersistencePort {
         return postMapper.toPost(
                 jpaPostRepository
                         .findByUserIdAndId(userId, postId)
-                        .orElseThrow(() -> new NotFoundException("Post with given id do not exist"))
+                        .orElseThrow(() -> new PostNotFoundException("Post with given id do not exist"))
         );
     }
 
