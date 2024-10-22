@@ -1,10 +1,11 @@
 eureka:
   instance:
-    hostname: localhost
+    hostname: ${EUREKA_INSTANCE_HOSTNAME}
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
-name: test
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE}
+name:
+  value: instagenius
 spring:
   cloud:
     config:

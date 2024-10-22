@@ -1,6 +1,11 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI}
   datasource:
-    url: jdbc:postgresql://localhost:5432/coin_management
+    url: ${COIN_MANAGEMENT_DB_URL}
     driver-class-name: org.postgresql.Driver
     username: ${COIN_MANAGEMENT_DB_USERNAME}
     password: ${COIN_MANAGEMENT_DB_PASSWORD}
@@ -10,4 +15,4 @@ spring:
       ddl-auto: update
     database: postgresql
 server:
-  port: 8040
+  port: ${COIN_MANAGEMENT_PORT}

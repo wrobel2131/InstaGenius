@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/post_management
+    url: jdbc:postgresql://localhost:5435/db_posts
     username: ${POST_MANAGEMENT_DB_USERNAME}
     password: ${POST_MANAGEMENT_DB_PASSWORD}
   jpa:

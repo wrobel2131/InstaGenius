@@ -3,22 +3,20 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/auth/realms/{{SOME_REALM}}  #TODO: Replace with your realm
+          issuer-uri: ${JWT_ISSUER_URI}
   cloud:
     gateway:
       discovery:
         locator:
-          enabled: true
+          enabled: ${GATEWAY_DISCOVERY_LOCATOR_ENABLED}
       routes:
         - id: post-management-service
-          uri: lb://http://POST-MANAGEMENT-SERVICE
+          uri: ${lb://POST-MANAGEMENT-SERVICE}
           predicates:
-            - Path=/api/v1/posts/**
+            - Path=${GATEWAY_POST_MANAGEMENT_SERVICE_PATH}
         - id: coin-management-service
-          uri: lb://http://COIN-MANAGEMENT-SERVICE
+          uri: ${GATEWAY_COIN_MANAGEMENT_SERVICE_URI}
           predicates:
-            - Path=/api/v1/coins/**
-      default-filters:
-        - TokenRelay=
+            - Path=${GATEWAY_COIN_MANAGEMENT_SERVICE_PATH}
 server:
-  port: 8100
+  port: ${GATEWAY_PORT}
