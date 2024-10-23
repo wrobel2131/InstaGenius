@@ -1,5 +1,6 @@
 package com.instagenius.postmanagementservice.infrastructure.rest;
 
+import com.instagenius.postmanagementservice.infrastructure.config.FeignConfig;
 import com.instagenius.postmanagementservice.infrastructure.dto.CreateDescriptionDto;
 import com.instagenius.postmanagementservice.infrastructure.dto.CreateImageDto;
 import com.instagenius.postmanagementservice.infrastructure.dto.GeneratedDescriptionDto;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Optional;
 
-@FeignClient(name = "post-generation-service", url = "${application.config.post-generation-url}")
+@FeignClient(name = "post-generation-service", url = "${application.config.post-generation-url}", configuration = FeignConfig.class)
 public interface PostGenerationClient {
     @PostMapping("/generate-image")
     Optional<GeneratedImageDto> generateImage(CreateImageDto createImageDto);

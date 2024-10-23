@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableFeignClients
-public class PostManagementServiceApplication {
+class PostManagementServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PostManagementServiceApplication.class, args);

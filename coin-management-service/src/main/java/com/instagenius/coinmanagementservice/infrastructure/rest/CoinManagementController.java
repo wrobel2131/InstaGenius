@@ -17,7 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/coins")
 @RequiredArgsConstructor
-public class CoinManagementController {
+class CoinManagementController {
     private final CoinManagementUseCase coinManagementUseCase;
     private static final CoinTransactionMapper coinTransactionMapper = CoinTransactionMapper.INSTANCE;
     private static final UserBalanceMapper userBalanceMapper = UserBalanceMapper.INSTANCE;
@@ -78,6 +78,6 @@ public class CoinManagementController {
     }
 
     private UUID getUserUUIDFromJwtToken(Jwt jwt) {
-        return UUID.fromString(jwt.getClaim("sub")); //TODO
+        return UUID.fromString(jwt.getClaim("sub"));
     }
 }

@@ -11,11 +11,11 @@ spring:
           enabled: ${GATEWAY_DISCOVERY_LOCATOR_ENABLED}
       routes:
         - id: post-management-service
-          uri: ${lb://POST-MANAGEMENT-SERVICE}
+          uri: lb://${POST_MANAGEMENT_SERVICE_URI}
           predicates:
             - Path=${GATEWAY_POST_MANAGEMENT_SERVICE_PATH}
         - id: coin-management-service
-          uri: ${GATEWAY_COIN_MANAGEMENT_SERVICE_URI}
+          uri: lb://${GATEWAY_COIN_MANAGEMENT_SERVICE_URI}
           predicates:
             - Path=${GATEWAY_COIN_MANAGEMENT_SERVICE_PATH}
 server:

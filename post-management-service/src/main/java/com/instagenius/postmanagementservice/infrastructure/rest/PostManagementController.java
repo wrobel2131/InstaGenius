@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -22,7 +24,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 @Slf4j
-public class PostManagementController {
+class PostManagementController {
     private final PostManagementUseCase postManagementUseCase;
     private static final DescriptionGenerationOptionsMapper descriptionGenerationOptionsMapper = DescriptionGenerationOptionsMapper.INSTANCE;
     private static final ImageGenerationOptionsMapper imageGenerationOptionsMapper = ImageGenerationOptionsMapper.INSTANCE;
@@ -30,8 +32,8 @@ public class PostManagementController {
 
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PostsResponseDto> getAllPostsByUserId() {
-        UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
+    ResponseEntity<PostsResponseDto> getAllPostsByUserId(@AuthenticationPrincipal Jwt jwt) {
+        UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 new PostsResponseDto(
                         postManagementUseCase
@@ -44,8 +46,8 @@ public class PostManagementController {
     }
 
     @GetMapping(value = "/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PostResponseDto> getPostByUserIdAndId(@PathVariable("postId") Long postId) {
-        UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
+    ResponseEntity<PostResponseDto> getPostByUserIdAndId(@PathVariable("postId") Long postId, @AuthenticationPrincipal Jwt jwt) {
+        UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 postMapper.toPostResponseDto(postManagementUseCase.getPostByUserIdAndId(userId, postId))
         );
@@ -53,8 +55,8 @@ public class PostManagementController {
 
 
     @PostMapping(value = "/create-post", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PostResponseDto> createPost(@Valid @RequestBody CreatePostRequestDto createPostRequestDto) {
-        UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
+    ResponseEntity<PostResponseDto> createPost(@Valid @RequestBody CreatePostRequestDto createPostRequestDto, @AuthenticationPrincipal Jwt jwt) {
+        UUID userId = getUserUUIDFromJwtToken(jwt);
         Post post =  postManagementUseCase.createPost(
                 userId,
                 descriptionGenerationOptionsMapper.toDescriptionGenerationOptions(createPostRequestDto.descriptionOptions()),
@@ -69,9 +71,13 @@ public class PostManagementController {
     }
 
     @DeleteMapping(value = "/{postId}")
-    ResponseEntity<Void> deletePost(@PathVariable("postId") Long postId) {
-        UUID userId = UUID.randomUUID(); //TODO get UUID form TOKEN
+    ResponseEntity<Void> deletePost(@PathVariable("postId") Long postId, @AuthenticationPrincipal Jwt jwt) {
+        UUID userId = getUserUUIDFromJwtToken(jwt);
         postManagementUseCase.deletePost(userId, postId);
         return ResponseEntity.noContent().build();
+    }
+
+    private UUID getUserUUIDFromJwtToken(Jwt jwt) {
+        return UUID.fromString(jwt.getClaim("sub"));
     }
 }
