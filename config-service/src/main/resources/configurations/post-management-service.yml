@@ -6,7 +6,7 @@ spring:
           issuer-uri: ${JWT_ISSUER_URI}
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5435/db_posts
+    url: ${POST_MANAGEMENT_DB_URL}
     username: ${POST_MANAGEMENT_DB_USERNAME}
     password: ${POST_MANAGEMENT_DB_PASSWORD}
   jpa:
@@ -15,10 +15,10 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 server:
-  port: 8020
+  port: ${POST_MANAGEMENT_SERVICE_PORT}
 application:
   config:
-    post-generation-url: http://localhost:8000/api/v1/generation
+    post-generation-url: ${FEIGN_CLIENT_GENERATION_URL}
 aws:
   access-key: ${AWS_ACCESS_KEY}
   secret-access-key: ${AWS_SECRET_ACCESS_KEY}

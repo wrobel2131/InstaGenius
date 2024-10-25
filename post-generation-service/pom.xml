@@ -10,7 +10,8 @@
 	</parent>
 	<groupId>com.instagenius</groupId>
 	<artifactId>post-generation-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>
 	<name>post-generation-service</name>
 	<description>post-generation-service</description>
 	<url/>
@@ -61,8 +62,6 @@
 			<artifactId>mapstruct</artifactId>
 			<version>1.5.5.Final</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

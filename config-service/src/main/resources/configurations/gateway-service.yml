@@ -8,10 +8,10 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: ${GATEWAY_DISCOVERY_LOCATOR_ENABLED}
+          enabled: true
       routes:
         - id: post-management-service
-          uri: lb://${POST_MANAGEMENT_SERVICE_URI}
+          uri: lb://${GATEWAY_POST_MANAGEMENT_SERVICE_URI}
           predicates:
             - Path=${GATEWAY_POST_MANAGEMENT_SERVICE_PATH}
         - id: coin-management-service
@@ -19,4 +19,4 @@ spring:
           predicates:
             - Path=${GATEWAY_COIN_MANAGEMENT_SERVICE_PATH}
 server:
-  port: ${GATEWAY_PORT}
+  port: ${GATEWAY_SERVICE_PORT}

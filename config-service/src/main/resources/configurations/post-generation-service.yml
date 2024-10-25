@@ -12,4 +12,4 @@ spring:
       image:
         enabled: true
 server:
-  port: 8000
+  port: ${POST_GENERATION_SERVICE_PORT}
