@@ -1,11 +1,8 @@
 eureka:
   instance:
-    hostname: ${EUREKA_INSTANCE_HOSTNAME}
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
   client:
-    enabled: false # check if works
     register-with-eureka: false
     fetch-registry: false
-    service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE}
 server:
-  port: ${EUREKA_SERVICE_PORT}
+  port: ${EUREKA_SERVICE_PORT:8761}
