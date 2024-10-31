@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class CoinManagementConfig {
+class CoinManagementConfig {
     private final CoinTransactionPersistencePort coinTransactionPersistencePort;
     private final UserBalancePersistencePort userBalancePersistencePort;
 

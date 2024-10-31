@@ -10,7 +10,8 @@
 	</parent>
 	<groupId>com.instagenius</groupId>
 	<artifactId>coin-management-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>
 	<name>coin-management-service</name>
 	<description>coin-management-service</description>
 	<url/>
@@ -54,6 +55,10 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
 
 		<dependency>

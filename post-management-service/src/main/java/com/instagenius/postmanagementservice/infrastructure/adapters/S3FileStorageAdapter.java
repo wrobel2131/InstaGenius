@@ -21,7 +21,7 @@ import java.util.Base64;
 
 @Component
 @RequiredArgsConstructor
-public class S3FileStorageAdapter implements FileStoragePort {
+class S3FileStorageAdapter implements FileStoragePort {
     private final S3Client s3Client;
 
     @Value("${aws.s3.bucket-name}")

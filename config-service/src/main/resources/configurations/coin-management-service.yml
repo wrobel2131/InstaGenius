@@ -1,13 +1,18 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI:http://localhost:8180/auth/realms/instagenius}
   datasource:
-    url: jdbc:postgresql://localhost:5432/coin_management
+    url: jdbc:postgresql://${COIN_MANAGEMENT_DB_HOST:localhost}:${COIN_MANAGEMENT_DB_PORT:5432}/${COIN_MANAGEMENT_DB_NAME:db_coins}
     driver-class-name: org.postgresql.Driver
-    username: ${COIN_MANAGEMENT_DB_USERNAME}
-    password: ${COIN_MANAGEMENT_DB_PASSWORD}
+    username: ${COIN_MANAGEMENT_DB_USERNAME:coin_management_service_user}
+    password: ${COIN_MANAGEMENT_DB_PASSWORD:password}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     database: postgresql
 server:
-  port: 8040
+  port: ${COIN_MANAGEMENT_SERVICE_PORT:8081}

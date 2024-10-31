@@ -1,0 +1,218 @@
+version: '3.7'
+
+services:
+#  config-service:
+#    build:
+#      context: ./config-service
+#      dockerfile: Dockerfile
+#    container_name: config-service
+#    environment:
+#      - CONFIG_SERVICE_PORT=${CONFIG_SERVICE_PORT}
+#      - SPRING_PROFILES_NATIVE=${SPRING_PROFILES_NATIVE}
+#      - CONFIG_SERVICE_NATIVE_SEARCH_LOCATIONS=${CONFIG_SERVICE_NATIVE_SEARCH_LOCATIONS}
+#    ports:
+#      - "${CONFIG_SERVICE_PORT}:${CONFIG_SERVICE_PORT}"
+#    networks:
+#      - instagenius-net
+
+#  discovery-service:
+#    build:
+#      context: ./discovery-service
+#      dockerfile: Dockerfile
+#    container_name: discovery-service
+#    environment:
+#      - EUREKA_INSTANCE_HOSTNAME=discovery-service
+#      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-service:8761/eureka/
+#      - EUREKA_SERVICE_PORT=8761
+#      - CONFIG_SERVICE_URL=http://config-service:8888
+#    ports:
+#      - "${EUREKA_SERVICE_PORT}:${EUREKA_SERVICE_PORT}"
+#    depends_on:
+#      - config-service
+#    networks:
+#      - instagenius-net
+#  gateway:
+#    build:
+#      context: ./gateway
+#      dockerfile: Dockerfile
+#    container_name: gateway
+#    environment:
+#      - EUREKA_INSTANCE_HOSTNAME=gateway
+#      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE}
+#      - CONFIG_SERVICE_URL=${CONFIG_SERVICE_URL}
+#      - JWT_ISSUER_URI=${JWT_ISSUER_URI}
+#      - GATEWAY_POST_MANAGEMENT_SERVICE_URI=${GATEWAY_POST_MANAGEMENT_SERVICE_URI}
+#      - GATEWAY_POST_MANAGEMENT_SERVICE_PATH=${GATEWAY_POST_MANAGEMENT_SERVICE_PATH}
+#      - GATEWAY_COIN_MANAGEMENT_SERVICE_URI=${GATEWAY_COIN_MANAGEMENT_SERVICE_URI}
+#      - GATEWAY_COIN_MANAGEMENT_SERVICE_PATH=${GATEWAY_COIN_MANAGEMENT_SERVICE_PATH}
+#      - GATEWAY_SERVICE_PORT=${GATEWAY_SERVICE_PORT}
+#    ports:
+#      - "${GATEWAY_SERVICE_PORT}:${GATEWAY_SERVICE_PORT}"
+#    depends_on:
+#      - config-service
+#      - discovery-service
+#    networks:
+#      - instagenius-net
+#  post-generation-service:
+#    build:
+#      context: ./post-generation-service
+#      dockerfile: Dockerfile
+#    container_name: post-generation-service
+#    environment:
+#      - EUREKA_INSTANCE_HOSTNAME=post-generation-service
+#      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE}
+#      - CONFIG_SERVICE_URL=${CONFIG_SERVICE_URL}
+#      - JWT_ISSUER_URI=${JWT_ISSUER_URI}
+#      - OPENAI_API_KEY=${OPENAI_API_KEY}
+#      - POST_GENERATION_SERVICE_PORT=${POST_GENERATION_SERVICE_PORT}
+#    ports:
+#      - "${POST_GENERATION_SERVICE_PORT}:${POST_GENERATION_SERVICE_PORT}"
+#    depends_on:
+#      - config-service
+#      - discovery-service
+#    networks:
+#      - instagenius-net
+#
+#  post-management-service:
+#    build:
+#      context: ./post-management-service
+#      dockerfile: Dockerfile
+#    container_name: post-management-service
+#    environment:
+#      - EUREKA_INSTANCE_HOSTNAME=post-management-service
+#      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE}
+#      - CONFIG_SERVICE_URL=${CONFIG_SERVICE_URL}
+#      - JWT_ISSUER_URI=${JWT_ISSUER_URI}
+#      - POST_MANAGEMENT_DB_URL=${POST_MANAGEMENT_DB_URL}
+#      - POST_MANAGEMENT_DB_USERNAME=${POST_MANAGEMENT_DB_USERNAME}
+#      - POST_MANAGEMENT_DB_PASSWORD=${POST_MANAGEMENT_DB_PASSWORD}
+#      - POST_MANAGEMENT_SERVICE_PORT=${POST_MANAGEMENT_SERVICE_PORT}
+#      - FEIGN_CLIENT_GENERATION_URL=${FEIGN_CLIENT_GENERATION_URL}
+#      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+#      - AWS_SECRET_ACCESS_KEY={AWS_SECRET_ACCESS_KEY}
+#      - AWS_REGION=${AWS_REGION}
+#      - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
+#    ports:
+#      - "${POST_MANAGEMENT_SERVICE_PORT}:${POST_MANAGEMENT_SERVICE_PORT}"
+#    depends_on:
+#      - config-service
+#      - discovery-service
+#      - postgres_posts
+#    networks:
+#      - instagenius-net
+#
+#  coin-management-service:
+#    build:
+#      context: ./coin-management-service
+#      dockerfile: Dockerfile
+#    container_name: coin-management-service
+#    environment:
+#      - EUREKA_INSTANCE_HOSTNAME=coin-management-service
+#      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE}
+#      - CONFIG_SERVICE_URL=${CONFIG_SERVICE_URL}
+#      - JWT_ISSUER_URI=${JWT_ISSUER_URI}
+#      - COIN_MANAGEMENT_DB_URL=${POST_MANAGEMENT_DB_URL}
+#      - COIN_MANAGEMENT_DB_USERNAME=${POST_MANAGEMENT_DB_USERNAME}
+#      - COIN_MANAGEMENT_DB_PASSWORD=${POST_MANAGEMENT_DB_PASSWORD}
+#      - COIN_MANAGEMENT_SERVICE_PORT=${POST_MANAGEMENT_SERVICE_PORT}
+#    ports:
+#      - "${COIN_MANAGEMENT_SERVICE_PORT}:${COIN_MANAGEMENT_SERVICE_PORT}"
+#    depends_on:
+#      - config-service
+#      - discovery-service
+#      - postgres_coins
+#    networks:
+#      - instagenius-net
+
+  postgres_posts:
+    image: postgres:latest
+    container_name: postgres_posts
+    environment:
+      POSTGRES_USER: post_management_service_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_posts
+    volumes:
+      - postgres_posts:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    networks:
+      - instagenius-net
+    restart: unless-stopped
+
+  postgres_coins:
+    image: postgres:latest
+    container_name: postgres_coins
+    environment:
+      POSTGRES_USER: coin_management_service_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_coins
+    volumes:
+      - postgres_coins:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - instagenius-net
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.1
+    container_name: keycloak
+    environment:
+      KC_HOSTNAME_PORT: 8180
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KEYCLOAK_SSL_REQUIRED: none
+      KC_DB_URL: jdbc:postgresql://postgres_keycloak:5432/keycloak_db
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres_keycloak
+      KC_DB_URL_PORT: 5432
+      KC_DB_URL_DATABASE: keycloak_db
+      KC_DB_USERNAME: admin
+      KC_DB_PASSWORD: admin
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    ports:
+      - "8180:8080"
+    restart: unless-stopped
+    command: ["start-dev"]
+    depends_on:
+      - postgres_keycloak
+    networks:
+      - instagenius-net
+
+  postgres_keycloak:
+    image: postgres:latest
+    container_name: postgres_keycloak
+    environment:
+      POSTGRES_DB: keycloak_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5434:5432"
+    volumes:
+      - keycloak_db_data:/var/lib/postgresql/data
+    networks:
+      - instagenius-net
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - instagenius-net
+
+volumes:
+  postgres_posts:
+  postgres_coins:
+  keycloak_db_data:
+  pgadmin_data:
+
+networks:
+  instagenius-net:
+    driver: bridge

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class PostRepository implements PostPersistencePort {
+class PostRepository implements PostPersistencePort {
     private final JpaPostRepository jpaPostRepository;
     private final PostMapper postMapper = PostMapper.INSTANCE;
 

@@ -4,8 +4,6 @@ import com.instagenius.coinmanagementservice.application.CoinManagementUseCase;
 import com.instagenius.coinmanagementservice.application.CoinTransactionPersistencePort;
 import com.instagenius.coinmanagementservice.application.UserBalancePersistencePort;
 import jakarta.transaction.Transactional;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 

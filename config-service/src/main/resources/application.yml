@@ -1,12 +1,18 @@
 server:
-  port: 8888
+  port: ${CONFIG_SERVICE_PORT:8888}
 spring:
-  profiles:
-    active: native
   application:
     name: config-service
+eureka:
+  instance:
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka}
+    register-with-eureka: true
+    fetch-registry: true
   cloud:
     config:
       server:
-        native:
-          search-locations: classpath:/configurations
+        git:
+          uri: file:///${HOME}/config-repo #change to use external repo for configs rather that folder in config service

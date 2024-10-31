@@ -4,7 +4,6 @@ import com.instagenius.coinmanagementservice.application.UserBalancePersistenceP
 import com.instagenius.coinmanagementservice.domain.UserBalance;
 import com.instagenius.coinmanagementservice.infrastructure.exception.UserNotFoundException;
 import com.instagenius.coinmanagementservice.infrastructure.mapper.UserBalanceMapper;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

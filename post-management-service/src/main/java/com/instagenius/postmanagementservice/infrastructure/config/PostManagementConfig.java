@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class PostManagementConfig {
+class PostManagementConfig {
     private final PostPersistencePort postPersistencePort;
     private final PostGenerationPort postGenerationPort;
     private final FileStoragePort fileStoragePort;

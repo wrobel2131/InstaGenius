@@ -1,7 +1,6 @@
 package com.instagenius.coinmanagementservice.infrastructure.rest;
 
 import com.instagenius.coinmanagementservice.infrastructure.exception.UserNotFoundException;
-import jakarta.ws.rs.NotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,7 +25,7 @@ class CoinManagementExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException() {
         return new ResponseEntity<>(new ErrorResponse("Value must be unique", LocalDateTime.now(), List.of()), HttpStatus.CONFLICT);
     }
 

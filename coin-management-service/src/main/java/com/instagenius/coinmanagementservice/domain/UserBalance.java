@@ -9,8 +9,8 @@ public class UserBalance {
     private final UUID userId;
     private Balance balance;
     private LocalDateTime updatedAt;
-    private LocalDateTime createdAt;
-    private int version;
+    private final LocalDateTime createdAt;
+    private final int version;
 
 
     public UserBalance(Long id, UUID userId, Balance balance, LocalDateTime updatedAt, LocalDateTime createdAt, int version) {
@@ -24,10 +24,6 @@ public class UserBalance {
 
     public void setBalance(Balance balance) {
         this.balance = balance;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
