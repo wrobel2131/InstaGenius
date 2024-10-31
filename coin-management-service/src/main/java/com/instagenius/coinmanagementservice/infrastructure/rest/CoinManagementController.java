@@ -2,6 +2,7 @@ package com.instagenius.coinmanagementservice.infrastructure.rest;
 
 import com.instagenius.coinmanagementservice.application.CoinManagementUseCase;
 import com.instagenius.coinmanagementservice.infrastructure.dto.*;
+import com.instagenius.coinmanagementservice.infrastructure.mapper.CoinReservationMapper;
 import com.instagenius.coinmanagementservice.infrastructure.mapper.CoinTransactionMapper;
 import com.instagenius.coinmanagementservice.infrastructure.mapper.UserBalanceMapper;
 import jakarta.validation.Valid;
@@ -21,6 +22,7 @@ class CoinManagementController {
     private final CoinManagementUseCase coinManagementUseCase;
     private static final CoinTransactionMapper coinTransactionMapper = CoinTransactionMapper.INSTANCE;
     private static final UserBalanceMapper userBalanceMapper = UserBalanceMapper.INSTANCE;
+    private static final CoinReservationMapper coinReservationMapper = CoinReservationMapper.INSTANCE;
 
     @GetMapping(value = "/balance", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<UserBalanceResponseDto> getBalance(@AuthenticationPrincipal Jwt jwt) {
@@ -47,6 +49,31 @@ class CoinManagementController {
     ResponseEntity<Void> deleteBalance(@AuthenticationPrincipal Jwt jwt) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
         coinManagementUseCase.deleteBalance(userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/reserve", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<CoinReservationDto> reserveCoins(@Valid @RequestBody ReserveCoinsDto reserveCoinsDto, @AuthenticationPrincipal Jwt jwt) {
+        UUID userId = getUserUUIDFromJwtToken(jwt);
+        return ResponseEntity.ok(
+                coinReservationMapper.toCoinReservationDto(
+                        coinManagementUseCase.reserveCoins(userId, reserveCoinsDto.amount(), reserveCoinsDto.operationId()
+                        )
+                )
+        );
+    }
+
+    @PostMapping(value = "/complete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> completeReservation(@Valid @RequestBody CompleteReservationDto completeReservationDto, @AuthenticationPrincipal Jwt jwt) {
+        UUID userId = getUserUUIDFromJwtToken(jwt);
+        coinManagementUseCase.completeReservation(userId, completeReservationDto.reservationId());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/cancel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> cancelReservation(@Valid @RequestBody CancelReservationDto cancelReservationDto, @AuthenticationPrincipal Jwt jwt) {
+        UUID userId = getUserUUIDFromJwtToken(jwt);
+        coinManagementUseCase.cancelReservation(userId, cancelReservationDto.reservationId());
         return ResponseEntity.noContent().build();
     }
 

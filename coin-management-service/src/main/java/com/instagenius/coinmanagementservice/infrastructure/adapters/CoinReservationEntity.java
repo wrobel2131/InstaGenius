@@ -1,5 +1,6 @@
 package com.instagenius.coinmanagementservice.infrastructure.adapters;
 
+import com.instagenius.coinmanagementservice.domain.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,35 +8,40 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Table(name = "coin_reservation")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 @Builder
-@Table(name = "user_balance")
-public class UserBalanceEntity {
+public class CoinReservationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "userId", unique = true)
+    @Column(nullable = false, name = "userId")
     private UUID userId;
 
-//    @Column(nullable = false, name = "balance")
-//    private int balance;
+    @Column(nullable = false, name = "amount")
+    private int amount;
 
-    @Column(nullable = false, name = "available_balance")
-    private int availableBalance;
+    /* Operation id is unique value, which identifies the operation */
+    @Column(nullable = false, name = "operationId", unique = true)
+    private UUID operationId;
 
-    @Column(nullable = false, name = "reserved_balance")
-    private int reservedBalance;
+    @Column(nullable = false, name = "status")
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
 
     @Column(nullable = false, name = "updated_at")
     private LocalDateTime updatedAt;
 
     @Column(nullable = false, name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(nullable = false, name = "expiry_time")
+    private LocalDateTime expiryTime;
 
     @Version
     private Long version;
@@ -48,8 +54,5 @@ public class UserBalanceEntity {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
-        this.availableBalance = 0;
-        this.reservedBalance = 0;
     }
-
 }
