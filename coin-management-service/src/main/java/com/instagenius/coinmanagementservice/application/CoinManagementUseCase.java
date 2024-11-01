@@ -17,6 +17,5 @@ public interface CoinManagementUseCase {
     void completeReservation(UUID userId, Long reservationId);
     void cancelReservation(UUID userId, Long reservationId);
     void addCoins(UUID userId, int amount, TransactionType transactionType);
-    void cancelExpiredReservations(UUID userId);
-//    void deductCoins(UUID userId, int amount);
-}
+//    void cancelExpiredReservations(UUID userId);
+    }

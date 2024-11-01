@@ -22,35 +22,35 @@ public class UserBalance {
         this.createdAt = createdAt;
     }
 
-    Long getId() {
+    public Long getId() {
         return id;
     }
 
-    LocalDateTime getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    UUID getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    Balance getReservedBalance() {
+    public Balance getReservedBalance() {
         return reservedBalance;
     }
 
-    void setAvailableBalance(Balance availableBalance) {
+    public void setAvailableBalance(Balance availableBalance) {
         this.availableBalance = availableBalance;
     }
 
-    void setReservedBalance(Balance reservedBalance) {
+    public void setReservedBalance(Balance reservedBalance) {
         this.reservedBalance = reservedBalance;
     }
 
-    LocalDateTime getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    Balance getAvailableBalance() {
+    public Balance getAvailableBalance() {
         return availableBalance;
     }
 

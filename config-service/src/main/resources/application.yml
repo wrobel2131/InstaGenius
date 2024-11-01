@@ -1,18 +1,19 @@
 server:
   port: ${CONFIG_SERVICE_PORT:8888}
+#eureka:
+#  instance:
+#    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+#  client:
+#    service-url:
+#      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka}
+#    register-with-eureka: true
+#    fetch-registry: true
+
 spring:
   application:
     name: config-service
-eureka:
-  instance:
-    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
-  client:
-    service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka}
-    register-with-eureka: true
-    fetch-registry: true
   cloud:
     config:
       server:
         git:
-          uri: file:///${HOME}/config-repo #change to use external repo for configs rather that folder in config service
+          uri: file://${HOME}/Desktop/RoadToProgramista15k/InstaGenius/config-repo/

@@ -24,7 +24,6 @@ public class CoinManagementService implements CoinManagementUseCase {
         this.coinReservationPersistencePort = coinReservationPersistencePort;
     }
 
-
     @Override
     public UserBalance getBalance(UUID userId) {
         return userBalancePersistencePort.findUserBalanceByUserId(userId);
@@ -64,7 +63,7 @@ public class CoinManagementService implements CoinManagementUseCase {
             userBalancePersistencePort.save(userBalance);
 
             CoinReservation coinReservation = new CoinReservation(null, userId, new CoinAmount(amount), operationId,
-                    ReservationStatus.PENDING, null, LocalDateTime.now());
+                    ReservationStatus.PENDING, null, LocalDateTime.now(), null);
             return coinReservationPersistencePort.save(coinReservation);
         }
     }
@@ -119,15 +118,15 @@ public class CoinManagementService implements CoinManagementUseCase {
         recordCointTransaction(userId, amount, type);
     }
 
-    @Override
-    @Scheduled(fixedRate = 60000)
-    public void cancelExpiredReservations(UUID userId) {
-        List<CoinReservation> coinReservations = coinReservationPersistencePort.findCoinReservationsByUserIdAndStatusAndExpiryTimeBefore(userId, ReservationStatus.PENDING, LocalDateTime.now());
-        for (CoinReservation coinReservation: coinReservations) {
-            cancelReservation(userId, coinReservation.getId());
-        }
-
-    }
+//    @Override
+//    @Scheduled(fixedRate = 60000)
+//    public void cancelExpiredReservations(UUID userId) {
+//        List<CoinReservation> coinReservations = coinReservationPersistencePort.findCoinReservationsByUserIdAndStatusAndExpiryTimeBefore(userId, ReservationStatus.PENDING, LocalDateTime.now());
+//        for (CoinReservation coinReservation: coinReservations) {
+//            cancelReservation(userId, coinReservation.getId());
+//        }
+//
+//    }
 
     
 

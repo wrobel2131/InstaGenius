@@ -44,7 +44,7 @@ public class CoinReservationEntity {
     private LocalDateTime expiryTime;
 
     @Version
-    private Long version;
+    private int version;
 
     @PreUpdate
     protected void onUpdate() {
@@ -54,5 +54,6 @@ public class CoinReservationEntity {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        this.expiryTime = LocalDateTime.now().plusMinutes(10);
     }
 }

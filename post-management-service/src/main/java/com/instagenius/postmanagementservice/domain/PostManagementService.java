@@ -1,9 +1,8 @@
 package com.instagenius.postmanagementservice.domain;
 
-import com.instagenius.postmanagementservice.application.FileStoragePort;
-import com.instagenius.postmanagementservice.application.PostGenerationPort;
-import com.instagenius.postmanagementservice.application.PostManagementUseCase;
-import com.instagenius.postmanagementservice.application.PostPersistencePort;
+import com.instagenius.postmanagementservice.application.*;
+import com.instagenius.postmanagementservice.infrastructure.exception.ImageStorageException;
+import com.instagenius.postmanagementservice.infrastructure.exception.PostGenerationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,30 +15,47 @@ import java.util.stream.Collectors;
 public class PostManagementService implements PostManagementUseCase {
     private final PostPersistencePort postPersistencePort;
     private final PostGenerationPort postGenerationPort;
+    private final CoinManagementPort coinManagementPort;
     private final FileStoragePort fileStoragePort;
 
-    public PostManagementService(PostPersistencePort postPersistencePort, PostGenerationPort postGenerationPort, FileStoragePort fileStoragePort) {
+    public PostManagementService(PostPersistencePort postPersistencePort, PostGenerationPort postGenerationPort, CoinManagementPort coinManagementPort, FileStoragePort fileStoragePort) {
         this.postPersistencePort = postPersistencePort;
         this.postGenerationPort = postGenerationPort;
+        this.coinManagementPort = coinManagementPort;
         this.fileStoragePort = fileStoragePort;
     }
 
-    //TODO check how to ensure, that all or operations here are transactional
+    //TODO check how to ensure, that all or operations here are transactional and async
     @Override
     public Post createPost(UUID userId, DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions, String title) {
-        //TODO should be async
-        GeneratedDescription generatedDescription = postGenerationPort.generateDescription(descriptionGenerationOptions);
+        int generationCost = calculateGenerationCost(descriptionGenerationOptions, imageGenerationOptions);
+        UUID operationId = UUID.randomUUID();
+        CoinReservation coinReservation = coinManagementPort.reserveCoins(new ReserveCoins(generationCost, operationId));
 
-        //TODO should be async
-        GeneratedImage generatedImage = postGenerationPort.generateImage(imageGenerationOptions);
+        GeneratedDescription generatedDescription = null;
+        GeneratedImage generatedImage = null;
+
+        try {
+            generatedDescription = postGenerationPort.generateDescription(descriptionGenerationOptions);
+            generatedImage = postGenerationPort.generateImage(imageGenerationOptions);
+        } catch (PostGenerationException exception) {
+            coinManagementPort.cancelReservation(new CancelReservation(coinReservation.reservationId()));
+            throw exception;
+        }
 
         FileKeyName imageKeyName = new FileKeyName(userId);
         //TODO should wait for image response and then should be async to allow post to be stored in database
-        fileStoragePort.uploadFile(imageKeyName, generatedImage);
+        try {
+            fileStoragePort.uploadFile(imageKeyName, generatedImage);
+        } catch(ImageStorageException exception) {
+            coinManagementPort.cancelReservation(new CancelReservation(coinReservation.reservationId()));
+            throw exception;
+        }
 
         Post post = postPersistencePort.save(new Post(null, userId, title, imageKeyName, generatedImage, generatedDescription, null, null));
         post.setGeneratedImage(generatedImage);
 
+        coinManagementPort.completeReservation(new CompleteReservation(coinReservation.reservationId()));
         return post;
     }
 
@@ -78,11 +94,6 @@ public class PostManagementService implements PostManagementUseCase {
         return post;
     }
 
-//    @Override
-//    public Post updatePost() {
-//        return null;
-//    }
-
     //TODO Check the case, when post is deleted from file storage, while error occurs while deleting post from my database.
     //TODO Then, image is deleted from file stroage but post with imagekeyname is not deleted from databse. Check how to solve it.
     @Transactional
@@ -93,5 +104,10 @@ public class PostManagementService implements PostManagementUseCase {
         fileStoragePort.deleteFile(post.getImageKeyName());
 
         postPersistencePort.deletePostByUserIdAndPostId(userId, id);
+    }
+
+    private int calculateGenerationCost(DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions) {
+        //TODO calculate generation cost based on the model options
+        return 0;
     }
 }

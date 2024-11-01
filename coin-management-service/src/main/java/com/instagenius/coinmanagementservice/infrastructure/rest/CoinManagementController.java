@@ -84,13 +84,6 @@ class CoinManagementController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/deduct", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> deductCoins(@Valid @RequestBody DeductCoinsDto deductCoinsDto, @AuthenticationPrincipal Jwt jwt) {
-        UUID userId = getUserUUIDFromJwtToken(jwt);
-        coinManagementUseCase.deductCoins(userId, deductCoinsDto.coins());
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping(value = "/transactions", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CoinTransactionsResponseDto> getCoinTransactions(@AuthenticationPrincipal Jwt jwt) {
         UUID userId = getUserUUIDFromJwtToken(jwt);

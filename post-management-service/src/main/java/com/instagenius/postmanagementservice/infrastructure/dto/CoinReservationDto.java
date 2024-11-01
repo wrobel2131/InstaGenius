@@ -1,4 +1,4 @@
-package com.instagenius.coinmanagementservice.infrastructure.dto;
+package com.instagenius.postmanagementservice.infrastructure.dto;
 
 import java.util.UUID;
 
