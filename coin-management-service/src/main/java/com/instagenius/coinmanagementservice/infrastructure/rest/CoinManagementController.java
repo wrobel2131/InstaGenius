@@ -26,6 +26,7 @@ class CoinManagementController {
 
     @GetMapping(value = "/balance", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<UserBalanceResponseDto> getBalance(@AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Get Balance endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 userBalanceMapper.toUserBalanceResponseDto(
@@ -37,6 +38,7 @@ class CoinManagementController {
     @PostMapping(value = "/balance", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<UserBalanceResponseDto> createBalance(@Valid @RequestBody CreateUserBalanceDto createUserBalanceDto,
                                                          @AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Create Balance endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 userBalanceMapper.toUserBalanceResponseDto(
@@ -47,6 +49,7 @@ class CoinManagementController {
 
     @DeleteMapping(value = "/balance")
     ResponseEntity<Void> deleteBalance(@AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Delete Balance endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         coinManagementUseCase.deleteBalance(userId);
         return ResponseEntity.noContent().build();
@@ -54,6 +57,7 @@ class CoinManagementController {
 
     @PostMapping(value = "/reserve", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CoinReservationDto> reserveCoins(@Valid @RequestBody ReserveCoinsDto reserveCoinsDto, @AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Reserve Coins endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 coinReservationMapper.toCoinReservationDto(
@@ -65,6 +69,7 @@ class CoinManagementController {
 
     @PostMapping(value = "/complete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> completeReservation(@Valid @RequestBody CompleteReservationDto completeReservationDto, @AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Complete Reservation endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         coinManagementUseCase.completeReservation(userId, completeReservationDto.reservationId());
         return ResponseEntity.noContent().build();
@@ -72,6 +77,7 @@ class CoinManagementController {
 
     @PostMapping(value = "/cancel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> cancelReservation(@Valid @RequestBody CancelReservationDto cancelReservationDto, @AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Cancel Reservation endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         coinManagementUseCase.cancelReservation(userId, cancelReservationDto.reservationId());
         return ResponseEntity.noContent().build();
@@ -79,6 +85,7 @@ class CoinManagementController {
 
     @PutMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> addCoins(@Valid @RequestBody AddCoinsDto addCoinsDto, @AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Add Coins endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         coinManagementUseCase.addCoins(userId, addCoinsDto.coins(), addCoinsDto.type());
         return ResponseEntity.noContent().build();
@@ -86,6 +93,7 @@ class CoinManagementController {
 
     @GetMapping(value = "/transactions", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CoinTransactionsResponseDto> getCoinTransactions(@AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Get Coins Transactions endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 new CoinTransactionsResponseDto(

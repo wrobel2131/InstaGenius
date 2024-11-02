@@ -108,6 +108,6 @@ public class PostManagementService implements PostManagementUseCase {
 
     private int calculateGenerationCost(DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions) {
         //TODO calculate generation cost based on the model options
-        return 0;
+        return 40;
     }
 }

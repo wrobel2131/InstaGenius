@@ -26,6 +26,7 @@ public interface CoinReservationMapper {
     @Mapping(source = "updatedAt", target = "updatedAt")
     @Mapping(source = "createdAt", target = "createdAt")
     @Mapping(source = "expiryTime", target = "expiryTime")
+    @Mapping(source = "version", target = "version")
     CoinReservation toCoinReservation(CoinReservationEntity coinReservationEntity);
 
     @Mapping(source = "id", target = "id")
@@ -33,9 +34,10 @@ public interface CoinReservationMapper {
     @Mapping(source = "amount", target = "amount", qualifiedByName = "coinAmountToInt")
     @Mapping(source = "operationId", target = "operationId")
     @Mapping(source = "status", target = "status")
-    @Mapping(source = "updatedAt", target = "updatedAt")
+    @Mapping(source = "updatedAt", target = "updatedAt", ignore = true)
     @Mapping(source = "createdAt", target = "createdAt")
     @Mapping(source = "expiryTime", target = "expiryTime")
+    @Mapping(source = "version", target = "version")
     CoinReservationEntity toCoinReservationEntity(CoinReservation coinReservation);
 
 

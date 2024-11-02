@@ -1,4 +1,6 @@
 package com.instagenius.coinmanagementservice.infrastructure.dto;
 
-public record CompleteReservationDto(Long reservationId) {
+import jakarta.validation.constraints.NotNull;
+
+public record CompleteReservationDto(@NotNull(message = "Reservation Id is required!")  Long reservationId) {
 }

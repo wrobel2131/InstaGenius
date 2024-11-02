@@ -10,13 +10,19 @@ public class CoinTransaction {
     private final CoinAmount amount;
     private final TransactionType type;
     private final LocalDateTime createdAt;
+    private final int version;
 
-    public CoinTransaction(Long id, UUID userId, CoinAmount amount, TransactionType type, LocalDateTime createdAt) {
+    public CoinTransaction(Long id, UUID userId, CoinAmount amount, TransactionType type, LocalDateTime createdAt, int version) {
         this.id = id;
         this.userId = userId;
         this.amount = amount;
         this.type = type;
         this.createdAt = createdAt;
+        this.version = version;
+    }
+
+    public int getVersion() {
+        return version;
     }
 
     public Long getId() {

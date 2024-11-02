@@ -12,8 +12,10 @@ public class CoinReservation {
     private final LocalDateTime updatedAt;
     private final LocalDateTime createdAt;
     private final LocalDateTime expiryTime;
+    private final int version;
 
-    public CoinReservation(Long id, UUID userId, CoinAmount amount, UUID operationId, ReservationStatus status, LocalDateTime updatedAt, LocalDateTime createdAt, LocalDateTime expiryTime) {
+
+    public CoinReservation(Long id, UUID userId, CoinAmount amount, UUID operationId, ReservationStatus status, LocalDateTime updatedAt, LocalDateTime createdAt, LocalDateTime expiryTime, int version) {
         this.id = id;
         this.userId = userId;
         this.amount = amount;
@@ -22,6 +24,11 @@ public class CoinReservation {
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
         this.expiryTime = expiryTime;
+        this.version = version;
+    }
+
+    public int getVersion() {
+        return version;
     }
 
     public Long getId() {
@@ -71,6 +78,7 @@ public class CoinReservation {
                 ", updatedAt=" + updatedAt +
                 ", createdAt=" + createdAt +
                 ", expiryTime=" + expiryTime +
+                ", version=" + version +
                 '}';
     }
 }

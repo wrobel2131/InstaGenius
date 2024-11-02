@@ -7,7 +7,6 @@ import com.instagenius.coinmanagementservice.application.UserBalancePersistenceP
 import com.instagenius.coinmanagementservice.infrastructure.exception.CoinReservationNotFoundException;
 import com.instagenius.coinmanagementservice.infrastructure.exception.InsufficientBalanceException;
 import jakarta.transaction.Transactional;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,46 +23,54 @@ public class CoinManagementService implements CoinManagementUseCase {
         this.coinReservationPersistencePort = coinReservationPersistencePort;
     }
 
+    @Transactional
     @Override
     public UserBalance getBalance(UUID userId) {
+        System.out.println("Getting balance for user " + userId);
         return userBalancePersistencePort.findUserBalanceByUserId(userId);
     }
 
     @Transactional
     @Override
     public void deleteBalance(UUID userId) {
+        System.out.println("Deleting balance for user " + userId);
         userBalancePersistencePort.deleteUserBalanceByUserId(userId);
     }
 
     @Transactional
     @Override
     public UserBalance createBalance(UUID userId, int initialBalance) {
-        return userBalancePersistencePort.save(new UserBalance(null, userId, new Balance(initialBalance), new Balance(0), null, null));
+        System.out.println("Creating balance for user " + userId + " with initial balance " + initialBalance);
+        return userBalancePersistencePort.save(new UserBalance(null, userId, new Balance(initialBalance), new Balance(0), null, null, 0));
     }
 
     @Transactional
     @Override
     public List<CoinTransaction> getCoinTransactions(UUID userId) {
+        System.out.println("Getting coin-transactions for user " + userId);
         return coinTransactionPersistencePort.findCoinTransactionsByUserId(userId);
     }
 
     @Transactional
     @Override
     public CoinReservation reserveCoins(UUID userId, int amount, UUID operationId) {
+        System.out.println("Reserving coin-transactions for user " + userId);
         try {
             return coinReservationPersistencePort.findCoinReservationByOperationId(operationId);
         } catch (CoinReservationNotFoundException e) {
+            System.out.println("Reservation with operation id " + operationId + " not found");
             UserBalance userBalance = userBalancePersistencePort.findUserBalanceByUserId(userId);
             if (userBalance.getAvailableBalance().balance() < amount) {
                 throw new InsufficientBalanceException("Insufficient balance");
             }
-
+            System.out.println("Reserving coins");
             userBalance.setAvailableBalance(new Balance(userBalance.getAvailableBalance().balance() - amount));
             userBalance.setReservedBalance(new Balance(userBalance.getReservedBalance().balance() + amount));
             userBalancePersistencePort.save(userBalance);
 
+            System.out.println("Creating coin reservation");
             CoinReservation coinReservation = new CoinReservation(null, userId, new CoinAmount(amount), operationId,
-                    ReservationStatus.PENDING, null, LocalDateTime.now(), null);
+                    ReservationStatus.PENDING, null, LocalDateTime.now(), null, 0);
             return coinReservationPersistencePort.save(coinReservation);
         }
     }
@@ -71,9 +78,11 @@ public class CoinManagementService implements CoinManagementUseCase {
     @Transactional
     @Override
     public void completeReservation(UUID userId, Long reservationId) {
+        System.out.println("Completing reservation with id " + reservationId);
         CoinReservation coinReservation = coinReservationPersistencePort.findCoinReservationByIdAndUserId(reservationId, userId);
 
         if(!coinReservation.getStatus().equals(ReservationStatus.PENDING)) {
+            System.out.println("Reservation with id " + reservationId + " is not pending.");
             return;
         }
 
@@ -82,17 +91,19 @@ public class CoinManagementService implements CoinManagementUseCase {
         userBalancePersistencePort.save(userBalance);
 
         coinReservation.setStatus(ReservationStatus.COMPLETED);
-        coinReservationPersistencePort.save(coinReservation);
+        coinReservationPersistencePort.save(coinReservation);;
 
-        recordCointTransaction(userId, coinReservation.getAmount().amount(), TransactionType.SPEND);
+        recordCoinTransaction(userId, coinReservation.getAmount().amount(), TransactionType.SPEND);
     }
 
     @Transactional
     @Override
     public void cancelReservation(UUID userId, Long reservationId) {
+        System.out.println("Cancelling reservation with id " + reservationId);
         CoinReservation  coinReservation = coinReservationPersistencePort.findCoinReservationByIdAndUserId(reservationId, userId);
 
         if(!coinReservation.getStatus().equals(ReservationStatus.PENDING)) {
+            System.out.println("Reservation with id " + reservationId + " is not pending.");
             return;
         }
 
@@ -103,19 +114,19 @@ public class CoinManagementService implements CoinManagementUseCase {
 
         coinReservation.setStatus(ReservationStatus.CANCELLED);
         coinReservationPersistencePort.save(coinReservation);
+
     }
 
     @Transactional
     @Override
     public void addCoins(UUID userId, int amount, TransactionType type) {
-        /* Adding coins to user balance */
+        System.out.println("Adding coins to user " + userId);
         UserBalance userBalance = userBalancePersistencePort.findUserBalanceByUserId(userId);
 
         userBalance.setAvailableBalance(new Balance(userBalance.getAvailableBalance().balance() + amount));
         userBalancePersistencePort.save(userBalance);
 
-        /* Saving coin transaction */
-        recordCointTransaction(userId, amount, type);
+        recordCoinTransaction(userId, amount, type);
     }
 
 //    @Override
@@ -130,8 +141,9 @@ public class CoinManagementService implements CoinManagementUseCase {
 
     
 
-    private void recordCointTransaction(UUID userId, int amount, TransactionType type) {
-        CoinTransaction coinTransaction = new CoinTransaction(null, userId, new CoinAmount(amount), type, null);
+    private void recordCoinTransaction(UUID userId, int amount, TransactionType type) {
+        CoinTransaction coinTransaction = new CoinTransaction(null, userId, new CoinAmount(amount), type, null, 0);
         coinTransactionPersistencePort.save(coinTransaction);
+        System.out.println("Added coin-transaction " + coinTransaction);
     }
 }

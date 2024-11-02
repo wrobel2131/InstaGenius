@@ -1,7 +1,7 @@
 package com.instagenius.postgenerationservice.infrastructure.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
-public record ImageGenerationOptionsDto(@NotNull String userPrompt, @NotNull String model, String quality,
-                                        @NotNull String width, @NotNull String height, String style) {
+public record ImageGenerationOptionsDto(@NotBlank(message = "User prompt is required!") String userPrompt, @NotBlank(message = "Model is required!") String model, String quality,
+                                        @NotBlank(message = "Width of the image is required!") String width, @NotBlank(message = "Height of the image is required!") String height, String style) {
 }

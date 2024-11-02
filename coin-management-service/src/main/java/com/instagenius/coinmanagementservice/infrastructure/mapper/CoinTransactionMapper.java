@@ -20,6 +20,7 @@ public interface CoinTransactionMapper {
     @Mapping(source = "amount", target = "amount", qualifiedByName = "intToCoinAmount")
     @Mapping(source = "type", target = "type")
     @Mapping(source = "createdAt", target = "createdAt")
+    @Mapping(source = "version", target = "version")
     CoinTransaction toCoinTransaction(CoinTransactionEntity coinTransactionEntity);
 
     @Mapping(source = "id", target = "id")
@@ -27,6 +28,7 @@ public interface CoinTransactionMapper {
     @Mapping(source = "amount", target = "amount", qualifiedByName = "coinAmountToInt")
     @Mapping(source = "type", target = "type")
     @Mapping(source = "createdAt", target = "createdAt")
+    @Mapping(source = "version", target = "version")
     CoinTransactionEntity toCoinTransactionEntity(CoinTransaction coinTransaction);
 
     @Mapping(source = "amount", target = "amount", qualifiedByName = "coinAmountToInt")

@@ -11,15 +11,17 @@ public class UserBalance {
     private Balance reservedBalance;
     private final LocalDateTime updatedAt;
     private final LocalDateTime createdAt;
+    private final int version;
 
 
-    public UserBalance(Long id, UUID userId, Balance availableBalance, Balance reservedBalance, LocalDateTime updatedAt, LocalDateTime createdAt) {
+    public UserBalance(Long id, UUID userId, Balance availableBalance, Balance reservedBalance, LocalDateTime updatedAt, LocalDateTime createdAt, int version) {
         this.id = id;
         this.userId = userId;
         this.availableBalance = availableBalance;
         this.reservedBalance = reservedBalance;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
+        this.version = version;
     }
 
     public Long getId() {
@@ -53,6 +55,9 @@ public class UserBalance {
     public Balance getAvailableBalance() {
         return availableBalance;
     }
+    public int getVersion() {
+        return version;
+    }
 
     @Override
     public String toString() {
@@ -63,6 +68,7 @@ public class UserBalance {
                 ", reservedBalance=" + reservedBalance +
                 ", updatedAt=" + updatedAt +
                 ", createdAt=" + createdAt +
+                ", version=" + version +
                 '}';
     }
 }
