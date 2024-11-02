@@ -1,6 +1,7 @@
 package com.instagenius.postgenerationservice.infrastructure.rest;
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
+import com.instagenius.postgenerationservice.infrastructure.exception.InvalidGenerationOptionsException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,12 @@ class PostGenerationExceptionHandler {
                         .map(e -> new ErrorResponse.ErrorDetail(e.getField(), e.getDefaultMessage()))
                         .toList()
         ), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidGenerationOptionsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleInvalidGenerationOptionsException(InvalidGenerationOptionsException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), LocalDateTime.now(), List.of()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

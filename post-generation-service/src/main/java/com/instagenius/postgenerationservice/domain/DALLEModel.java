@@ -1,4 +1,4 @@
 package com.instagenius.postgenerationservice.domain;
 
-public record GeneratedImage(String b64Image) {
+public record DALLEModel(String model) {
 }

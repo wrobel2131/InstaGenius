@@ -1,4 +1,4 @@
-package com.instagenius.postgenerationservice.infrastructure.config;
+package com.instagenius.postgenerationservice.infrastructure.config.openai;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.image.ImageModel;
