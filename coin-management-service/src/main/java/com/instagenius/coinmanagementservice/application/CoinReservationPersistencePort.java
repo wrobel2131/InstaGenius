@@ -11,5 +11,5 @@ public interface CoinReservationPersistencePort {
     CoinReservation save(CoinReservation coinReservation);
     CoinReservation findCoinReservationByIdAndUserId(Long reservationId, UUID userId);
     CoinReservation findCoinReservationByOperationId(UUID operationId);
-    List<CoinReservation> findCoinReservationsByUserIdAndStatusAndExpiryTimeBefore(UUID userId, ReservationStatus status, LocalDateTime expiryTime);
+    List<CoinReservation> findAllCoinReservationsByStatusAndExpiryTimeBefore(ReservationStatus status, LocalDateTime expiryTime);
 }

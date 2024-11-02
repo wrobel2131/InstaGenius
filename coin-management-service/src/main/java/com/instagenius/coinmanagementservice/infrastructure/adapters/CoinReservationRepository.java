@@ -46,8 +46,8 @@ public class CoinReservationRepository implements CoinReservationPersistencePort
     }
 
     @Override
-    public List<CoinReservation> findCoinReservationsByUserIdAndStatusAndExpiryTimeBefore(UUID userId, ReservationStatus status, LocalDateTime expiryTime) {
-        return jpaCoinReservationRepository.findCoinReservationEntitiesByUserIdAndStatusAndExpiryTimeBefore(userId, status, expiryTime)
+    public List<CoinReservation> findAllCoinReservationsByStatusAndExpiryTimeBefore(ReservationStatus status, LocalDateTime expiryTime) {
+        return jpaCoinReservationRepository.findCoinReservationEntitiesByStatusAndExpiryTimeBefore(status, expiryTime)
                 .stream()
                 .map(coinReservationMapper::toCoinReservation)
                 .toList();
@@ -58,6 +58,5 @@ public class CoinReservationRepository implements CoinReservationPersistencePort
 interface JpaCoinReservationRepository  extends JpaRepository<CoinReservationEntity, Long> {
     Optional<CoinReservationEntity> findCoinReservationEntityByIdAndUserId(Long reservationId, UUID userId);
     Optional<CoinReservationEntity> findCoinReservationEntityByOperationId(UUID operationId);
-    //TODO check if this is correct
-    List<CoinReservationEntity> findCoinReservationEntitiesByUserIdAndStatusAndExpiryTimeBefore(UUID userId, ReservationStatus status, LocalDateTime expiryTime);
+    List<CoinReservationEntity> findCoinReservationEntitiesByStatusAndExpiryTimeBefore(ReservationStatus status, LocalDateTime expiryTime);
 }
