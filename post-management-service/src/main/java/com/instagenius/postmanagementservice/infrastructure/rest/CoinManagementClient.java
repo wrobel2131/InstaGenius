@@ -6,7 +6,6 @@ import com.instagenius.postmanagementservice.infrastructure.dto.CoinReservationD
 import com.instagenius.postmanagementservice.infrastructure.dto.CompleteReservationDto;
 import com.instagenius.postmanagementservice.infrastructure.dto.ReserveCoinsDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 

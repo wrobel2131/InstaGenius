@@ -16,6 +16,7 @@ import org.springframework.ai.openai.OpenAiImageOptions;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -28,7 +29,6 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
     @Override
     public GeneratedDescription generateDescription(DescriptionGenerationOptions descriptionGenerationOptions) {
         if (!validateDescriptionOptions(descriptionGenerationOptions)) {
-//            throw new InvalidGenerationOptionsException("Invalid description generation options!");
             return null;
         }
         System.out.println("Description options are valid!");
@@ -107,52 +107,72 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
         if(!validateImageOptions(imageGenerationOptions) || !validateDescriptionOptions(descriptionGenerationOptions)) {
             throw new InvalidGenerationOptionsException("Invalid image or description generation options!");
         }
-
-        int descriptionGenerationCost = generationConfig
-                .getDescription()
-                .getModels()
-                .stream()
-                .filter(m -> m.getName().equals(descriptionGenerationOptions.model().model()))
-                .findFirst()
-                .get()
-                .getCost();
-
-        ImageModelConfig imageModelConfig = generationConfig
+        Optional<ImageModelConfig> optionalImageModelConfig = generationConfig
                 .getImage()
                 .getModels()
                 .stream()
                 .filter(m -> m.getName().equals(imageGenerationOptions.model().model()))
-                .findFirst()
-                .get();
+                .findFirst();
 
-        int imageGenerationSizeCost = imageModelConfig
-                .getSizes()
-                .stream()
-                .filter(s -> s.equals(new SizeConfig(imageGenerationOptions.size().width(), imageGenerationOptions.size().height())))
-                .findFirst()
-                .get()
-                .getCost();
-
-        int imageGenerationQualityCost = imageModelConfig.getQualities() == null ? 0 :
-                imageModelConfig
-                        .getQualities()
-                        .stream()
-                        .filter(q -> q.equals(new QualityConfig(imageGenerationOptions.quality().quality())))
-                        .findFirst()
-                        .get()
-                        .getCost();
-
-        return descriptionGenerationCost + imageGenerationSizeCost + imageGenerationQualityCost;
+        return calculateDescriptionGenerationCost(descriptionGenerationOptions)
+                + calculateImageGenerationSizeCost(imageGenerationOptions, optionalImageModelConfig)
+                + calculateImageGenerationQualityCost(imageGenerationOptions, optionalImageModelConfig);
     }
 
-    private boolean validateDescriptionOptions(DescriptionGenerationOptions descriptionGenerationOptions) {
-        System.out.println("isDescriptionoptions valid: " + generationConfig
+    private int calculateDescriptionGenerationCost(DescriptionGenerationOptions descriptionGenerationOptions) {
+        Optional<DescriptionModelConfig> optionalDescriptionModelConfig = generationConfig
                 .getDescription()
                 .getModels()
                 .stream()
-                .map(DescriptionModelConfig::getName)
-                .toList()
-                .contains(descriptionGenerationOptions.model().model()));
+                .filter(m -> m.getName().equals(descriptionGenerationOptions.model().model()))
+                .findFirst();
+
+        if(optionalDescriptionModelConfig.isEmpty()) {
+            throw new InvalidGenerationOptionsException("Invalid image or description generation options!");
+        }
+
+        return optionalDescriptionModelConfig
+                .get()
+                .getCost();
+    }
+
+    private int calculateImageGenerationSizeCost(ImageGenerationOptions imageGenerationOptions, Optional<ImageModelConfig> optionalImageModelConfig) {
+        if (optionalImageModelConfig.isEmpty()) {
+            throw new InvalidGenerationOptionsException("Invalid image or description generation options!");
+        }
+        Optional<SizeConfig> optionalSizeConfig = optionalImageModelConfig
+                .get()
+                .getSizes()
+                .stream()
+                .filter(s -> s.equals(new SizeConfig(imageGenerationOptions.size().width(), imageGenerationOptions.size().height())))
+                .findFirst();
+        if (optionalSizeConfig.isEmpty()) {
+            throw new InvalidGenerationOptionsException("Invalid image or description generation options!");
+        }
+
+        return optionalSizeConfig
+                .get()
+                .getCost();
+    }
+
+    private int calculateImageGenerationQualityCost(ImageGenerationOptions imageGenerationOptions, Optional<ImageModelConfig> optionalImageModelConfig) {
+        if (optionalImageModelConfig.isEmpty()) {
+            throw new InvalidGenerationOptionsException("Invalid image or description generation options!");
+        }
+
+        Optional<QualityConfig> optionalQualityConfig =  optionalImageModelConfig
+                .get()
+                .getQualities()
+                .stream()
+                .filter(q -> q.equals(new QualityConfig(imageGenerationOptions.quality().quality())))
+                .findFirst();
+
+        return optionalQualityConfig
+                .map(QualityConfig::getCost)
+                .orElse(0);
+    }
+
+    private boolean validateDescriptionOptions(DescriptionGenerationOptions descriptionGenerationOptions) {
         return generationConfig
                 .getDescription()
                 .getModels()
@@ -178,28 +198,25 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
         if(!isModelValid) {
             return false;
         }
-
-        List<QualityConfig> qualities = imageConfig
+        Optional<ImageModelConfig> imageModelConfig = imageConfig
                 .getModels()
                 .stream()
                 .filter(m -> m.getName().equals(generationOptionsModel))
-                .findFirst()
+                .findFirst();
+
+        if(imageModelConfig.isEmpty()) {
+            return false;
+        }
+
+        List<QualityConfig> qualities = imageModelConfig
                 .get()
                 .getQualities();
 
-        List<String> styles = imageConfig
-                .getModels()
-                .stream()
-                .filter(m -> m.getName().equals(generationOptionsModel))
-                .findFirst()
+        List<String> styles = imageModelConfig
                 .get()
                 .getStyles();
 
-        boolean isSizeValid = imageConfig
-                .getModels()
-                .stream()
-                .filter(m -> m.getName().equals(generationOptionsModel))
-                .findFirst()
+        boolean isSizeValid = imageModelConfig
                 .get()
                 .getSizes().contains(sizeConfig);
         System.out.println("isSizeValid: " + isSizeValid);

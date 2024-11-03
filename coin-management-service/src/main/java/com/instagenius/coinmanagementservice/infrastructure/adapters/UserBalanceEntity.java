@@ -22,9 +22,6 @@ public class UserBalanceEntity {
     @Column(nullable = false, name = "userId", unique = true)
     private UUID userId;
 
-//    @Column(nullable = false, name = "balance")
-//    private int balance;
-
     @Column(nullable = false, name = "available_balance")
     private int availableBalance;
 

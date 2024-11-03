@@ -2,8 +2,6 @@ package com.instagenius.postgenerationservice.infrastructure.rest;
 
 
 import com.instagenius.postgenerationservice.application.PostGenerationUseCase;
-import com.instagenius.postgenerationservice.domain.GeneratedDescription;
-import com.instagenius.postgenerationservice.domain.GeneratedImage;
 import com.instagenius.postgenerationservice.domain.PostGenerationOptions;
 import com.instagenius.postgenerationservice.infrastructure.config.openai.GenerationConfig;
 import com.instagenius.postgenerationservice.infrastructure.dto.*;
@@ -35,7 +33,6 @@ class PostGenerationController {
     @PostMapping(value = "/generate-image", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
             MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<GeneratedImageResponseDto> generateImage(@Valid @RequestBody ImageGenerationOptionsDto imageGenerationOptionsDto) {
-//        return ResponseEntity.ok(new GeneratedImageResponseDto(Base64.getEncoder().encodeToString(new byte[3])));
         return ResponseEntity.ok(
                 generatedImageMapper.toGeneratedImageResponseDto(
                         postGenerationUseCase.generateImage(
@@ -48,7 +45,6 @@ class PostGenerationController {
     @PostMapping(value = "/generate-description", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<GeneratedDescriptionResponseDto> generateDescription(@Valid @RequestBody DescriptionGenerationOptionsDto descriptionGenerationOptionsDto) {
-//        return ResponseEntity.ok(new GeneratedDescriptionResponseDto("description mock"));
         return ResponseEntity.ok(
                 generatedDescriptionMapper.toGeneratedDescriptionResponseDto(
                         postGenerationUseCase.generateDescription(
