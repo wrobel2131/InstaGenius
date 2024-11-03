@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class PostRepository implements PostPersistencePort {
     private final JpaPostRepository jpaPostRepository;
-    private final PostMapper postMapper = PostMapper.INSTANCE;
+    private static final PostMapper postMapper = PostMapper.INSTANCE;
 
     @Override
     public Post save(Post post) {
@@ -34,7 +34,7 @@ class PostRepository implements PostPersistencePort {
                 .findAllByUserId(userId)
                 .stream()
                 .map(postMapper::toPost)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

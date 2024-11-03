@@ -1,11 +1,9 @@
 package com.instagenius.coinmanagementservice.infrastructure.rest;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import com.instagenius.coinmanagementservice.infrastructure.exception.CoinReservationNotFoundException;
 import com.instagenius.coinmanagementservice.infrastructure.exception.InsufficientBalanceException;
 import com.instagenius.coinmanagementservice.infrastructure.exception.UserNotFoundException;
-import com.nimbusds.jose.shaded.gson.JsonParseException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -88,20 +86,9 @@ class CoinManagementExceptionHandler {
                 ), HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
-//        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), LocalDateTime.now(), List.of()), HttpStatus.BAD_REQUEST);
-//    }
-
-
-
-    // Handler for overall exception thrown by this service, i
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
-        System.out.println(ex.getMessage());
-        ex.printStackTrace();
         return new ResponseEntity<>(new ErrorResponse("Server Internal Error!", LocalDateTime.now(), List.of()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }

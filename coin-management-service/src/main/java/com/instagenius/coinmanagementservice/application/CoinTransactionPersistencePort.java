@@ -1,7 +1,6 @@
 package com.instagenius.coinmanagementservice.application;
 
 import com.instagenius.coinmanagementservice.domain.CoinTransaction;
-import com.instagenius.coinmanagementservice.domain.UserBalance;
 
 import java.util.List;
 import java.util.UUID;

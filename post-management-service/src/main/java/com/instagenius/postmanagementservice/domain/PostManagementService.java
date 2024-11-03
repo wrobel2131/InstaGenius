@@ -3,7 +3,6 @@ package com.instagenius.postmanagementservice.domain;
 import com.instagenius.postmanagementservice.application.*;
 import com.instagenius.postmanagementservice.infrastructure.exception.ImageStorageException;
 import com.instagenius.postmanagementservice.infrastructure.exception.PostGenerationException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;
@@ -110,6 +109,5 @@ public class PostManagementService implements PostManagementUseCase {
 
     private GenerationCost calculateGenerationCost(DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions) {
         return postGenerationPort.calculateGenerationCost(descriptionGenerationOptions, imageGenerationOptions);
-//        return new GenerationCost(10);
     }
 }

@@ -7,7 +7,6 @@ import com.instagenius.coinmanagementservice.application.UserBalancePersistenceP
 import com.instagenius.coinmanagementservice.infrastructure.exception.CoinReservationNotFoundException;
 import com.instagenius.coinmanagementservice.infrastructure.exception.InsufficientBalanceException;
 import jakarta.transaction.Transactional;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -92,7 +91,7 @@ public class CoinManagementService implements CoinManagementUseCase {
         userBalancePersistencePort.save(userBalance);
 
         coinReservation.setStatus(ReservationStatus.COMPLETED);
-        coinReservationPersistencePort.save(coinReservation);;
+        coinReservationPersistencePort.save(coinReservation);
 
         recordCoinTransaction(userId, coinReservation.getAmount().amount(), TransactionType.SPEND);
     }

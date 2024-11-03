@@ -2,7 +2,6 @@ package com.instagenius.postgenerationservice.domain;
 
 import com.instagenius.postgenerationservice.application.PostGenerationOutputPort;
 import com.instagenius.postgenerationservice.application.PostGenerationUseCase;
-import lombok.RequiredArgsConstructor;
 
 public class PostGenerationService implements PostGenerationUseCase {
     private final PostGenerationOutputPort postGenerationOutputPort;
