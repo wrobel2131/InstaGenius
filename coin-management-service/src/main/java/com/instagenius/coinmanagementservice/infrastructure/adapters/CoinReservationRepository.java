@@ -33,7 +33,7 @@ public class CoinReservationRepository implements CoinReservationPersistencePort
     public CoinReservation findCoinReservationByIdAndUserId(Long reservationId, UUID userId) {
         return coinReservationMapper.toCoinReservation(
                 jpaCoinReservationRepository.findCoinReservationEntityByIdAndUserId(reservationId, userId)
-                        .orElseThrow(() -> new CoinReservationNotFoundException("Coin reservation with id " + reservationId + " not found"))
+                        .orElseThrow(() -> new CoinReservationNotFoundException("Coin reservation with id " + reservationId + " not found!"))
         );
     }
 
@@ -41,7 +41,7 @@ public class CoinReservationRepository implements CoinReservationPersistencePort
     public CoinReservation findCoinReservationByOperationId(UUID operationId) {
         return coinReservationMapper.toCoinReservation(
                 jpaCoinReservationRepository.findCoinReservationEntityByOperationId(operationId)
-                        .orElseThrow(() -> new CoinReservationNotFoundException("Coin reservation with operation id " + operationId + " not found"))
+                        .orElseThrow(() -> new CoinReservationNotFoundException("Coin reservation with operation id " + operationId + " not found!"))
         );
     }
 

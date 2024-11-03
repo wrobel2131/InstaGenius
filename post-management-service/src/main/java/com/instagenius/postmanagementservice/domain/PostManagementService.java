@@ -28,12 +28,13 @@ public class PostManagementService implements PostManagementUseCase {
     //TODO check how to ensure, that all or operations here are transactional and async
     @Override
     public Post createPost(UUID userId, DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions, String title) {
-        int generationCost = calculateGenerationCost(descriptionGenerationOptions, imageGenerationOptions);
+        GenerationCost generationCost = calculateGenerationCost(descriptionGenerationOptions, imageGenerationOptions);
+        System.out.println("Generation cost: " + generationCost.coins());
         UUID operationId = UUID.randomUUID();
-        CoinReservation coinReservation = coinManagementPort.reserveCoins(new ReserveCoins(generationCost, operationId));
+        CoinReservation coinReservation = coinManagementPort.reserveCoins(new ReserveCoins(generationCost.coins(), operationId));
 
-        GeneratedDescription generatedDescription = null;
-        GeneratedImage generatedImage = null;
+        GeneratedDescription generatedDescription;
+        GeneratedImage generatedImage;
 
         try {
             generatedDescription = postGenerationPort.generateDescription(descriptionGenerationOptions);
@@ -46,6 +47,7 @@ public class PostManagementService implements PostManagementUseCase {
         FileKeyName imageKeyName = new FileKeyName(userId);
         //TODO should wait for image response and then should be async to allow post to be stored in database
         try {
+            /* Responses from post generation service are placeholders, so file storage wont actually save images */
             fileStoragePort.uploadFile(imageKeyName, generatedImage);
         } catch(ImageStorageException exception) {
             coinManagementPort.cancelReservation(new CancelReservation(coinReservation.reservationId()));
@@ -106,8 +108,8 @@ public class PostManagementService implements PostManagementUseCase {
         postPersistencePort.deletePostByUserIdAndPostId(userId, id);
     }
 
-    private int calculateGenerationCost(DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions) {
-        //TODO calculate generation cost based on the model options
-        return 40;
+    private GenerationCost calculateGenerationCost(DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions) {
+        return postGenerationPort.calculateGenerationCost(descriptionGenerationOptions, imageGenerationOptions);
+//        return new GenerationCost(10);
     }
 }

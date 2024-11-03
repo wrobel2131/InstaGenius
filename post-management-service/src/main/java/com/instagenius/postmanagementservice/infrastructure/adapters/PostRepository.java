@@ -42,7 +42,7 @@ class PostRepository implements PostPersistencePort {
         return postMapper.toPost(
                 jpaPostRepository
                         .findByUserIdAndId(userId, postId)
-                        .orElseThrow(() -> new PostNotFoundException("Post with given id do not exist"))
+                        .orElseThrow(() -> new PostNotFoundException("Post with id " + postId + " not found!"))
         );
     }
 

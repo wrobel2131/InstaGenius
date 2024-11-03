@@ -23,7 +23,7 @@ public class UserBalanceRepository implements UserBalancePersistencePort {
     public UserBalance findUserBalanceByUserId(UUID userId) {
         return userBalanceMapper.toUserBalance(
                 jpaUserBalanceRepository.findUserBalanceEntityByUserId(userId)
-                        .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"))
+                        .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found!"))
         );
     }
 

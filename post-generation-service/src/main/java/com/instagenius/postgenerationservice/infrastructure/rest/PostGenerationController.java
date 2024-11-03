@@ -58,7 +58,7 @@ class PostGenerationController {
         );
     }
 
-    @PostMapping(value = "calculate-generation-cost", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/calculate-generation-cost", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<GenerationCostResponseDto> calculateGenerationCost(@Valid @RequestBody PostGenerationOptionsDto postGenerationOptionsDto) {
         System.out.println(generationConfig.toString());
         return ResponseEntity.ok(new GenerationCostResponseDto(

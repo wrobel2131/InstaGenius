@@ -29,19 +29,20 @@ class S3FileStorageAdapter implements FileStoragePort {
 
     @Override
     public void uploadFile(FileKeyName fileKeyName, GeneratedImage generatedImage) {
-        PutObjectRequest putObjectRequest = PutObjectRequest
-                .builder()
-                .bucket(bucketName)
-                .key(fileKeyName.keyName())
-                .build();
-        byte[] image = Base64.getDecoder().decode(generatedImage.b64Image());
-
-        try (InputStream inputStream = new ByteArrayInputStream(image)) {
-            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputStream, image.length));
-        } catch (IOException | S3Exception e) {
-            System.out.println(e.getMessage());
-            throw new ImageStorageException("Failed to upload the file!");
-        }
+        System.out.println("Uploading file " + fileKeyName + " to " + bucketName); //TODO change it to working upload, if the whole creating post flow works
+//        PutObjectRequest putObjectRequest = PutObjectRequest
+//                .builder()
+//                .bucket(bucketName)
+//                .key(fileKeyName.keyName())
+//                .build();
+//        byte[] image = Base64.getDecoder().decode(generatedImage.b64Image());
+//
+//        try (InputStream inputStream = new ByteArrayInputStream(image)) {
+//            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputStream, image.length));
+//        } catch (IOException | S3Exception e) {
+//            System.out.println(e.getMessage());
+//            throw new ImageStorageException("Failed to upload the file!");
+//        }
     }
 
     @Override

@@ -98,7 +98,6 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .findFirst()
                 .get()
                 .getCost();
-        System.out.println("Description generation cost: " + descriptionGenerationCost);
 
         ImageModelConfig imageModelConfig = generationConfig
                 .getImage()
@@ -115,7 +114,6 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .findFirst()
                 .get()
                 .getCost();
-        System.out.println("Image generation size cost: " + imageGenerationSizeCost);
 
         int imageGenerationQualityCost = imageModelConfig.getQualities() == null ? 0 :
                 imageModelConfig
@@ -125,7 +123,6 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                         .findFirst()
                         .get()
                         .getCost();
-        System.out.println("Image generation quality cost: " + imageGenerationQualityCost);
 
         return descriptionGenerationCost + imageGenerationSizeCost + imageGenerationQualityCost;
     }
@@ -152,7 +149,6 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .getModels()
                 .stream()
                 .anyMatch(m -> m.getName().equals(generationOptionsModel));
-        System.out.println("Is model valid? " + isModelValid);
         if(!isModelValid) {
             return false;
         }
@@ -180,7 +176,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .findFirst()
                 .get()
                 .getSizes().contains(sizeConfig);
-        System.out.println("Is size valid? " + isSizeValid);
+
         boolean isQualityValid = qualities != null &&
                 qualities
                 .stream()
@@ -188,10 +184,8 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                         .toList()
                         .contains(generationOptionsImageQuality);
 
-        System.out.println("Is quality valid? " + isQualityValid);
         boolean isStyleValid = styles != null && styles.contains(generationOptionsImageStyle);
 
-        System.out.println("Is style valid? " + isStyleValid);
         return isSizeValid && isQualityValid && isStyleValid;
     }
 }
