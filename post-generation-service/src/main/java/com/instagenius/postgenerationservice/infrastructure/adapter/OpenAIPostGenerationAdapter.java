@@ -11,6 +11,7 @@ import com.instagenius.postgenerationservice.infrastructure.exception.InvalidGen
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.image.ImageModel;
+import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.openai.OpenAiImageOptions;
 import org.springframework.stereotype.Component;
 
@@ -27,23 +28,30 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
     @Override
     public GeneratedDescription generateDescription(DescriptionGenerationOptions descriptionGenerationOptions) {
         if (!validateDescriptionOptions(descriptionGenerationOptions)) {
-            throw new InvalidGenerationOptionsException("Invalid description generation options!");
+//            throw new InvalidGenerationOptionsException("Invalid description generation options!");
+            return null;
         }
         System.out.println("Description options are valid!");
-        //TODO mocked response
-        return new GeneratedDescription("Mocked description");
-//        return new GeneratedDescription(chatClient
-//                .prompt()
-//                .user(descriptionGenerationOptions.userPrompt())
-//                .call()
-//                .content()
-//        );
+
+        try {
+            //TODO mocked response
+            return new GeneratedDescription("Mocked description");
+//            return new GeneratedDescription(chatClient
+//                    .prompt()
+//                    .user(descriptionGenerationOptions.userPrompt())
+//                    .call()
+//                    .content()
+//            );
+        } catch(Exception e) {
+            return null;
+        }
+
     }
 
     @Override
     public GeneratedImage generateImage(ImageGenerationOptions imageGenerationOptions) {
         if (!validateImageOptions(imageGenerationOptions)) {
-            throw new InvalidGenerationOptionsException("Invalid image generation options!");
+            return null;
         }
         System.out.println("Image options are valid!");
 
@@ -56,32 +64,42 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .withN(NUMBER_OF_GENERATED_IMAGES);
         // for model DALL-E-2 generate b64Image without style and quality params
         if(imageGenerationOptions.model().model().equals("dall-e-2")) {
-            //TODO mocked response
-            return new GeneratedImage("some-b54-image");
-//            return new GeneratedImage(
-//                    imageModel.call(
-//                            new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder.build()
-//                            )
-//                    )
-//                            .getResult()
-//                            .getOutput()
-//                            .getB64Json()
-//            );
+
+            try {
+                //TODO mocked response
+                return new GeneratedImage("some-b54-image");
+//                return new GeneratedImage(
+//                        imageModel.call(
+//                                        new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder.build()
+//                                        )
+//                                )
+//                                .getResult()
+//                                .getOutput()
+//                                .getB64Json()
+//                );
+            } catch(Exception e) {
+                return null;
+            }
         }
 
-        //TODO mocked response
-        return new GeneratedImage("some-b54-image");
-//        return new GeneratedImage(imageModel
-//                .call(
-//                        new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder
-//                                .withStyle(imageGenerationOptions.style().style())
-//                                .withQuality(imageGenerationOptions.quality().quality())
-//                                .build()
-//                        )
-//                )
-//                .getResult()
-//                .getOutput()
-//                .getB64Json());
+
+        try {
+            //TODO mocked response
+            return new GeneratedImage("some-b54-image");
+//            return new GeneratedImage(imageModel
+//                    .call(
+//                            new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder
+//                                    .withStyle(imageGenerationOptions.style().style())
+//                                    .withQuality(imageGenerationOptions.quality().quality())
+//                                    .build()
+//                            )
+//                    )
+//                    .getResult()
+//                    .getOutput()
+//                    .getB64Json());
+        } catch(Exception e) {
+            return null;
+        }
     }
 
     @Override
@@ -128,6 +146,13 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
     }
 
     private boolean validateDescriptionOptions(DescriptionGenerationOptions descriptionGenerationOptions) {
+        System.out.println("isDescriptionoptions valid: " + generationConfig
+                .getDescription()
+                .getModels()
+                .stream()
+                .map(DescriptionModelConfig::getName)
+                .toList()
+                .contains(descriptionGenerationOptions.model().model()));
         return generationConfig
                 .getDescription()
                 .getModels()
@@ -149,6 +174,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .getModels()
                 .stream()
                 .anyMatch(m -> m.getName().equals(generationOptionsModel));
+        System.out.println("isModelValid: " + isModelValid);
         if(!isModelValid) {
             return false;
         }
@@ -176,15 +202,20 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .findFirst()
                 .get()
                 .getSizes().contains(sizeConfig);
+        System.out.println("isSizeValid: " + isSizeValid);
 
-        boolean isQualityValid = qualities != null &&
+        boolean isQualityValid = qualities == null && generationOptionsImageQuality == null || qualities != null &&
                 qualities
-                .stream()
+                        .stream()
                         .map(QualityConfig::getName)
                         .toList()
                         .contains(generationOptionsImageQuality);
+        System.out.println("isQualityValid: " + isQualityValid);
 
-        boolean isStyleValid = styles != null && styles.contains(generationOptionsImageStyle);
+        boolean isStyleValid = styles == null && generationOptionsImageStyle == null ||
+                styles != null && styles.contains(generationOptionsImageStyle);
+
+        System.out.println("isStyleValid: " + isStyleValid);
 
         return isSizeValid && isQualityValid && isStyleValid;
     }
