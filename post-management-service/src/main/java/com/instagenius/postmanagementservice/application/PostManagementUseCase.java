@@ -11,7 +11,6 @@ public interface PostManagementUseCase {
     Post createPost(UUID userId, DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions, String title);
     List<Post> getPostsByUserId(UUID userId);
     Post getPostByUserIdAndId(UUID userId, Long id);
-//    Post updatePost();
     void deletePost(UUID userId, Long id);
     //TODO add pagination for get posts, add parameters to methods
 }

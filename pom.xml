@@ -14,9 +14,6 @@
     <packaging>pom</packaging>
     <name>instagenius</name>
 	<description>Backend for InstaGenius</description>
-    <modules>
-        <module>gateway</module>
-    </modules>
     <properties>
 		<sonar.organization>wrobel2131</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>

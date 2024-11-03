@@ -1,9 +1,12 @@
 package com.instagenius.postmanagementservice.infrastructure.config;
 
 import com.instagenius.postmanagementservice.infrastructure.rest.FeignClientInterceptor;
+import feign.Logger;
 import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class FeignConfig {
 
     @Bean

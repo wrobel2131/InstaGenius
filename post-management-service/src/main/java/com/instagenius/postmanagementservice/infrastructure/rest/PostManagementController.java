@@ -32,7 +32,7 @@ class PostManagementController {
 
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PostsResponseDto> getAllPostsByUserId(@AuthenticationPrincipal Jwt jwt) {
+    ResponseEntity<PostsResponseDto> getPosts(@AuthenticationPrincipal Jwt jwt) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 new PostsResponseDto(
@@ -46,7 +46,7 @@ class PostManagementController {
     }
 
     @GetMapping(value = "/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PostResponseDto> getPostByUserIdAndId(@PathVariable("postId") Long postId, @AuthenticationPrincipal Jwt jwt) {
+    ResponseEntity<PostResponseDto> getPostByPostId(@PathVariable("postId") Long postId, @AuthenticationPrincipal Jwt jwt) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 postMapper.toPostResponseDto(postManagementUseCase.getPostByUserIdAndId(userId, postId))
@@ -54,7 +54,7 @@ class PostManagementController {
     }
 
 
-    @PostMapping(value = "/create-post", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<PostResponseDto> createPost(@Valid @RequestBody CreatePostRequestDto createPostRequestDto, @AuthenticationPrincipal Jwt jwt) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
         Post post =  postManagementUseCase.createPost(

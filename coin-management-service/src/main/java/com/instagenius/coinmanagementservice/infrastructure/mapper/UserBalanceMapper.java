@@ -16,7 +16,8 @@ public interface UserBalanceMapper {
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "userId", target = "userId")
-    @Mapping(source = "balance", target = "balance", qualifiedByName = "intToBalance")
+    @Mapping(source = "availableBalance", target = "availableBalance", qualifiedByName = "intToBalance")
+    @Mapping(source = "reservedBalance", target = "reservedBalance", qualifiedByName = "intToBalance")
     @Mapping(source = "updatedAt", target = "updatedAt")
     @Mapping(source = "createdAt", target = "createdAt")
     @Mapping(source = "version", target = "version")
@@ -24,13 +25,14 @@ public interface UserBalanceMapper {
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "userId", target = "userId")
-    @Mapping(source = "balance", target = "balance", qualifiedByName = "balanceToInt")
-    @Mapping(source = "updatedAt", target = "updatedAt")
+    @Mapping(source = "availableBalance", target = "availableBalance", qualifiedByName = "balanceToInt")
+    @Mapping(source = "reservedBalance", target = "reservedBalance", qualifiedByName = "balanceToInt")
+    @Mapping(source = "updatedAt", target = "updatedAt", ignore = true)
     @Mapping(source = "createdAt", target = "createdAt")
     @Mapping(source = "version", target = "version")
     UserBalanceEntity toUserBalanceEntity(UserBalance userBalance);
 
-    @Mapping(source = "balance", target = "balance", qualifiedByName = "balanceToInt")
+    @Mapping(source = "availableBalance", target = "balance", qualifiedByName = "balanceToInt")
     UserBalanceResponseDto toUserBalanceResponseDto(UserBalance userBalance);
 
     @Named("intToBalance")

@@ -1,6 +1,7 @@
 package com.instagenius.coinmanagementservice.infrastructure.config;
 
 import com.instagenius.coinmanagementservice.application.CoinManagementUseCase;
+import com.instagenius.coinmanagementservice.application.CoinReservationPersistencePort;
 import com.instagenius.coinmanagementservice.application.CoinTransactionPersistencePort;
 import com.instagenius.coinmanagementservice.application.UserBalancePersistencePort;
 import com.instagenius.coinmanagementservice.domain.CoinManagementService;
@@ -13,9 +14,10 @@ import org.springframework.context.annotation.Configuration;
 class CoinManagementConfig {
     private final CoinTransactionPersistencePort coinTransactionPersistencePort;
     private final UserBalancePersistencePort userBalancePersistencePort;
+    private final CoinReservationPersistencePort coinReservationPersistencePort;
 
     @Bean
     CoinManagementUseCase coinManagementUseCase() {
-        return new CoinManagementService(coinTransactionPersistencePort, userBalancePersistencePort);
+        return new CoinManagementService(coinTransactionPersistencePort, userBalancePersistencePort, coinReservationPersistencePort);
     }
 }

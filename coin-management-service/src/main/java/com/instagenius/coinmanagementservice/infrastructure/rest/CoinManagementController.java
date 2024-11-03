@@ -2,6 +2,7 @@ package com.instagenius.coinmanagementservice.infrastructure.rest;
 
 import com.instagenius.coinmanagementservice.application.CoinManagementUseCase;
 import com.instagenius.coinmanagementservice.infrastructure.dto.*;
+import com.instagenius.coinmanagementservice.infrastructure.mapper.CoinReservationMapper;
 import com.instagenius.coinmanagementservice.infrastructure.mapper.CoinTransactionMapper;
 import com.instagenius.coinmanagementservice.infrastructure.mapper.UserBalanceMapper;
 import jakarta.validation.Valid;
@@ -21,9 +22,11 @@ class CoinManagementController {
     private final CoinManagementUseCase coinManagementUseCase;
     private static final CoinTransactionMapper coinTransactionMapper = CoinTransactionMapper.INSTANCE;
     private static final UserBalanceMapper userBalanceMapper = UserBalanceMapper.INSTANCE;
+    private static final CoinReservationMapper coinReservationMapper = CoinReservationMapper.INSTANCE;
 
     @GetMapping(value = "/balance", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<UserBalanceResponseDto> getBalance(@AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Get Balance endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 userBalanceMapper.toUserBalanceResponseDto(
@@ -35,6 +38,7 @@ class CoinManagementController {
     @PostMapping(value = "/balance", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<UserBalanceResponseDto> createBalance(@Valid @RequestBody CreateUserBalanceDto createUserBalanceDto,
                                                          @AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Create Balance endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 userBalanceMapper.toUserBalanceResponseDto(
@@ -45,27 +49,51 @@ class CoinManagementController {
 
     @DeleteMapping(value = "/balance")
     ResponseEntity<Void> deleteBalance(@AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Delete Balance endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         coinManagementUseCase.deleteBalance(userId);
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping(value = "/reserve", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<CoinReservationDto> reserveCoins(@Valid @RequestBody ReserveCoinsDto reserveCoinsDto, @AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Reserve Coins endpoint");
+        UUID userId = getUserUUIDFromJwtToken(jwt);
+        return ResponseEntity.ok(
+                coinReservationMapper.toCoinReservationDto(
+                        coinManagementUseCase.reserveCoins(userId, reserveCoinsDto.amount(), reserveCoinsDto.operationId()
+                        )
+                )
+        );
+    }
+
+    @PostMapping(value = "/complete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> completeReservation(@Valid @RequestBody CompleteReservationDto completeReservationDto, @AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Complete Reservation endpoint");
+        UUID userId = getUserUUIDFromJwtToken(jwt);
+        coinManagementUseCase.completeReservation(userId, completeReservationDto.reservationId());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/cancel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> cancelReservation(@Valid @RequestBody CancelReservationDto cancelReservationDto, @AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Cancel Reservation endpoint");
+        UUID userId = getUserUUIDFromJwtToken(jwt);
+        coinManagementUseCase.cancelReservation(userId, cancelReservationDto.reservationId());
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> addCoins(@Valid @RequestBody AddCoinsDto addCoinsDto, @AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Add Coins endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         coinManagementUseCase.addCoins(userId, addCoinsDto.coins(), addCoinsDto.type());
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/deduct", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> deductCoins(@Valid @RequestBody DeductCoinsDto deductCoinsDto, @AuthenticationPrincipal Jwt jwt) {
-        UUID userId = getUserUUIDFromJwtToken(jwt);
-        coinManagementUseCase.deductCoins(userId, deductCoinsDto.coins());
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping(value = "/transactions", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CoinTransactionsResponseDto> getCoinTransactions(@AuthenticationPrincipal Jwt jwt) {
+        System.out.println("Get Coins Transactions endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 new CoinTransactionsResponseDto(

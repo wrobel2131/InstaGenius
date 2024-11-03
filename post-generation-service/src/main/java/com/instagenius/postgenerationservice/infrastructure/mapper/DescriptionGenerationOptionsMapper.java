@@ -2,7 +2,7 @@ package com.instagenius.postgenerationservice.infrastructure.mapper;
 
 import com.instagenius.postgenerationservice.infrastructure.dto.DescriptionGenerationOptionsDto;
 import com.instagenius.postgenerationservice.domain.DescriptionGenerationOptions;
-import com.instagenius.postgenerationservice.domain.vo.GPTModel;
+import com.instagenius.postgenerationservice.domain.GPTModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

@@ -1,16 +1,11 @@
 package com.instagenius.postmanagementservice.infrastructure.adapters;
 
+import com.instagenius.postmanagementservice.domain.*;
+import com.instagenius.postmanagementservice.infrastructure.dto.CreatePostOptionsDto;
 import com.instagenius.postmanagementservice.infrastructure.exception.PostGenerationException;
-import com.instagenius.postmanagementservice.infrastructure.mapper.DescriptionGenerationOptionsMapper;
-import com.instagenius.postmanagementservice.infrastructure.mapper.GeneratedDescriptionMapper;
-import com.instagenius.postmanagementservice.infrastructure.mapper.GeneratedImageMapper;
-import com.instagenius.postmanagementservice.infrastructure.mapper.ImageGenerationOptionsMapper;
+import com.instagenius.postmanagementservice.infrastructure.mapper.*;
 import com.instagenius.postmanagementservice.infrastructure.rest.PostGenerationClient;
 import com.instagenius.postmanagementservice.application.PostGenerationPort;
-import com.instagenius.postmanagementservice.domain.DescriptionGenerationOptions;
-import com.instagenius.postmanagementservice.domain.GeneratedDescription;
-import com.instagenius.postmanagementservice.domain.GeneratedImage;
-import com.instagenius.postmanagementservice.domain.ImageGenerationOptions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +17,7 @@ class PostGenerationAdapter implements PostGenerationPort {
     private static final GeneratedDescriptionMapper generatedDescriptionMapper = GeneratedDescriptionMapper.INSTANCE;
     private static final ImageGenerationOptionsMapper imageGenerationOptionsMapper = ImageGenerationOptionsMapper.INSTANCE;
     private static final GeneratedImageMapper generatedImageMapper = GeneratedImageMapper.INSTANCE;
+    private static final GenerationCostMapper generationCostMapper = GenerationCostMapper.INSTANCE;
 
     @Override
     public GeneratedDescription generateDescription(DescriptionGenerationOptions descriptionGenerationOptions) {
@@ -40,4 +36,15 @@ class PostGenerationAdapter implements PostGenerationPort {
                 ).orElseThrow(() -> new PostGenerationException("Error while generating image!"))
         );
     }
+
+    @Override
+    public GenerationCost calculateGenerationCost(DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions) {
+        return generationCostMapper.toGenerationCost(
+                postGenerationClient.calculateGenerationCost(new CreatePostOptionsDto(
+                        descriptionGenerationOptionsMapper.toCreateDescriptionDto(descriptionGenerationOptions),
+                        imageGenerationOptionsMapper.toCreateImageDto(imageGenerationOptions)
+                )).orElseThrow(() -> new PostGenerationException("Error while calculating generation cost!"))
+        );
+    }
+
 }

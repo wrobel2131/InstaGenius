@@ -1,10 +1,10 @@
 package com.instagenius.postgenerationservice.infrastructure.mapper;
 
 import com.instagenius.postgenerationservice.infrastructure.dto.ImageGenerationOptionsDto;
-import com.instagenius.postgenerationservice.domain.vo.DALLEModel;
+import com.instagenius.postgenerationservice.domain.DALLEModel;
 import com.instagenius.postgenerationservice.domain.ImageGenerationOptions;
-import com.instagenius.postgenerationservice.domain.vo.ImageQuality;
-import com.instagenius.postgenerationservice.domain.vo.ImageStyle;
+import com.instagenius.postgenerationservice.domain.ImageQuality;
+import com.instagenius.postgenerationservice.domain.ImageStyle;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

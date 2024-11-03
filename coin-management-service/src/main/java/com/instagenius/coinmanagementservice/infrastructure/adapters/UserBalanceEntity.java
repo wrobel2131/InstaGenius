@@ -22,14 +22,23 @@ public class UserBalanceEntity {
     @Column(nullable = false, name = "userId", unique = true)
     private UUID userId;
 
-    @Column(nullable = false, name = "balance")
-    private int balance;
+//    @Column(nullable = false, name = "balance")
+//    private int balance;
 
+    @Column(nullable = false, name = "available_balance")
+    private int availableBalance;
+
+    @Column(nullable = false, name = "reserved_balance")
+    private int reservedBalance;
+
+    @Column(nullable = true, name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(nullable = false, name = "created_at")
     private LocalDateTime createdAt;
 
     @Version
-    private Long version;
+    private int version;
 
     @PreUpdate
     protected void onUpdate() {
@@ -39,6 +48,7 @@ public class UserBalanceEntity {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        this.reservedBalance = 0;
     }
 
 }
