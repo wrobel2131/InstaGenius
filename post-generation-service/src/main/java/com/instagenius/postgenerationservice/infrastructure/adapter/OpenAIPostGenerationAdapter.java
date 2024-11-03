@@ -6,14 +6,11 @@ import com.instagenius.postgenerationservice.domain.GeneratedDescription;
 import com.instagenius.postgenerationservice.domain.GeneratedImage;
 import com.instagenius.postgenerationservice.domain.ImageGenerationOptions;
 import com.instagenius.postgenerationservice.domain.ImageSize;
-import com.instagenius.postgenerationservice.infrastructure.config.openai.GenerationConfig;
-import com.instagenius.postgenerationservice.infrastructure.config.openai.ImageConfig;
-import com.instagenius.postgenerationservice.infrastructure.config.openai.Size;
+import com.instagenius.postgenerationservice.infrastructure.config.openai.*;
 import com.instagenius.postgenerationservice.infrastructure.exception.InvalidGenerationOptionsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.image.ImageModel;
-import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.openai.OpenAiImageOptions;
 import org.springframework.stereotype.Component;
 
@@ -33,12 +30,14 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
             throw new InvalidGenerationOptionsException("Invalid description generation options!");
         }
         System.out.println("Description options are valid!");
-        return new GeneratedDescription(chatClient
-                .prompt()
-                .user(descriptionGenerationOptions.userPrompt())
-                .call()
-                .content()
-        );
+        //TODO mocked response
+        return new GeneratedDescription("Mocked description");
+//        return new GeneratedDescription(chatClient
+//                .prompt()
+//                .user(descriptionGenerationOptions.userPrompt())
+//                .call()
+//                .content()
+//        );
     }
 
     @Override
@@ -57,32 +56,88 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .withN(NUMBER_OF_GENERATED_IMAGES);
         // for model DALL-E-2 generate b64Image without style and quality params
         if(imageGenerationOptions.model().model().equals("dall-e-2")) {
-            return new GeneratedImage(
-                    imageModel.call(
-                            new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder.build()
-                            )
-                    )
-                            .getResult()
-                            .getOutput()
-                            .getB64Json()
-            );
+            //TODO mocked response
+            return new GeneratedImage("some-b54-image");
+//            return new GeneratedImage(
+//                    imageModel.call(
+//                            new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder.build()
+//                            )
+//                    )
+//                            .getResult()
+//                            .getOutput()
+//                            .getB64Json()
+//            );
         }
 
-        return new GeneratedImage(imageModel
-                .call(
-                        new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder
-                                .withStyle(imageGenerationOptions.style().style())
-                                .withQuality(imageGenerationOptions.quality().quality())
-                                .build()
-                        )
-                )
-                .getResult()
-                .getOutput()
-                .getB64Json());
+        //TODO mocked response
+        return new GeneratedImage("some-b54-image");
+//        return new GeneratedImage(imageModel
+//                .call(
+//                        new ImagePrompt(imageGenerationOptions.userPrompt(), imageOptionsBuilder
+//                                .withStyle(imageGenerationOptions.style().style())
+//                                .withQuality(imageGenerationOptions.quality().quality())
+//                                .build()
+//                        )
+//                )
+//                .getResult()
+//                .getOutput()
+//                .getB64Json());
+    }
+
+    @Override
+    public int calculateGenerationCost(DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions) {
+        if(!validateImageOptions(imageGenerationOptions) || !validateDescriptionOptions(descriptionGenerationOptions)) {
+            throw new InvalidGenerationOptionsException("Invalid image or description generation options!");
+        }
+
+        int descriptionGenerationCost = generationConfig
+                .getDescription()
+                .getModels()
+                .stream()
+                .filter(m -> m.getName().equals(descriptionGenerationOptions.model().model()))
+                .findFirst()
+                .get()
+                .getCost();
+        System.out.println("Description generation cost: " + descriptionGenerationCost);
+
+        ImageModelConfig imageModelConfig = generationConfig
+                .getImage()
+                .getModels()
+                .stream()
+                .filter(m -> m.getName().equals(imageGenerationOptions.model().model()))
+                .findFirst()
+                .get();
+
+        int imageGenerationSizeCost = imageModelConfig
+                .getSizes()
+                .stream()
+                .filter(s -> s.equals(new SizeConfig(imageGenerationOptions.size().width(), imageGenerationOptions.size().height())))
+                .findFirst()
+                .get()
+                .getCost();
+        System.out.println("Image generation size cost: " + imageGenerationSizeCost);
+
+        int imageGenerationQualityCost = imageModelConfig.getQualities() == null ? 0 :
+                imageModelConfig
+                        .getQualities()
+                        .stream()
+                        .filter(q -> q.equals(new QualityConfig(imageGenerationOptions.quality().quality())))
+                        .findFirst()
+                        .get()
+                        .getCost();
+        System.out.println("Image generation quality cost: " + imageGenerationQualityCost);
+
+        return descriptionGenerationCost + imageGenerationSizeCost + imageGenerationQualityCost;
     }
 
     private boolean validateDescriptionOptions(DescriptionGenerationOptions descriptionGenerationOptions) {
-        return generationConfig.getDescription().getModels().contains(descriptionGenerationOptions.model().model());
+        return generationConfig
+                .getDescription()
+                .getModels()
+                .stream()
+                .map(DescriptionModelConfig::getName)
+                .toList()
+                .contains(descriptionGenerationOptions.model().model());
     }
 
     private boolean validateImageOptions(ImageGenerationOptions imageGenerationOptions) {
@@ -91,7 +146,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
         String generationOptionsImageQuality = imageGenerationOptions.quality().quality();
         String generationOptionsImageStyle = imageGenerationOptions.style().style();
         ImageSize generationOptionsImageSize = imageGenerationOptions.size();
-        Size size = new Size(generationOptionsImageSize.width(), generationOptionsImageSize.height());
+        SizeConfig sizeConfig = new SizeConfig(generationOptionsImageSize.width(), generationOptionsImageSize.height());
 
         boolean isModelValid = imageConfig
                 .getModels()
@@ -102,7 +157,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
             return false;
         }
 
-        List<String> qualities = imageConfig
+        List<QualityConfig> qualities = imageConfig
                 .getModels()
                 .stream()
                 .filter(m -> m.getName().equals(generationOptionsModel))
@@ -124,9 +179,14 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .filter(m -> m.getName().equals(generationOptionsModel))
                 .findFirst()
                 .get()
-                .getSizes().contains(size);
+                .getSizes().contains(sizeConfig);
         System.out.println("Is size valid? " + isSizeValid);
-        boolean isQualityValid = qualities != null && qualities.contains(generationOptionsImageQuality);
+        boolean isQualityValid = qualities != null &&
+                qualities
+                .stream()
+                        .map(QualityConfig::getName)
+                        .toList()
+                        .contains(generationOptionsImageQuality);
 
         System.out.println("Is quality valid? " + isQualityValid);
         boolean isStyleValid = styles != null && styles.contains(generationOptionsImageStyle);

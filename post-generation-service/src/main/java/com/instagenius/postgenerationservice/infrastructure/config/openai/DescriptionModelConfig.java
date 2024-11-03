@@ -2,9 +2,8 @@ package com.instagenius.postgenerationservice.infrastructure.config.openai;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class ImageConfig {
-    private List<ImageModelConfig> models;
+public class DescriptionModelConfig {
+    private String name;
+    private int cost;
 }

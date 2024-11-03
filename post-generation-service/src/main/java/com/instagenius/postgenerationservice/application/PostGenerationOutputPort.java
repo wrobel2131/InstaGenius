@@ -8,4 +8,5 @@ import com.instagenius.postgenerationservice.domain.ImageGenerationOptions;
 public interface PostGenerationOutputPort {
     GeneratedDescription generateDescription(DescriptionGenerationOptions descriptionGenerationOptions);
     GeneratedImage generateImage(ImageGenerationOptions imageGenerationOptions);
+    int calculateGenerationCost(DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions);
 }

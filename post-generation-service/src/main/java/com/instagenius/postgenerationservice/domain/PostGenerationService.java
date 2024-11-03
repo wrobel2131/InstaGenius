@@ -20,4 +20,10 @@ public class PostGenerationService implements PostGenerationUseCase {
     public GeneratedImage generateImage(ImageGenerationOptions imageGenerationOptions) {
         return postGenerationOutputPort.generateImage(imageGenerationOptions);
     }
+
+    @Override
+    public int calculateGenerationCost(PostGenerationOptions postGenerationOptions) {
+        return postGenerationOutputPort.calculateGenerationCost(postGenerationOptions.descriptionGenerationOptions(),
+                postGenerationOptions.imageGenerationOptions());
+    }
 }

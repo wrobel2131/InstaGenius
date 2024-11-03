@@ -1,15 +1,13 @@
 package com.instagenius.postgenerationservice.infrastructure.config.openai;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class ImageModelConfig {
     private String name;
-    private List<String> qualities;
-    private List<Size> sizes;
+    private List<QualityConfig> qualities;
+    private List<SizeConfig> sizes;
     private List<String> styles;
 }

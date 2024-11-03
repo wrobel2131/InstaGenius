@@ -1,12 +1,10 @@
 package com.instagenius.postgenerationservice.infrastructure.config.openai;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class DescriptionConfig {
-    private List<String> models;
+    private List<DescriptionModelConfig> models;
 }
