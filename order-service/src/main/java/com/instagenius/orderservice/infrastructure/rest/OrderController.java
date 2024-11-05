@@ -1,5 +1,6 @@
 package com.instagenius.orderservice.infrastructure.rest;
 
+import com.instagenius.orderservice.infrastructure.dto.CoinPackagesResponseDto;
 import com.instagenius.orderservice.infrastructure.dto.CreateOrderResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
