@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +30,7 @@ public class CoinReservationRepository implements CoinReservationPersistencePort
     }
 
     @Override
-    public CoinReservation findCoinReservationByIdAndUserId(Long reservationId, UUID userId) {
+    public CoinReservation findCoinReservationByIdAndUserId(UUID reservationId, UUID userId) {
         return coinReservationMapper.toCoinReservation(
                 jpaCoinReservationRepository.findCoinReservationEntityByIdAndUserId(reservationId, userId)
                         .orElseThrow(() -> new CoinReservationNotFoundException("Coin reservation with id " + reservationId + " not found!"))
@@ -46,7 +46,7 @@ public class CoinReservationRepository implements CoinReservationPersistencePort
     }
 
     @Override
-    public List<CoinReservation> findAllCoinReservationsByStatusAndExpiryTimeBefore(ReservationStatus status, LocalDateTime expiryTime) {
+    public List<CoinReservation> findAllCoinReservationsByStatusAndExpiryTimeBefore(ReservationStatus status, Instant expiryTime) {
         return jpaCoinReservationRepository.findCoinReservationEntitiesByStatusAndExpiryTimeBefore(status, expiryTime)
                 .stream()
                 .map(coinReservationMapper::toCoinReservation)
@@ -55,8 +55,8 @@ public class CoinReservationRepository implements CoinReservationPersistencePort
 }
 
 @Repository
-interface JpaCoinReservationRepository  extends JpaRepository<CoinReservationEntity, Long> {
-    Optional<CoinReservationEntity> findCoinReservationEntityByIdAndUserId(Long reservationId, UUID userId);
+interface JpaCoinReservationRepository  extends JpaRepository<CoinReservationEntity, UUID> {
+    Optional<CoinReservationEntity> findCoinReservationEntityByIdAndUserId(UUID reservationId, UUID userId);
     Optional<CoinReservationEntity> findCoinReservationEntityByOperationId(UUID operationId);
-    List<CoinReservationEntity> findCoinReservationEntitiesByStatusAndExpiryTimeBefore(ReservationStatus status, LocalDateTime expiryTime);
+    List<CoinReservationEntity> findCoinReservationEntitiesByStatusAndExpiryTimeBefore(ReservationStatus status, Instant expiryTime);
 }

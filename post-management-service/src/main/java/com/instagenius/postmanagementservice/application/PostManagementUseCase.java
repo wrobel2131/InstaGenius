@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface PostManagementUseCase {
     Post createPost(UUID userId, DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions, String title);
     List<Post> getPostsByUserId(UUID userId);
-    Post getPostByUserIdAndId(UUID userId, Long id);
-    void deletePost(UUID userId, Long id);
+    Post getPostByUserIdAndPostId(UUID userId, UUID postId);
+    void deletePost(UUID userId, UUID postId);
     //TODO add pagination for get posts, add parameters to methods
 }

@@ -6,12 +6,13 @@ import com.instagenius.postmanagementservice.infrastructure.exception.PostNotFou
 import com.instagenius.postmanagementservice.infrastructure.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,30 +32,36 @@ class PostRepository implements PostPersistencePort {
     @Override
     public List<Post> getPostsByUserId(UUID userId) {
         return jpaPostRepository
-                .findAllByUserId(userId)
+                .findAllPostEntitiesByUserId(userId)
                 .stream()
                 .map(postMapper::toPost)
                 .toList();
     }
 
     @Override
-    public Post getPostByUserIdAndPostId(UUID userId, Long postId) {
+    public Post getPostByUserIdAndPostId(UUID userId, UUID postId) {
         return postMapper.toPost(
                 jpaPostRepository
-                        .findByUserIdAndId(userId, postId)
+                        .findPostEntityByUserIdAndId(userId, postId)
                         .orElseThrow(() -> new PostNotFoundException("Post with id " + postId + " not found!"))
         );
     }
 
     @Override
-    public void deletePostByUserIdAndPostId(UUID userId, Long postId) {
-        jpaPostRepository.deleteByUserIdAndId(userId, postId);
+    public void deletePostByUserIdAndPostId(UUID userId, UUID postId) {
+        jpaPostRepository.deletePostEntityByUserIdAndId(userId, postId);
     }
 }
 
 @Repository
-interface JpaPostRepository extends JpaRepository<PostEntity, Long> {
-    Optional<PostEntity> findByUserIdAndId(UUID userId, Long id);
-    List<PostEntity> findAllByUserId(UUID userId);
-    void deleteByUserIdAndId(UUID userId, Long id);
+interface JpaPostRepository extends JpaRepository<PostEntity, UUID> {
+
+    @Query("select p from PostEntity p where p.userId = :userId and p.id = :id")
+    Optional<PostEntity> findPostEntityByUserIdAndId(@Param("userId") UUID userId, @Param("id") UUID id);
+
+    @Query("select p from PostEntity p where p.userId = :userId")
+    List<PostEntity> findAllPostEntitiesByUserId(@Param("userId") UUID userId);
+
+    @Query("delete from PostEntity p where p.userId = :userId and p.id = :id")
+    void deletePostEntityByUserIdAndId(@Param("userId") UUID userId, @Param("id") UUID id);
 }

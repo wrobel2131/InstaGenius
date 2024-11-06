@@ -1,20 +1,20 @@
 package com.instagenius.postmanagementservice.domain;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.UUID;
 
 public class Post {
-    private final Long id;
+    private final UUID id;
     private final UUID userId;
     private final String title;
     private final FileKeyName imageKeyName;
     private GeneratedImage generatedImage;
     private final GeneratedDescription generatedDescription;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime lastModified;
+    private final Instant createdAt;
+    private final Instant lastModified;
 
-    public Post(Long id, UUID userId, String title, FileKeyName imageKeyName, GeneratedImage generatedImage, GeneratedDescription generatedDescription, LocalDateTime createdAt, LocalDateTime lastModified) {
+    public Post(UUID id, UUID userId, String title, FileKeyName imageKeyName, GeneratedImage generatedImage, GeneratedDescription generatedDescription, Instant createdAt, Instant lastModified) {
         this.id = id;
         this.userId = userId;
         this.title = title;
@@ -33,7 +33,7 @@ public class Post {
         this.generatedImage = generatedImage;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -57,11 +57,11 @@ public class Post {
         return generatedDescription;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDateTime getLastModified() {
+    public Instant getLastModified() {
         return lastModified;
     }
 }

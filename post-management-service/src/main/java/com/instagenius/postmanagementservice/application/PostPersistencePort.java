@@ -8,6 +8,6 @@ import java.util.UUID;
 public interface PostPersistencePort {
     Post save(Post post);
     List<Post> getPostsByUserId(UUID userId);
-    Post getPostByUserIdAndPostId(UUID userId, Long postId);
-    void deletePostByUserIdAndPostId(UUID userId, Long postId);
+    Post getPostByUserIdAndPostId(UUID userId, UUID postId);
+    void deletePostByUserIdAndPostId(UUID userId, UUID postId);
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @RestControllerAdvice
@@ -22,7 +22,7 @@ class PostGenerationExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        return new ResponseEntity<>(new ErrorResponse("Request body not valid!", LocalDateTime.now(),
+        return new ResponseEntity<>(new ErrorResponse("Request body not valid!", Instant.now(),
                 ex
                         .getBindingResult()
                         .getFieldErrors()
@@ -35,7 +35,7 @@ class PostGenerationExceptionHandler {
     @ExceptionHandler(InvalidGenerationOptionsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleInvalidGenerationOptionsException(InvalidGenerationOptionsException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), LocalDateTime.now(), List.of()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -49,7 +49,7 @@ class PostGenerationExceptionHandler {
                 String message = cause.getMessage();
                 ErrorResponse errorResponse = new ErrorResponse(
                         message,
-                        LocalDateTime.now(),
+                        Instant.now(),
                         List.of()
                 );
                 return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -59,7 +59,7 @@ class PostGenerationExceptionHandler {
         // Fallback for other HttpMessageNotReadableException cases
         ErrorResponse errorResponse = new ErrorResponse(
                 "Malformed JSON request",
-                LocalDateTime.now(),
+                Instant.now(),
                 List.of()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -70,7 +70,7 @@ class PostGenerationExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         ex.printStackTrace();
-        return new ResponseEntity<>(new ErrorResponse("Server Internal Error!", LocalDateTime.now(), List.of()),
+        return new ResponseEntity<>(new ErrorResponse("Server Internal Error!", Instant.now(), List.of()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

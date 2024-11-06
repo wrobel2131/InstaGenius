@@ -1,21 +1,21 @@
 package com.instagenius.coinmanagementservice.domain;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public class CoinReservation {
-    private final Long id;
+    private final UUID id;
     private final UUID userId;
     private final CoinAmount amount;
     private final UUID operationId;
     private ReservationStatus status;
-    private final LocalDateTime updatedAt;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime expiryTime;
+    private final Instant updatedAt;
+    private final Instant createdAt;
+    private final Instant expiryTime;
     private final int version;
 
 
-    public CoinReservation(Long id, UUID userId, CoinAmount amount, UUID operationId, ReservationStatus status, LocalDateTime updatedAt, LocalDateTime createdAt, LocalDateTime expiryTime, int version) {
+    public CoinReservation(UUID id, UUID userId, CoinAmount amount, UUID operationId, ReservationStatus status, Instant updatedAt, Instant createdAt, Instant expiryTime, int version) {
         this.id = id;
         this.userId = userId;
         this.amount = amount;
@@ -31,7 +31,7 @@ public class CoinReservation {
         return version;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -55,15 +55,15 @@ public class CoinReservation {
         this.status = status;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDateTime getExpiryTime() {
+    public Instant getExpiryTime() {
         return expiryTime;
     }
 

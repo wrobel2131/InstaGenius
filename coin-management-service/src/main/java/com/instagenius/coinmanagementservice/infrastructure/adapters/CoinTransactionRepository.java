@@ -37,7 +37,7 @@ public class CoinTransactionRepository implements CoinTransactionPersistencePort
 }
 
 @Repository
-interface JpaCoinTransactionRepository extends JpaRepository<CoinTransactionEntity, Long> {
+interface JpaCoinTransactionRepository extends JpaRepository<CoinTransactionEntity, UUID> {
     List<CoinTransactionEntity> findCoinTransactionEntitiesByUserId(UUID userId);
 }
 

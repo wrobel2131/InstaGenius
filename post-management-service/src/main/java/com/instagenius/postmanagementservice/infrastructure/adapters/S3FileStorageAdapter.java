@@ -47,17 +47,19 @@ class S3FileStorageAdapter implements FileStoragePort {
 
     @Override
     public byte[] downloadFile(FileKeyName fileKeyName) {
-        GetObjectRequest getObjectRequest = GetObjectRequest
-                .builder()
-                .bucket(bucketName)
-                .key(fileKeyName.keyName())
-                .build();
-        try(InputStream inputStream = s3Client.getObject(getObjectRequest)) {
-            return inputStream.readAllBytes();
-        } catch (IOException | S3Exception e) {
-            System.out.println(e.getMessage());
-            throw new ImageStorageException("Failed to download the file!");
-        }
+        System.out.println("Downloading file " + fileKeyName + " from " + bucketName);
+        return new byte[10];
+//        GetObjectRequest getObjectRequest = GetObjectRequest
+//                .builder()
+//                .bucket(bucketName)
+//                .key(fileKeyName.keyName())
+//                .build();
+//        try(InputStream inputStream = s3Client.getObject(getObjectRequest)) {
+//            return inputStream.readAllBytes();
+//        } catch (IOException | S3Exception e) {
+//            System.out.println(e.getMessage());
+//            throw new ImageStorageException("Failed to download the file!");
+//        }
     }
 
     @Override

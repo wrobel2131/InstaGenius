@@ -160,6 +160,11 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
             throw new InvalidGenerationOptionsException("Invalid image or description generation options!");
         }
 
+        if(imageGenerationOptions.quality().quality() == null && optionalImageModelConfig.get().getQualities() == null) {
+            System.out.println("Quality is required!");
+            return 0;
+        }
+
         Optional<QualityConfig> optionalQualityConfig =  optionalImageModelConfig
                 .get()
                 .getQualities()
