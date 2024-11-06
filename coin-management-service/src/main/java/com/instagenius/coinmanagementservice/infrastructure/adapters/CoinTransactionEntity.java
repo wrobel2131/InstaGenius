@@ -4,7 +4,7 @@ import com.instagenius.coinmanagementservice.domain.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Table(name = "coin_transaction")
@@ -17,8 +17,8 @@ import java.util.UUID;
 @Entity
 public class CoinTransactionEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @Column(name = "userId", nullable = false)
     private UUID userId;
@@ -30,13 +30,15 @@ public class CoinTransactionEntity {
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
-    private LocalDateTime createdAt;
+    @Column(name = "createdAt", nullable = false)
+    private Instant createdAt;
 
     @Version
-    private Long version;
+    @Column(name = "version", nullable = false)
+    private int version;
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = Instant.now();
     }
 }

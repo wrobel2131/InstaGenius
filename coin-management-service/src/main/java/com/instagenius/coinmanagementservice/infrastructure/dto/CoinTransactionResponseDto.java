@@ -1,6 +1,7 @@
 package com.instagenius.coinmanagementservice.infrastructure.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
-public record CoinTransactionResponseDto(int amount, LocalDateTime createdAt, String type) {
+
+public record CoinTransactionResponseDto(int amount, Instant createdAt, String type) {
 }

@@ -13,8 +13,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @RestControllerAdvice
@@ -24,7 +25,7 @@ class PostManagementExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        return new ResponseEntity<>(new ErrorResponse("Request body not valid!", LocalDateTime.now(),
+        return new ResponseEntity<>(new ErrorResponse("Request body not valid!", Instant.now(),
                 ex
                         .getBindingResult()
                         .getFieldErrors()
@@ -45,7 +46,7 @@ class PostManagementExceptionHandler {
                 String message = cause.getMessage();
                 ErrorResponse errorResponse = new ErrorResponse(
                         message,
-                        LocalDateTime.now(),
+                        Instant.now(),
                         List.of()
                 );
                 return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -55,7 +56,7 @@ class PostManagementExceptionHandler {
         // Fallback for other HttpMessageNotReadableException cases
         ErrorResponse errorResponse = new ErrorResponse(
                 "Malformed JSON request",
-                LocalDateTime.now(),
+                Instant.now(),
                 List.of()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -64,27 +65,33 @@ class PostManagementExceptionHandler {
     @ExceptionHandler(PostNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ResponseEntity<ErrorResponse> handlePostNotFoundException(PostNotFoundException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), LocalDateTime.now(), List.of()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(PostGenerationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseEntity<ErrorResponse> handlePostGenerationException(PostGenerationException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), LocalDateTime.now(), List.of()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        return new ResponseEntity<>(new ErrorResponse("Invalid Id format!", Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ImageStorageException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     ResponseEntity<ErrorResponse> handleImageStorageException(ImageStorageException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), LocalDateTime.now(), List.of()), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // Handler for overall exception thrown by this service, i
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
-        System.out.println(ex.getMessage());
-        return new ResponseEntity<>(new ErrorResponse("Server Internal Error!", LocalDateTime.now(), List.of()),
+        ex.printStackTrace();
+        return new ResponseEntity<>(new ErrorResponse("Server Internal Error!", Instant.now(), List.of()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

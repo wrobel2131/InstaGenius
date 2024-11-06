@@ -1,15 +1,15 @@
 package com.instagenius.postmanagementservice.infrastructure.adapters;
 
 import com.instagenius.postmanagementservice.application.CoinManagementPort;
-import com.instagenius.postmanagementservice.domain.CancelReservation;
 import com.instagenius.postmanagementservice.domain.CoinReservation;
-import com.instagenius.postmanagementservice.domain.CompleteReservation;
 import com.instagenius.postmanagementservice.domain.ReserveCoins;
 import com.instagenius.postmanagementservice.infrastructure.exception.CoinManagementException;
 import com.instagenius.postmanagementservice.infrastructure.mapper.CoinReservationMapper;
 import com.instagenius.postmanagementservice.infrastructure.rest.CoinManagementClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,16 +27,12 @@ class CoinManagementAdapter implements CoinManagementPort {
     }
 
     @Override
-    public void completeReservation(CompleteReservation completeReservation) {
-        coinManagementClient.completeReservation(
-                coinReservationMapper.toCompleteReservationDto(completeReservation)
-        );
+    public void completeReservation(UUID reservationId) {
+        coinManagementClient.completeReservation(reservationId);
     }
 
     @Override
-    public void cancelReservation(CancelReservation cancelReservation) {
-        coinManagementClient.cancelReservation(
-                coinReservationMapper.toCancelReservationDto(cancelReservation)
-        );
+    public void cancelReservation(UUID reservationId) {
+        coinManagementClient.cancelReservation(reservationId);
     }
 }

@@ -1,9 +1,10 @@
 package com.instagenius.postgenerationservice.infrastructure.rest;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
-public record ErrorResponse(String message, LocalDateTime timestamp, List<ErrorDetail> errors) {
+
+public record ErrorResponse(String message, Instant timestamp, List<ErrorDetail> errors) {
 
     record ErrorDetail(String field, String message) {}
 }

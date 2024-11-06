@@ -14,7 +14,7 @@ public interface CoinManagementUseCase {
     void deleteBalance(UUID userId);
     List<CoinTransaction> getCoinTransactions(UUID userId);
     CoinReservation reserveCoins(UUID userId, int amount, UUID operationId);
-    void completeReservation(UUID userId, Long reservationId);
-    void cancelReservation(UUID userId, Long reservationId);
+    void completeReservation(UUID userId, UUID reservationId);
+    void cancelReservation(UUID userId, UUID reservationId);
     void addCoins(UUID userId, int amount, TransactionType transactionType);
     }

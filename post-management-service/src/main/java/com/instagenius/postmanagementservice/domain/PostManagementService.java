@@ -39,7 +39,7 @@ public class PostManagementService implements PostManagementUseCase {
             generatedDescription = postGenerationPort.generateDescription(descriptionGenerationOptions);
             generatedImage = postGenerationPort.generateImage(imageGenerationOptions);
         } catch (PostGenerationException exception) {
-            coinManagementPort.cancelReservation(new CancelReservation(coinReservation.reservationId()));
+            coinManagementPort.cancelReservation(coinReservation.reservationId());
             throw exception;
         }
 
@@ -49,14 +49,14 @@ public class PostManagementService implements PostManagementUseCase {
             /* Responses from post generation service are placeholders, so file storage wont actually save images */
             fileStoragePort.uploadFile(imageKeyName, generatedImage);
         } catch(ImageStorageException exception) {
-            coinManagementPort.cancelReservation(new CancelReservation(coinReservation.reservationId()));
+            coinManagementPort.cancelReservation(coinReservation.reservationId());
             throw exception;
         }
 
         Post post = postPersistencePort.save(new Post(null, userId, title, imageKeyName, generatedImage, generatedDescription, null, null));
         post.setGeneratedImage(generatedImage);
 
-        coinManagementPort.completeReservation(new CompleteReservation(coinReservation.reservationId()));
+        coinManagementPort.completeReservation(coinReservation.reservationId());
         return post;
     }
 
@@ -85,7 +85,7 @@ public class PostManagementService implements PostManagementUseCase {
     }
 
     @Override
-    public Post getPostByUserIdAndId(UUID userId, Long id) {
+    public Post getPostByUserIdAndPostId(UUID userId, UUID id) {
         Post post = postPersistencePort.getPostByUserIdAndPostId(userId, id);
 
         String b64Image = Base64.getEncoder().encodeToString(fileStoragePort.downloadFile(post.getImageKeyName()));
@@ -99,7 +99,7 @@ public class PostManagementService implements PostManagementUseCase {
     //TODO Then, image is deleted from file stroage but post with imagekeyname is not deleted from databse. Check how to solve it.
     @Transactional
     @Override
-    public void deletePost(UUID userId, Long id) {
+    public void deletePost(UUID userId, UUID id) {
         Post post = postPersistencePort.getPostByUserIdAndPostId(userId, id);
 
         fileStoragePort.deleteFile(post.getImageKeyName());

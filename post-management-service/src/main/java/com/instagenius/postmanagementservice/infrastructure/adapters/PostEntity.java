@@ -4,7 +4,7 @@ package com.instagenius.postmanagementservice.infrastructure.adapters;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -16,8 +16,8 @@ import java.util.UUID;
 @Table(name = "posts")
 public class PostEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @Column(name = "userId", nullable = false)
     private UUID userId;
@@ -31,19 +31,19 @@ public class PostEntity {
     @Column(name = "imageKeyName", nullable = false)
     private String imageKeyName;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModified;
+    private Instant createdAt;
+    private Instant lastModified;
 
     @Version
     private Long version;
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = Instant.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.lastModified = LocalDateTime.now();
+        this.lastModified = Instant.now();
     }
 }

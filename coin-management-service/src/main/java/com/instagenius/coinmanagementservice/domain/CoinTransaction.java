@@ -1,18 +1,18 @@
 package com.instagenius.coinmanagementservice.domain;
 
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public class CoinTransaction {
-    private final Long id;
+    private final UUID id;
     private final UUID userId;
     private final CoinAmount amount;
     private final TransactionType type;
-    private final LocalDateTime createdAt;
+    private final Instant createdAt;
     private final int version;
 
-    public CoinTransaction(Long id, UUID userId, CoinAmount amount, TransactionType type, LocalDateTime createdAt, int version) {
+    public CoinTransaction(UUID id, UUID userId, CoinAmount amount, TransactionType type, Instant createdAt, int version) {
         this.id = id;
         this.userId = userId;
         this.amount = amount;
@@ -25,7 +25,7 @@ public class CoinTransaction {
         return version;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -41,7 +41,7 @@ public class CoinTransaction {
         return type;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 

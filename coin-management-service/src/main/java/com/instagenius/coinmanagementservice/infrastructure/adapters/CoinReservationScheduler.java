@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -20,7 +20,7 @@ class CoinReservationScheduler {
     @Scheduled(fixedRate = 300000) /* Runs every 5 min */
     public void cancelExpiredReservations() {
         System.out.println("Scheduled task, cancelling expired reservations");
-        List<CoinReservation> coinReservations = coinReservationPersistencePort.findAllCoinReservationsByStatusAndExpiryTimeBefore(ReservationStatus.PENDING, LocalDateTime.now());
+        List<CoinReservation> coinReservations = coinReservationPersistencePort.findAllCoinReservationsByStatusAndExpiryTimeBefore(ReservationStatus.PENDING, Instant.now());
         for (CoinReservation coinReservation: coinReservations) {
             coinManagementUseCase.cancelReservation(coinReservation.getUserId(), coinReservation.getId());
         }

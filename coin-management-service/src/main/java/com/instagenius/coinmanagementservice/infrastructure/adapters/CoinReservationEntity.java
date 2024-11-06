@@ -4,7 +4,8 @@ import com.instagenius.coinmanagementservice.domain.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Entity
@@ -17,8 +18,8 @@ import java.util.UUID;
 @Builder
 public class CoinReservationEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @Column(nullable = false, name = "userId")
     private UUID userId;
@@ -35,25 +36,26 @@ public class CoinReservationEntity {
     private ReservationStatus status;
 
     @Column(nullable = true, name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
 
     @Column(nullable = false, name = "created_at")
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(nullable = false, name = "expiry_time")
-    private LocalDateTime expiryTime;
+    private Instant expiryTime;
 
     @Version
+    @Column(nullable = false, name = "version")
     private int version;
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = Instant.now();
     }
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.expiryTime = LocalDateTime.now().plusMinutes(10);
+        this.createdAt = Instant.now();
+        this.expiryTime = Instant.now().plus(10, ChronoUnit.MINUTES);
     }
 }
