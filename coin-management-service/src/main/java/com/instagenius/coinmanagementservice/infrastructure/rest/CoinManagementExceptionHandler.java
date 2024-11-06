@@ -14,8 +14,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @RestControllerAdvice
@@ -25,19 +26,25 @@ class CoinManagementExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), LocalDateTime.now(), List.of()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        return new ResponseEntity<>(new ErrorResponse("Invalid Id format!", Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CoinReservationNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ResponseEntity<ErrorResponse> handleCoinReservationNotFoundException(CoinReservationNotFoundException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), LocalDateTime.now(), List.of()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InsufficientBalanceException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     ResponseEntity<ErrorResponse> handleInsufficientBalanceException(InsufficientBalanceException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), LocalDateTime.now(), List.of()), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -51,7 +58,7 @@ class CoinManagementExceptionHandler {
                 String message = cause.getMessage();
                 ErrorResponse errorResponse = new ErrorResponse(
                         message,
-                        LocalDateTime.now(),
+                        Instant.now(),
                         List.of()
                 );
                 return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -61,7 +68,7 @@ class CoinManagementExceptionHandler {
         // Fallback for other HttpMessageNotReadableException cases
         ErrorResponse errorResponse = new ErrorResponse(
                 "Malformed JSON request",
-                LocalDateTime.now(),
+                Instant.now(),
                 List.of()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -70,13 +77,13 @@ class CoinManagementExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException() {
-        return new ResponseEntity<>(new ErrorResponse("Value must be unique!", LocalDateTime.now(), List.of()), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(new ErrorResponse("Value must be unique!", Instant.now(), List.of()), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        return new ResponseEntity<>(new ErrorResponse("Request body not valid!", LocalDateTime.now(),
+        return new ResponseEntity<>(new ErrorResponse("Request body not valid!", Instant.now(),
                 ex
                         .getBindingResult()
                         .getFieldErrors()
@@ -89,7 +96,8 @@ class CoinManagementExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
-        return new ResponseEntity<>(new ErrorResponse("Server Internal Error!", LocalDateTime.now(), List.of()),
+        ex.printStackTrace();
+        return new ResponseEntity<>(new ErrorResponse("Server Internal Error!", Instant.now(), List.of()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

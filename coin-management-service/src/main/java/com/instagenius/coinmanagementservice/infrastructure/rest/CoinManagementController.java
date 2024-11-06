@@ -67,19 +67,19 @@ class CoinManagementController {
         );
     }
 
-    @PostMapping(value = "/complete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> completeReservation(@Valid @RequestBody CompleteReservationDto completeReservationDto, @AuthenticationPrincipal Jwt jwt) {
+    @PostMapping(value = "/complete/{reservationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> completeReservation(@PathVariable("reservationId") UUID reservationId, @AuthenticationPrincipal Jwt jwt) {
         System.out.println("Complete Reservation endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
-        coinManagementUseCase.completeReservation(userId, completeReservationDto.reservationId());
+        coinManagementUseCase.completeReservation(userId, reservationId);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(value = "/cancel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> cancelReservation(@Valid @RequestBody CancelReservationDto cancelReservationDto, @AuthenticationPrincipal Jwt jwt) {
+    @PostMapping(value = "/cancel/{reservationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> cancelReservation(@PathVariable("reservationId") UUID reservationId, @AuthenticationPrincipal Jwt jwt) {
         System.out.println("Cancel Reservation endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
-        coinManagementUseCase.cancelReservation(userId, cancelReservationDto.reservationId());
+        coinManagementUseCase.cancelReservation(userId, reservationId);
         return ResponseEntity.noContent().build();
     }
 

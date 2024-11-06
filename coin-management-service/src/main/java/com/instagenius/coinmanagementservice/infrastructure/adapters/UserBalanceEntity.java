@@ -3,7 +3,7 @@ package com.instagenius.coinmanagementservice.infrastructure.adapters;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -16,8 +16,8 @@ import java.util.UUID;
 @Table(name = "user_balance")
 public class UserBalanceEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @Column(nullable = false, name = "userId", unique = true)
     private UUID userId;
@@ -29,22 +29,23 @@ public class UserBalanceEntity {
     private int reservedBalance;
 
     @Column(nullable = true, name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
 
     @Column(nullable = false, name = "created_at")
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Version
+    @Column(name = "version", nullable = false)
     private int version;
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = Instant.now();
     }
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = Instant.now();
         this.reservedBalance = 0;
     }
 

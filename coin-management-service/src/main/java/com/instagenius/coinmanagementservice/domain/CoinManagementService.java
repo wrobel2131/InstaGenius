@@ -8,7 +8,7 @@ import com.instagenius.coinmanagementservice.infrastructure.exception.CoinReserv
 import com.instagenius.coinmanagementservice.infrastructure.exception.InsufficientBalanceException;
 import jakarta.transaction.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,14 +70,14 @@ public class CoinManagementService implements CoinManagementUseCase {
 
             System.out.println("Creating coin reservation");
             CoinReservation coinReservation = new CoinReservation(null, userId, new CoinAmount(amount), operationId,
-                    ReservationStatus.PENDING, null, LocalDateTime.now(), null, 0);
+                    ReservationStatus.PENDING, null, Instant.now(), null, 0);
             return coinReservationPersistencePort.save(coinReservation);
         }
     }
 
     @Transactional
     @Override
-    public void completeReservation(UUID userId, Long reservationId) {
+    public void completeReservation(UUID userId, UUID reservationId) {
         System.out.println("Completing reservation with id " + reservationId);
         CoinReservation coinReservation = coinReservationPersistencePort.findCoinReservationByIdAndUserId(reservationId, userId);
 
@@ -98,7 +98,7 @@ public class CoinManagementService implements CoinManagementUseCase {
 
     @Transactional
     @Override
-    public void cancelReservation(UUID userId, Long reservationId) {
+    public void cancelReservation(UUID userId, UUID reservationId) {
         System.out.println("Cancelling reservation with id " + reservationId);
         CoinReservation  coinReservation = coinReservationPersistencePort.findCoinReservationByIdAndUserId(reservationId, userId);
 

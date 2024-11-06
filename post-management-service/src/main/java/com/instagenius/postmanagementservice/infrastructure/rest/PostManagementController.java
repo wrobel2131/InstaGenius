@@ -46,10 +46,10 @@ class PostManagementController {
     }
 
     @GetMapping(value = "/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PostResponseDto> getPostByPostId(@PathVariable("postId") Long postId, @AuthenticationPrincipal Jwt jwt) {
+    ResponseEntity<PostResponseDto> getPostByPostId(@PathVariable("postId") UUID postId, @AuthenticationPrincipal Jwt jwt) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
-                postMapper.toPostResponseDto(postManagementUseCase.getPostByUserIdAndId(userId, postId))
+                postMapper.toPostResponseDto(postManagementUseCase.getPostByUserIdAndPostId(userId, postId))
         );
     }
 
@@ -71,7 +71,7 @@ class PostManagementController {
     }
 
     @DeleteMapping(value = "/{postId}")
-    ResponseEntity<Void> deletePost(@PathVariable("postId") Long postId, @AuthenticationPrincipal Jwt jwt) {
+    ResponseEntity<Void> deletePost(@PathVariable("postId") UUID postId, @AuthenticationPrincipal Jwt jwt) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
         postManagementUseCase.deletePost(userId, postId);
         return ResponseEntity.noContent().build();

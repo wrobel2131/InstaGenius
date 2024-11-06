@@ -41,7 +41,7 @@ public class UserBalanceRepository implements UserBalancePersistencePort {
 }
 
 @Repository
-interface JpaUserBalanceRepository extends JpaRepository<UserBalanceEntity, Long> {
+interface JpaUserBalanceRepository extends JpaRepository<UserBalanceEntity, UUID> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<UserBalanceEntity> findUserBalanceEntityByUserId(UUID userId);
     void deleteUserBalanceEntityByUserId(UUID userId);
