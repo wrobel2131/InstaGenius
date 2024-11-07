@@ -7,7 +7,9 @@ import java.util.UUID;
 public class Order {
     private UUID id;
     private UUID userId;
-    private List<OrderItem>
+    private OrderStatus status;
+    private List<OrderItem> items;
+    private Price totalPrice;
     private Instant createdAt;
     private Instant updatedAt;
 
