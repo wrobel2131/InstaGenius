@@ -1,4 +1,4 @@
 package com.instagenius.orderservice.infrastructure.dto;
 
-public record CoinPackageDto(LonString name, int coins, PriceDto price) {
+public record CoinPackageDto(String name, int coins, PriceDto price) {
 }

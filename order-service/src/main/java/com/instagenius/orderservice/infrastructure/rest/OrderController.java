@@ -10,6 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ class OrderController {
     }
 
     @GetMapping(value = "/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<OrderStatusResponseDto> getOrderStatus(@PathVariable("orderId") Long orderId, @AuthenticationPrincipal Jwt jwt) {
+    ResponseEntity<OrderStatusResponseDto> getOrderStatus(@PathVariable("orderId") UUID orderId, @AuthenticationPrincipal Jwt jwt) {
 
         return ResponseEntity.ok().build();
     }
