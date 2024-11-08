@@ -8,6 +8,8 @@ import com.instagenius.coinmanagementservice.infrastructure.exception.CoinReserv
 import com.instagenius.coinmanagementservice.infrastructure.mapper.CoinReservationMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
@@ -56,7 +58,12 @@ public class CoinReservationRepository implements CoinReservationPersistencePort
 
 @Repository
 interface JpaCoinReservationRepository  extends JpaRepository<CoinReservationEntity, UUID> {
-    Optional<CoinReservationEntity> findCoinReservationEntityByIdAndUserId(UUID reservationId, UUID userId);
-    Optional<CoinReservationEntity> findCoinReservationEntityByOperationId(UUID operationId);
-    List<CoinReservationEntity> findCoinReservationEntitiesByStatusAndExpiryTimeBefore(ReservationStatus status, Instant expiryTime);
+    @Query(value = "SELECT c FROM CoinReservationEntity c WHERE c.id = :id AND c.userId = :userId")
+    Optional<CoinReservationEntity> findCoinReservationEntityByIdAndUserId(@Param("id") UUID reservationId, @Param("userId") UUID userId);
+
+    @Query(value = "SELECT c FROM CoinReservationEntity c WHERE c.operationId = :operationId")
+    Optional<CoinReservationEntity> findCoinReservationEntityByOperationId(@Param("operationId") UUID operationId);
+
+    @Query(value = "SELECT c FROM CoinReservationEntity c WHERE c.status = :status AND c.expiryTime < :expiryTime")
+    List<CoinReservationEntity> findCoinReservationEntitiesByStatusAndExpiryTimeBefore(@Param("status") ReservationStatus status, @Param("expiryTime") Instant expiryTime);
 }

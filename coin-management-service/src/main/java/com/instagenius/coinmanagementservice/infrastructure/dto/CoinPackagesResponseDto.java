@@ -1,4 +1,4 @@
-package com.instagenius.orderservice.infrastructure.dto;
+package com.instagenius.coinmanagementservice.infrastructure.dto;
 
 import java.util.List;
 

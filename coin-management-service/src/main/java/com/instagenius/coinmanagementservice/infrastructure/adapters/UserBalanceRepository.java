@@ -8,6 +8,9 @@ import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -43,6 +46,10 @@ public class UserBalanceRepository implements UserBalancePersistencePort {
 @Repository
 interface JpaUserBalanceRepository extends JpaRepository<UserBalanceEntity, UUID> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    Optional<UserBalanceEntity> findUserBalanceEntityByUserId(UUID userId);
-    void deleteUserBalanceEntityByUserId(UUID userId);
+    @Query(value = "SELECT b FROM UserBalanceEntity b WHERE b.userId = :userId")
+    Optional<UserBalanceEntity> findUserBalanceEntityByUserId(@Param("userId") UUID userId);
+
+    @Query(value = "DELETE FROM UserBalanceEntity u WHERE u.userId = :userId")
+    @Modifying
+    void deleteUserBalanceEntityByUserId(@Param("userId") UUID userId);
 }

@@ -17,9 +17,10 @@ import java.util.UUID;
 public class UserBalanceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(nullable = false, name = "userId", unique = true)
+    @Column(nullable = false, name = "user_id", unique = true)
     private UUID userId;
 
     @Column(nullable = false, name = "available_balance")

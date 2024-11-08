@@ -23,12 +23,6 @@ class OrderController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/coin-packages", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CoinPackagesResponseDto> getCoinPackages(@AuthenticationPrincipal Jwt jwt) {
-
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping(value = "/{orderId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<OrderStatusResponseDto> getOrderStatus(@PathVariable("orderId") UUID orderId, @AuthenticationPrincipal Jwt jwt) {
 

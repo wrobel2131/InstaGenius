@@ -18,9 +18,10 @@ import java.util.UUID;
 public class CoinTransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "userId", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private UUID userId;
 
     @Column(name = "amount", nullable = false)
@@ -30,7 +31,7 @@ public class CoinTransactionEntity {
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
-    @Column(name = "createdAt", nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     @Version

@@ -5,6 +5,8 @@ import com.instagenius.coinmanagementservice.domain.CoinTransaction;
 import com.instagenius.coinmanagementservice.infrastructure.mapper.CoinTransactionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,7 +40,8 @@ public class CoinTransactionRepository implements CoinTransactionPersistencePort
 
 @Repository
 interface JpaCoinTransactionRepository extends JpaRepository<CoinTransactionEntity, UUID> {
-    List<CoinTransactionEntity> findCoinTransactionEntitiesByUserId(UUID userId);
+    @Query(value = "SELECT c FROM CoinTransactionEntity c WHERE c.userId = :userId")
+    List<CoinTransactionEntity> findCoinTransactionEntitiesByUserId(@Param("userId") UUID userId);
 }
 
 

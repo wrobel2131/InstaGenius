@@ -1,0 +1,7 @@
+package com.instagenius.coinmanagementservice.infrastructure.dto;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
+public record CoinPackageDto(UUID id, String name, String description, int coins, BigDecimal price, String currency) {
+}

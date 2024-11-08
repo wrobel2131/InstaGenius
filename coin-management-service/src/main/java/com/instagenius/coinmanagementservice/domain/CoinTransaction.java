@@ -50,7 +50,7 @@ public class CoinTransaction {
         return "CoinTransaction{" +
                 "id=" + id +
                 ", userId=" + userId +
-                ", amount=" + amount +
+                ", price=" + amount +
                 ", type=" + type +
                 ", createdAt=" + createdAt +
                 '}';

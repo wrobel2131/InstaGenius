@@ -19,16 +19,17 @@ import java.util.UUID;
 public class CoinReservationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(nullable = false, name = "userId")
+    @Column(nullable = false, name = "user_id")
     private UUID userId;
 
     @Column(nullable = false, name = "amount")
     private int amount;
 
     /* Operation id is unique value, which identifies the operation */
-    @Column(nullable = false, name = "operationId", unique = true)
+    @Column(nullable = false, name = "operation_id", unique = true)
     private UUID operationId;
 
     @Column(nullable = false, name = "status")

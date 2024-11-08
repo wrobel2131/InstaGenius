@@ -17,7 +17,10 @@ public class CoinManagementService implements CoinManagementUseCase {
     private final UserBalancePersistencePort userBalancePersistencePort;
     private final CoinReservationPersistencePort coinReservationPersistencePort;
 
-    public CoinManagementService(CoinTransactionPersistencePort coinTransactionPersistencePort, UserBalancePersistencePort userBalancePersistencePort, CoinReservationPersistencePort coinReservationPersistencePort) {
+    public CoinManagementService(
+            CoinTransactionPersistencePort coinTransactionPersistencePort,
+            UserBalancePersistencePort userBalancePersistencePort,
+            CoinReservationPersistencePort coinReservationPersistencePort) {
         this.coinTransactionPersistencePort = coinTransactionPersistencePort;
         this.userBalancePersistencePort = userBalancePersistencePort;
         this.coinReservationPersistencePort = coinReservationPersistencePort;
@@ -41,7 +44,8 @@ public class CoinManagementService implements CoinManagementUseCase {
     @Override
     public UserBalance createBalance(UUID userId, int initialBalance) {
         System.out.println("Creating balance for user " + userId + " with initial balance " + initialBalance);
-        return userBalancePersistencePort.save(new UserBalance(null, userId, new Balance(initialBalance), new Balance(0), null, null, 0));
+        return userBalancePersistencePort.save(
+                new UserBalance(null, userId, new Balance(initialBalance), new Balance(0), null, null, 0));
     }
 
     @Transactional
@@ -70,7 +74,8 @@ public class CoinManagementService implements CoinManagementUseCase {
 
             System.out.println("Creating coin reservation");
             CoinReservation coinReservation = new CoinReservation(null, userId, new CoinAmount(amount), operationId,
-                    ReservationStatus.PENDING, null, Instant.now(), null, 0);
+                                                                  ReservationStatus.PENDING, null, Instant.now(), null,
+                                                                  0);
             return coinReservationPersistencePort.save(coinReservation);
         }
     }
@@ -79,15 +84,17 @@ public class CoinManagementService implements CoinManagementUseCase {
     @Override
     public void completeReservation(UUID userId, UUID reservationId) {
         System.out.println("Completing reservation with id " + reservationId);
-        CoinReservation coinReservation = coinReservationPersistencePort.findCoinReservationByIdAndUserId(reservationId, userId);
+        CoinReservation coinReservation = coinReservationPersistencePort.findCoinReservationByIdAndUserId(reservationId,
+                                                                                                          userId);
 
-        if(!coinReservation.getStatus().equals(ReservationStatus.PENDING)) {
+        if (!coinReservation.getStatus().equals(ReservationStatus.PENDING)) {
             System.out.println("Reservation with id " + reservationId + " is not pending.");
             return;
         }
 
         UserBalance userBalance = userBalancePersistencePort.findUserBalanceByUserId(userId);
-        userBalance.setReservedBalance(new Balance(userBalance.getReservedBalance().balance() - coinReservation.getAmount().amount()));
+        userBalance.setReservedBalance(
+                new Balance(userBalance.getReservedBalance().balance() - coinReservation.getAmount().amount()));
         userBalancePersistencePort.save(userBalance);
 
         coinReservation.setStatus(ReservationStatus.COMPLETED);
@@ -100,16 +107,19 @@ public class CoinManagementService implements CoinManagementUseCase {
     @Override
     public void cancelReservation(UUID userId, UUID reservationId) {
         System.out.println("Cancelling reservation with id " + reservationId);
-        CoinReservation  coinReservation = coinReservationPersistencePort.findCoinReservationByIdAndUserId(reservationId, userId);
+        CoinReservation coinReservation = coinReservationPersistencePort.findCoinReservationByIdAndUserId(reservationId,
+                                                                                                          userId);
 
-        if(!coinReservation.getStatus().equals(ReservationStatus.PENDING)) {
+        if (!coinReservation.getStatus().equals(ReservationStatus.PENDING)) {
             System.out.println("Reservation with id " + reservationId + " is not pending.");
             return;
         }
 
         UserBalance userBalance = userBalancePersistencePort.findUserBalanceByUserId(userId);
-        userBalance.setAvailableBalance(new Balance(userBalance.getAvailableBalance().balance() + coinReservation.getAmount().amount()));
-        userBalance.setReservedBalance(new Balance(userBalance.getReservedBalance().balance() - coinReservation.getAmount().amount()));
+        userBalance.setAvailableBalance(
+                new Balance(userBalance.getAvailableBalance().balance() + coinReservation.getAmount().amount()));
+        userBalance.setReservedBalance(
+                new Balance(userBalance.getReservedBalance().balance() - coinReservation.getAmount().amount()));
         userBalancePersistencePort.save(userBalance);
 
         coinReservation.setStatus(ReservationStatus.CANCELLED);

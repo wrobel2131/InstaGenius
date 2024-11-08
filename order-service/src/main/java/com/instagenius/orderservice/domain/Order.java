@@ -4,14 +4,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-public class Order {
-    private UUID id;
-    private UUID userId;
-    private OrderStatus status;
-    private List<OrderItem> items;
-    private Price totalPrice;
-    private Instant createdAt;
-    private Instant updatedAt;
-
-
+public record Order(UUID id, UUID userId, OrderStatus status, List<OrderItem> items, Price totalPrice,
+                    Instant createdAt, Instant updatedAt) {
 }

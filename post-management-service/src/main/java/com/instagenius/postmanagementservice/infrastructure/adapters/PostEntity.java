@@ -17,9 +17,10 @@ import java.util.UUID;
 public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "userId", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private UUID userId;
 
     @Column(name = "title", length = 100, nullable = false)
@@ -28,14 +29,18 @@ public class PostEntity {
     @Column(name = "description", length = 1000, nullable = false)
     private String description;
 
-    @Column(name = "imageKeyName", nullable = false)
+    @Column(name = "image_key_name", nullable = false)
     private String imageKeyName;
 
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
-    private Instant lastModified;
+
+    @Column(name = "updated_at", nullable = true)
+    private Instant updatedAt;
 
     @Version
-    private Long version;
+    @Column(name = "version")
+    private int version;
 
     @PrePersist
     protected void onCreate() {
@@ -44,6 +49,6 @@ public class PostEntity {
 
     @PreUpdate
     protected void onUpdate() {
-        this.lastModified = Instant.now();
+        this.updatedAt = Instant.now();
     }
 }
