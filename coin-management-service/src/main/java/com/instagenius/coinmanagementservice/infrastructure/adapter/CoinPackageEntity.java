@@ -1,4 +1,4 @@
-package com.instagenius.coinmanagementservice.infrastructure.adapters;
+package com.instagenius.coinmanagementservice.infrastructure.adapter;
 
 
 import jakarta.persistence.*;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @Builder
 public class CoinPackageEntity {
 
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;

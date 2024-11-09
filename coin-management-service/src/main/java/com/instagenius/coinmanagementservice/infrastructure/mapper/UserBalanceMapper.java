@@ -3,7 +3,7 @@ package com.instagenius.coinmanagementservice.infrastructure.mapper;
 
 import com.instagenius.coinmanagementservice.domain.Balance;
 import com.instagenius.coinmanagementservice.domain.UserBalance;
-import com.instagenius.coinmanagementservice.infrastructure.adapters.UserBalanceEntity;
+import com.instagenius.coinmanagementservice.infrastructure.adapter.UserBalanceEntity;
 import com.instagenius.coinmanagementservice.infrastructure.dto.UserBalanceResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

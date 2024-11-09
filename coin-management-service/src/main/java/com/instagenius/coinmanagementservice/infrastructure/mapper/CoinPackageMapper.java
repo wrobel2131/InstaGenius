@@ -2,8 +2,8 @@ package com.instagenius.coinmanagementservice.infrastructure.mapper;
 
 import com.instagenius.coinmanagementservice.domain.CoinAmount;
 import com.instagenius.coinmanagementservice.domain.CoinPackage;
-import com.instagenius.coinmanagementservice.infrastructure.adapters.CoinPackageEntity;
-import com.instagenius.coinmanagementservice.infrastructure.dto.CoinPackageDto;
+import com.instagenius.coinmanagementservice.infrastructure.adapter.CoinPackageEntity;
+import com.instagenius.coinmanagementservice.infrastructure.dto.CoinPackageResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -12,7 +12,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface CoinPackageMapper {
     CoinPackageMapper INSTANCE = Mappers.getMapper(CoinPackageMapper.class);
-
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target ="name")
@@ -37,7 +36,6 @@ public interface CoinPackageMapper {
     @Mapping(source = "version", target = "version")
     CoinPackage toCoinPackage(CoinPackageEntity coinPackageEntity);
 
-
     @Named("coinAmountToInt")
     default int coinAmountToInt(CoinAmount coinAmount) {
         return coinAmount.amount();
@@ -54,5 +52,6 @@ public interface CoinPackageMapper {
     @Mapping(source = "price.price", target = "price")
     @Mapping(source = "coinAmount", target = "coins", qualifiedByName = "coinAmountToInt")
     @Mapping(source = "price.currency", target = "currency")
-    CoinPackageDto toCoinPackageDto(CoinPackage coinPackage);
+    @Mapping(source = "type", target = "type")
+    CoinPackageResponseDto toCoinPackageResponseDto(CoinPackage coinPackage);
 }

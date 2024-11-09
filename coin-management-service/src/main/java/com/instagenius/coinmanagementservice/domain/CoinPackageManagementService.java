@@ -2,7 +2,7 @@ package com.instagenius.coinmanagementservice.domain;
 
 
 import com.instagenius.coinmanagementservice.application.CoinPackageManagementUseCase;
-import com.instagenius.coinmanagementservice.infrastructure.adapters.CoinPackageRepository;
+import com.instagenius.coinmanagementservice.infrastructure.adapter.CoinPackageRepository;
 import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;

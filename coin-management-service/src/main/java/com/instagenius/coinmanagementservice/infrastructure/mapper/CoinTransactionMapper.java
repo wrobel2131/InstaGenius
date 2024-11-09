@@ -4,7 +4,7 @@ package com.instagenius.coinmanagementservice.infrastructure.mapper;
 import com.instagenius.coinmanagementservice.domain.CoinAmount;
 import com.instagenius.coinmanagementservice.domain.CoinTransaction;
 import com.instagenius.coinmanagementservice.domain.TransactionType;
-import com.instagenius.coinmanagementservice.infrastructure.adapters.CoinTransactionEntity;
+import com.instagenius.coinmanagementservice.infrastructure.adapter.CoinTransactionEntity;
 import com.instagenius.coinmanagementservice.infrastructure.dto.CoinTransactionResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -3,7 +3,7 @@ package com.instagenius.postmanagementservice.infrastructure.mapper;
 import com.instagenius.postmanagementservice.domain.FileKeyName;
 import com.instagenius.postmanagementservice.domain.GeneratedDescription;
 import com.instagenius.postmanagementservice.domain.Post;
-import com.instagenius.postmanagementservice.infrastructure.adapters.PostEntity;
+import com.instagenius.postmanagementservice.infrastructure.adapter.PostEntity;
 import com.instagenius.postmanagementservice.infrastructure.dto.PostResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

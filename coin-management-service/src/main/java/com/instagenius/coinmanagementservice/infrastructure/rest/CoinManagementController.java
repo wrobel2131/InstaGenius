@@ -56,7 +56,7 @@ class CoinManagementController {
     }
 
     @PostMapping(value = "/reserve", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CoinReservationDto> reserveCoins(@Valid @RequestBody ReserveCoinsDto reserveCoinsDto, @AuthenticationPrincipal Jwt jwt) {
+    ResponseEntity<CoinReservationResponseDto> reserveCoins(@Valid @RequestBody ReserveCoinsDto reserveCoinsDto, @AuthenticationPrincipal Jwt jwt) {
         System.out.println("Reserve Coins endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(

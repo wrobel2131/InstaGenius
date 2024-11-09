@@ -1,4 +1,4 @@
-package com.instagenius.postmanagementservice.infrastructure.adapters;
+package com.instagenius.postmanagementservice.infrastructure.adapter;
 
 
 import jakarta.persistence.*;
@@ -17,7 +17,7 @@ import java.util.UUID;
 public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
 
     @Column(name = "user_id", nullable = false)

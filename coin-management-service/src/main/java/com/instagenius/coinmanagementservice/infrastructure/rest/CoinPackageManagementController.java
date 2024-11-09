@@ -1,7 +1,7 @@
 package com.instagenius.coinmanagementservice.infrastructure.rest;
 
 import com.instagenius.coinmanagementservice.application.CoinPackageManagementUseCase;
-import com.instagenius.coinmanagementservice.infrastructure.dto.CoinPackageDto;
+import com.instagenius.coinmanagementservice.infrastructure.dto.CoinPackageResponseDto;
 import com.instagenius.coinmanagementservice.infrastructure.dto.CoinPackagesResponseDto;
 import com.instagenius.coinmanagementservice.infrastructure.dto.CreateCoinPackageRequestDto;
 import com.instagenius.coinmanagementservice.infrastructure.dto.UpdateCoinPackageRequestDto;
@@ -30,27 +30,27 @@ public class CoinPackageManagementController {
                         coinPackageManagementUseCase
                                 .getCoinPackages()
                                 .stream()
-                                .map(coinPackageMapper::toCoinPackageDto)
+                                .map(coinPackageMapper::toCoinPackageResponseDto)
                                 .toList())
         );
     }
 
     @GetMapping(value = "/{coinPackageId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CoinPackageDto> getCoinPackage(
+    ResponseEntity<CoinPackageResponseDto> getCoinPackage(
             @PathVariable("coinPackageId") UUID coinPackageId) {
         System.out.println("Get Coins Package endpoint");
-        return ResponseEntity.ok(coinPackageMapper.toCoinPackageDto(
+        return ResponseEntity.ok(coinPackageMapper.toCoinPackageResponseDto(
                 coinPackageManagementUseCase.getCoinPackage(coinPackageId))
         );
     }
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CoinPackageDto> createCoinPackage(
+    ResponseEntity<CoinPackageResponseDto> createCoinPackage(
             @RequestBody @Valid CreateCoinPackageRequestDto createCoinPackageRequestDto) {
         System.out.println("Create Coins Package endpoint");
 
         return ResponseEntity.ok(
-                coinPackageMapper.toCoinPackageDto(
+                coinPackageMapper.toCoinPackageResponseDto(
                         coinPackageManagementUseCase.createCoinPackage(createCoinPackageRequestDto.name(),
                                                                        createCoinPackageRequestDto.description(),
                                                                        createCoinPackageRequestDto.coinAmount(),

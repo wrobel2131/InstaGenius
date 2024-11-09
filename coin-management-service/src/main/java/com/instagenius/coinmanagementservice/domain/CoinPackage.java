@@ -12,6 +12,7 @@ public class CoinPackage {
         private Price price;
         private final Instant createdAt;
         private final Instant updatedAt;
+        private final String type;
         private boolean active;
         private final int version;
 
@@ -25,6 +26,7 @@ public class CoinPackage {
         this.price = price;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.type = "COIN_PACKAGE";
         this.active = active;
         this.version = version;
     }
@@ -43,6 +45,10 @@ public class CoinPackage {
 
     public void setPrice(Price price) {
         this.price = price;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public void setActive(boolean active) {

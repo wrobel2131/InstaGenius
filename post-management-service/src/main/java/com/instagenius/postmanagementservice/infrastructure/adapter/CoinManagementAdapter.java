@@ -1,4 +1,4 @@
-package com.instagenius.postmanagementservice.infrastructure.adapters;
+package com.instagenius.postmanagementservice.infrastructure.adapter;
 
 import com.instagenius.postmanagementservice.application.CoinManagementPort;
 import com.instagenius.postmanagementservice.domain.CoinReservation;

@@ -1,4 +1,4 @@
-package com.instagenius.coinmanagementservice.infrastructure.adapters;
+package com.instagenius.coinmanagementservice.infrastructure.adapter;
 
 import com.instagenius.coinmanagementservice.domain.ReservationStatus;
 import jakarta.persistence.*;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class CoinReservationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
 
     @Column(nullable = false, name = "user_id")

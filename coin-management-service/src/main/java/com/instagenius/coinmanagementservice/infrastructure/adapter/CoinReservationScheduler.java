@@ -1,4 +1,4 @@
-package com.instagenius.coinmanagementservice.infrastructure.adapters;
+package com.instagenius.coinmanagementservice.infrastructure.adapter;
 
 import com.instagenius.coinmanagementservice.application.CoinManagementUseCase;
 import com.instagenius.coinmanagementservice.application.CoinReservationPersistencePort;
