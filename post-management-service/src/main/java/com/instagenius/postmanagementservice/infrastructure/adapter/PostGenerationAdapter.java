@@ -2,11 +2,14 @@ package com.instagenius.postmanagementservice.infrastructure.adapter;
 
 import com.instagenius.postmanagementservice.domain.*;
 import com.instagenius.postmanagementservice.infrastructure.dto.CreatePostOptionsDto;
+import com.instagenius.postmanagementservice.infrastructure.exception.FeignExceptionUtils;
 import com.instagenius.postmanagementservice.infrastructure.exception.PostGenerationException;
 import com.instagenius.postmanagementservice.infrastructure.mapper.*;
 import com.instagenius.postmanagementservice.infrastructure.rest.PostGenerationClient;
 import com.instagenius.postmanagementservice.application.PostGenerationPort;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,30 +24,47 @@ class PostGenerationAdapter implements PostGenerationPort {
 
     @Override
     public GeneratedDescription generateDescription(DescriptionGenerationOptions descriptionGenerationOptions) {
-        return generatedDescriptionMapper.toGeneratedDescription(
-                postGenerationClient.generateDescription(
-                        descriptionGenerationOptionsMapper.toCreateDescriptionDto(descriptionGenerationOptions)
-                ).orElseThrow(() -> new PostGenerationException("Error while generating description!"))
-        );
+        try {
+            return generatedDescriptionMapper.toGeneratedDescription(
+                    postGenerationClient.generateDescription(
+                            descriptionGenerationOptionsMapper.toCreateDescriptionDto(descriptionGenerationOptions)
+                    )
+            );
+        } catch (FeignException e) {
+            String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
+            throw new PostGenerationException(errorMessage, HttpStatus.valueOf(e.status()));
+        }
     }
 
     @Override
     public GeneratedImage generateImage(ImageGenerationOptions imageGenerationOptions) {
-        return generatedImageMapper.toGeneratedImage(
-                postGenerationClient.generateImage(
-                        imageGenerationOptionsMapper.toCreateImageDto(imageGenerationOptions)
-                ).orElseThrow(() -> new PostGenerationException("Error while generating image!"))
-        );
+        try {
+            return generatedImageMapper.toGeneratedImage(
+                    postGenerationClient.generateImage(
+                            imageGenerationOptionsMapper.toCreateImageDto(imageGenerationOptions)
+                    )
+            );
+        } catch (FeignException e) {
+            String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
+            throw new PostGenerationException(errorMessage, HttpStatus.valueOf(e.status()));
+        }
     }
 
     @Override
-    public GenerationCost calculateGenerationCost(DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions) {
-        return generationCostMapper.toGenerationCost(
-                postGenerationClient.calculateGenerationCost(new CreatePostOptionsDto(
-                        descriptionGenerationOptionsMapper.toCreateDescriptionDto(descriptionGenerationOptions),
-                        imageGenerationOptionsMapper.toCreateImageDto(imageGenerationOptions)
-                )).orElseThrow(() -> new PostGenerationException("Error while calculating generation cost!"))
-        );
+    public GenerationCost calculateGenerationCost(
+            DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions) {
+        try {
+            return generationCostMapper.toGenerationCost(
+                    postGenerationClient.calculateGenerationCost(new CreatePostOptionsDto(
+                                                                         descriptionGenerationOptionsMapper.toCreateDescriptionDto(descriptionGenerationOptions),
+                                                                         imageGenerationOptionsMapper.toCreateImageDto(imageGenerationOptions)
+                                                                 )
+                    )
+            );
+        } catch (FeignException e) {
+            String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
+            throw new PostGenerationException(errorMessage, HttpStatus.valueOf(e.status()));
+        }
     }
 
 }

@@ -18,20 +18,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OrderRepository implements OrderPersistencePort {
     private final JpaOrderRepository jpaOrderRepository;
-    private static final OrderMapper orderMapper = OrderMapper.INSTANCE;
-
     @Override
     public Order save(Order order) {
-        return orderMapper.toOrder(
+        return OrderMapper.toOrder(
                 jpaOrderRepository.save(
-                        orderMapper.toOrderEntity(order)
+                        OrderMapper.toOrderEntity(order)
                 )
         );
     }
 
     @Override
     public Order findOrderByUserIdAndOrderId(UUID userId, UUID orderId) {
-        return orderMapper.toOrder(
+        return OrderMapper.toOrder(
                 jpaOrderRepository.findOrderByUserIdAndId(userId, orderId).orElseThrow(() -> new OrderNotFoundException("Order not found!"))
         );
     }
@@ -41,7 +39,7 @@ public class OrderRepository implements OrderPersistencePort {
         return jpaOrderRepository
                 .findOrdersByUserId(userId)
                 .stream()
-                .map(orderMapper::toOrder)
+                .map(OrderMapper::toOrder)
                 .toList();
     }
 }

@@ -12,9 +12,9 @@ public class Post {
     private GeneratedImage generatedImage;
     private final GeneratedDescription generatedDescription;
     private final Instant createdAt;
-    private final Instant lastModified;
+    private final Instant updatedAt;
 
-    public Post(UUID id, UUID userId, String title, FileKeyName imageKeyName, GeneratedImage generatedImage, GeneratedDescription generatedDescription, Instant createdAt, Instant lastModified) {
+    public Post(UUID id, UUID userId, String title, FileKeyName imageKeyName, GeneratedImage generatedImage, GeneratedDescription generatedDescription, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.userId = userId;
         this.title = title;
@@ -22,7 +22,7 @@ public class Post {
         this.generatedImage = generatedImage;
         this.generatedDescription = generatedDescription;
         this.createdAt = createdAt;
-        this.lastModified = lastModified;
+        this.updatedAt = updatedAt;
     }
 
     public void setGeneratedImageFromBytes(byte[] image) {
@@ -61,7 +61,7 @@ public class Post {
         return createdAt;
     }
 
-    public Instant getLastModified() {
-        return lastModified;
+    public Instant getUpdatedAt() {
+        return updatedAt;
     }
 }

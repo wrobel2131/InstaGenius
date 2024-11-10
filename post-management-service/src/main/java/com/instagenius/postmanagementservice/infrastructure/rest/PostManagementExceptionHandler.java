@@ -1,6 +1,7 @@
 package com.instagenius.postmanagementservice.infrastructure.rest;
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
+import com.instagenius.postmanagementservice.infrastructure.exception.CoinManagementException;
 import com.instagenius.postmanagementservice.infrastructure.exception.ImageStorageException;
 import com.instagenius.postmanagementservice.infrastructure.exception.PostGenerationException;
 import com.instagenius.postmanagementservice.infrastructure.exception.PostNotFoundException;
@@ -69,9 +70,13 @@ class PostManagementExceptionHandler {
     }
 
     @ExceptionHandler(PostGenerationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseEntity<ErrorResponse> handlePostGenerationException(PostGenerationException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
+    }
+
+    @ExceptionHandler(CoinManagementException.class)
+    ResponseEntity<ErrorResponse> handleCoinManagementException(CoinManagementException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

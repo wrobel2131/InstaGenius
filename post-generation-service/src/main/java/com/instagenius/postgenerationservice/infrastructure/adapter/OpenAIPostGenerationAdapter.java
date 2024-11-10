@@ -7,11 +7,11 @@ import com.instagenius.postgenerationservice.domain.GeneratedImage;
 import com.instagenius.postgenerationservice.domain.ImageGenerationOptions;
 import com.instagenius.postgenerationservice.domain.ImageSize;
 import com.instagenius.postgenerationservice.infrastructure.config.openai.*;
+import com.instagenius.postgenerationservice.infrastructure.exception.GenerationException;
 import com.instagenius.postgenerationservice.infrastructure.exception.InvalidGenerationOptionsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.image.ImageModel;
-import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.openai.OpenAiImageOptions;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +43,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
 //                    .content()
 //            );
         } catch(Exception e) {
-            return null;
+            throw new GenerationException("Error while generating a description!");
         }
 
     }
@@ -78,7 +78,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
 //                                .getB64Json()
 //                );
             } catch(Exception e) {
-                return null;
+                throw new GenerationException("Error while generating an image!");
             }
         }
 
@@ -98,7 +98,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
 //                    .getOutput()
 //                    .getB64Json());
         } catch(Exception e) {
-            return null;
+            throw new GenerationException("Error while generating an image!");
         }
     }
 
@@ -161,7 +161,6 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
         }
 
         if(imageGenerationOptions.quality().quality() == null && optionalImageModelConfig.get().getQualities() == null) {
-            System.out.println("Quality is required!");
             return 0;
         }
 

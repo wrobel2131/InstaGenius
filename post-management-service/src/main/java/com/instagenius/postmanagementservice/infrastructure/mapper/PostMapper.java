@@ -33,7 +33,7 @@ public interface PostMapper {
     @Mapping(source = "imageKeyName", target = "imageKeyName", qualifiedByName = "stringToFileKeyName")
     @Mapping(source = "description", target = "generatedDescription", qualifiedByName = "stringToGeneratedDescription")
     @Mapping(source = "createdAt", target = "createdAt")
-    @Mapping(source = "lastModified", target = "lastModified")
+    @Mapping(source = "updatedAt", target = "updatedAt")
     Post toPost(PostEntity postEntity);
 
 

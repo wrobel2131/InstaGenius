@@ -18,13 +18,15 @@ public class CoinPackageServiceClient implements ProductServiceClient {
 
     @Override
     public Product getProductById(UUID productId) {
+        System.out.println("Getting product by id: " + productId);
         CoinPackage coinPackage = coinPackageManagementPort.getCoinPackage(productId);
         return new Product(coinPackage.id(), coinPackage.name(), coinPackage.description(),
-                           getProductType(), new Price(coinPackage.price(), coinPackage.currency()), null);
+                           getProductType(), new Price(coinPackage.price(), coinPackage.currency()));
     }
 
     @Override
     public ProductType getProductType() {
+        System.out.println("Getting product type in CoinPackageServiceClient");
         return ProductType.COIN_PACKAGE;
     }
 }

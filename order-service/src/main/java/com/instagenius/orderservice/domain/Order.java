@@ -8,7 +8,6 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Order {
-
     private final UUID id;
     private final String orderId;
     private final UUID userId;
@@ -17,13 +16,14 @@ public class Order {
     private final Price totalPrice;
     private final Instant createdAt;
     private final Instant updatedAt;
+    private final int version;
 
     public Order(UUID userId, OrderStatus status, List<OrderItem> items) {
-        this(null, generateOrderId(), userId, status, items, null, null);
+        this(null, generateOrderId(), userId, status, items, null, null, 0);
     }
 
     public Order(UUID id, String orderId, UUID userId, OrderStatus status, List<OrderItem> items,
-                 Instant createdAt, Instant updatedAt) {
+                 Instant createdAt, Instant updatedAt, int version) {
         this.id = id;
         this.orderId = orderId;
         this.userId = userId;
@@ -31,6 +31,7 @@ public class Order {
         this.items = List.copyOf(items);
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.version = version;
 
         validateItems();
         this.totalPrice = calculateTotalPrice();
@@ -68,6 +69,10 @@ public class Order {
         return updatedAt;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
     private static String generateOrderId() {
         long timestamp = Instant.now().toEpochMilli();
         int randomNum = ThreadLocalRandom.current().nextInt(1000, 9999999);
@@ -98,5 +103,39 @@ public class Order {
                                       .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return new Price(totalAmount, currency);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return version == order.version && Objects.equals(id, order.id) && Objects.equals(orderId,
+                                                                                          order.orderId) && Objects.equals(
+                userId, order.userId) && status == order.status && Objects.equals(items,
+                                                                                  order.items) && Objects.equals(
+                totalPrice, order.totalPrice) && Objects.equals(createdAt,
+                                                                order.createdAt) && Objects.equals(
+                updatedAt, order.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, orderId, userId, status, items, totalPrice, createdAt, updatedAt, version);
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderId='" + orderId + '\'' +
+                ", userId=" + userId +
+                ", status=" + status +
+                ", items=" + items +
+                ", totalPrice=" + totalPrice +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", version=" + version +
+                '}';
     }
 }

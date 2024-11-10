@@ -8,34 +8,35 @@ import java.util.UUID;
 
 public class OrderService implements OrderUseCase {
     private final OrderPersistencePort orderPersistencePort;
+    private final PaymentPort paymentPort;
     private final ProductServiceClientFactory productServiceClientFactory;
 
-    public OrderService(OrderPersistencePort orderPersistencePort, ProductServiceClientFactory productServiceClientFactory) {
+    public OrderService(OrderPersistencePort orderPersistencePort, PaymentPort paymentPort, ProductServiceClientFactory productServiceClientFactory) {
         this.orderPersistencePort = orderPersistencePort;
+        this.paymentPort = paymentPort;
         this.productServiceClientFactory = productServiceClientFactory;
     }
 
     @Override
-    public Order createOrder(List<OrderedProduct> orderedProducts, UUID userID) {
+    public CreatedOrder createOrder(List<OrderedProduct> orderedProducts, UUID userID) {
+        System.out.println("Creating order");
         List<OrderItem> orderItems = new ArrayList<>();
 
         //TODO make this somehow async
         for (OrderedProduct orderedProduct : orderedProducts) {
-            ProductServiceClient productServiceClient = productServiceClientFactory.getClient(orderedProduct.productType());
+            System.out.println("in for loop");
+            ProductServiceClient productServiceClient = productServiceClientFactory.getClient(orderedProduct.type());
             Product product = productServiceClient.getProductById(orderedProduct.id());
 
             OrderItem orderItem = new OrderItem(null, product.id(), product.name(), product.description(),
-                                                product.type(), orderedProduct.quantity(), product.price(),
-                                                product.details(), null);
+                                                product.type(), orderedProduct.quantity(), product.price(), null, null);
             orderItems.add(orderItem);
         }
 
         Order newOrder = orderPersistencePort.save(new Order(userID, OrderStatus.PENDING, orderItems));
 
-        //TODO
-        // call to payment service which will return checkout session id from stripe and then return orderId and
-        // checkout id
+        CreatedPayment createdPayment = paymentPort.initializePaymentSession(new InitializePayment(newOrder.getId(), newOrder.getTotalPrice()));
 
-
+        return new CreatedOrder(newOrder.getOrderId(), newOrder.getStatus(), createdPayment.paymentGatewaySessionId());
     }
 }

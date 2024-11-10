@@ -50,6 +50,7 @@ public class OrderEntity {
     @Column(name = "version")
     private int version;
 
+    @Builder.Default
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItemEntity> items = new ArrayList<>();
 

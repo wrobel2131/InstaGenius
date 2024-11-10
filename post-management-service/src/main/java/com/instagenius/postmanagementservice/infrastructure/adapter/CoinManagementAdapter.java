@@ -4,9 +4,12 @@ import com.instagenius.postmanagementservice.application.CoinManagementPort;
 import com.instagenius.postmanagementservice.domain.CoinReservation;
 import com.instagenius.postmanagementservice.domain.ReserveCoins;
 import com.instagenius.postmanagementservice.infrastructure.exception.CoinManagementException;
+import com.instagenius.postmanagementservice.infrastructure.exception.FeignExceptionUtils;
 import com.instagenius.postmanagementservice.infrastructure.mapper.CoinReservationMapper;
 import com.instagenius.postmanagementservice.infrastructure.rest.CoinManagementClient;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -19,20 +22,35 @@ class CoinManagementAdapter implements CoinManagementPort {
 
     @Override
     public CoinReservation reserveCoins(ReserveCoins reserveCoins) {
-        return coinReservationMapper.toCoinReservation(
-                coinManagementClient.reserveCoins(
-                        coinReservationMapper.toReserveCoinsDto(reserveCoins)
-                ).orElseThrow(() -> new CoinManagementException("Error while reserving coins!"))
-        );
+        try {
+            return coinReservationMapper.toCoinReservation(
+                    coinManagementClient.reserveCoins(
+                            coinReservationMapper.toReserveCoinsDto(reserveCoins)
+                    )
+            );
+        } catch (FeignException e) {
+            String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
+            throw new CoinManagementException(errorMessage, HttpStatus.valueOf(e.status()));
+        }
     }
 
     @Override
     public void completeReservation(UUID reservationId) {
-        coinManagementClient.completeReservation(reservationId);
+        try {
+            coinManagementClient.completeReservation(reservationId);
+        } catch (FeignException e) {
+            String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
+            throw new CoinManagementException(errorMessage, HttpStatus.valueOf(e.status()));
+        }
     }
 
     @Override
     public void cancelReservation(UUID reservationId) {
-        coinManagementClient.cancelReservation(reservationId);
+        try {
+            coinManagementClient.cancelReservation(reservationId);
+        } catch (FeignException e) {
+            String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
+            throw new CoinManagementException(errorMessage, HttpStatus.valueOf(e.status()));
+        }
     }
 }

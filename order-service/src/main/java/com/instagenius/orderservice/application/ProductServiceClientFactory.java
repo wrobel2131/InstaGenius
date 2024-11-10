@@ -15,11 +15,14 @@ public class ProductServiceClientFactory {
     private final Map<ProductType, ProductServiceClient> clientMap;
 
     public ProductServiceClientFactory(List<ProductServiceClient> clients) {
+        System.out.println("ProductServiceClientFactory constructor");
         clientMap = clients.stream()
                            .collect(Collectors.toMap(ProductServiceClient::getProductType, Function.identity()));
     }
 
     public ProductServiceClient getClient(ProductType productType) {
+        System.out.println("Map: " + clientMap);
+        System.out.println("ProductServiceClientFactory getClient of type: " + productType);
         return clientMap.get(productType);
     }
 }

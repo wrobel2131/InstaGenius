@@ -1,8 +1,10 @@
 package com.instagenius.postmanagementservice.domain;
 
 import com.instagenius.postmanagementservice.application.*;
+import com.instagenius.postmanagementservice.infrastructure.exception.CoinManagementException;
 import com.instagenius.postmanagementservice.infrastructure.exception.ImageStorageException;
 import com.instagenius.postmanagementservice.infrastructure.exception.PostGenerationException;
+import feign.FeignException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;
@@ -31,6 +33,7 @@ public class PostManagementService implements PostManagementUseCase {
         System.out.println("Generation cost: " + generationCost.coins());
         UUID operationId = UUID.randomUUID();
         CoinReservation coinReservation = coinManagementPort.reserveCoins(new ReserveCoins(generationCost.coins(), operationId));
+
 
         GeneratedDescription generatedDescription;
         GeneratedImage generatedImage;

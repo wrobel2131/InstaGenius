@@ -10,10 +10,11 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 class OrderConfig {
     private final OrderPersistencePort orderPersistencePort;
+    private final PaymentPort paymentPort;
     private final ProductServiceClientFactory productServiceClientFactory;
 
     @Bean
     OrderUseCase orderUseCase() {
-        return new OrderService(orderPersistencePort, productServiceClientFactory);
+        return new OrderService(orderPersistencePort, paymentPort, productServiceClientFactory);
     }
 }

@@ -34,14 +34,14 @@ public class OrderItemEntity {
     @Enumerated(EnumType.STRING)
     private ProductType productType;
 
-    @Column(name = "product_details")
-    private String productDetailsJson;
-
     @Column(name = "unit_price", nullable = false)
     private BigDecimal unitPrice;
 
     @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
+
+    @Column(name = "currency", nullable = false, length = 3)
+    private String currency;
 
     @Column(name = "quantity")
     private int quantity;
@@ -54,7 +54,7 @@ public class OrderItemEntity {
     private int version;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private OrderEntity order;
 
 
