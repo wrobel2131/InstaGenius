@@ -184,6 +184,21 @@ services:
       - instagenius-net
     restart: unless-stopped
 
+  postgres_products:
+    image: postgres:latest
+    container_name: postgres_products
+    environment:
+      POSTGRES_USER: product_management_service_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_products
+    volumes:
+      - postgres_products:/var/lib/postgresql/data
+    ports:
+      - "5438:5432"
+    networks:
+      - instagenius-net
+    restart: unless-stopped
+
   keycloak:
     image: quay.io/keycloak/keycloak:26.0.1
     container_name: keycloak
@@ -242,6 +257,7 @@ volumes:
   postgres_coins:
   postgres_orders:
   postgres_payments:
+  postgres_products:
   keycloak_db_data:
   pgadmin_data:
 
