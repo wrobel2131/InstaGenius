@@ -2,6 +2,8 @@ package com.instagenius.orderservice.domain;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class OrderItem {
@@ -13,10 +15,9 @@ public class OrderItem {
     private final Price totalPrice;
     private final Instant createdAt;
     private final int version;
-    private final UUID orderId;
 
     public OrderItem(UUID id, Product product, int quantity, Price unitPrice, Price totalPrice, Instant createdAt,
-                     int version, UUID orderId) {
+                     int version) {
         this.id = id;
         this.product = product;
         this.quantity = quantity;
@@ -24,14 +25,13 @@ public class OrderItem {
         this.totalPrice = totalPrice;
         this.createdAt = createdAt;
         this.version = version;
-        this.orderId = orderId;
     }
 
     public OrderItem(UUID id, UUID productId, String productName, String productDescription, ProductType productType,
-                     int quantity, Price unitPrice, Instant createdAt, UUID orderId) {
+                     int quantity, Price unitPrice, Instant createdAt, Map<String, Object> attributes) {
 
-        this(id, new Product(productId, productName, productDescription, productType, unitPrice),
-             quantity, unitPrice, calculateTotalPrice(unitPrice, quantity), createdAt, 0, orderId);
+        this(id, new Product(productId, productName, productDescription, productType, unitPrice, attributes),
+             quantity, unitPrice, calculateTotalPrice(unitPrice, quantity), createdAt, 0);
     }
 
     private static Price calculateTotalPrice(Price unitPrice, int quantity) {
@@ -65,5 +65,35 @@ public class OrderItem {
 
     public Instant getCreatedAt() {
         return createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                ", unitPrice=" + unitPrice +
+                ", totalPrice=" + totalPrice +
+                ", createdAt=" + createdAt +
+                ", version=" + version +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderItem orderItem = (OrderItem) o;
+        return quantity == orderItem.quantity && version == orderItem.version && Objects.equals(id,
+                                                                                                orderItem.id) && Objects.equals(
+                product, orderItem.product) && Objects.equals(unitPrice,
+                                                              orderItem.unitPrice) && Objects.equals(
+                totalPrice, orderItem.totalPrice) && Objects.equals(createdAt, orderItem.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, product, quantity, unitPrice, totalPrice, createdAt, version);
     }
 }

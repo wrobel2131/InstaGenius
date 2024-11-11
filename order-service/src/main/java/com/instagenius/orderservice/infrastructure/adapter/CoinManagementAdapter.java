@@ -1,8 +1,8 @@
 package com.instagenius.orderservice.infrastructure.adapter;
 
-import com.instagenius.orderservice.application.CoinPackageManagementPort;
-import com.instagenius.orderservice.domain.CoinPackage;
-import com.instagenius.orderservice.infrastructure.exception.CoinPackageManagementException;
+import com.instagenius.orderservice.application.CoinManagementPort;
+import com.instagenius.orderservice.domain.AddCoins;
+import com.instagenius.orderservice.infrastructure.exception.CoinManagementException;
 import com.instagenius.orderservice.infrastructure.exception.FeignExceptionUtils;
 import com.instagenius.orderservice.infrastructure.mapper.CoinRelatedMapper;
 import com.instagenius.orderservice.infrastructure.rest.CoinManagementClient;
@@ -11,23 +11,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
-@RequiredArgsConstructor
 @Service
-public class CoinPackageManagementAdapter implements CoinPackageManagementPort {
+@RequiredArgsConstructor
+public class CoinManagementAdapter implements CoinManagementPort {
     private final CoinManagementClient coinManagementClient;
     private static final CoinRelatedMapper coinRelatedMapper = CoinRelatedMapper.INSTANCE;
 
     @Override
-    public CoinPackage getCoinPackage(UUID coinPackageId) {
+    public void addCoins(AddCoins addCoins) {
         try {
-            return coinRelatedMapper.toCoinPackage(
-                    coinManagementClient.getCoinPackageById(coinPackageId));
+            coinManagementClient.addCoins(coinRelatedMapper.toAddCoinsDto(addCoins));
         } catch (FeignException e) {
             String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
-            throw new CoinPackageManagementException(errorMessage, HttpStatus.valueOf(e.status()));
+            throw new CoinManagementException(errorMessage, HttpStatus.valueOf(e.status()));
         }
-
     }
 }

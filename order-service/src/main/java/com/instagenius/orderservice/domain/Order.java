@@ -11,19 +11,20 @@ public class Order {
     private final UUID id;
     private final String orderId;
     private final UUID userId;
-    private final OrderStatus status;
+    private OrderStatus status;
     private final List<OrderItem> items;
     private final Price totalPrice;
     private final Instant createdAt;
     private final Instant updatedAt;
     private final int version;
+    private UUID paymentId;
 
-    public Order(UUID userId, OrderStatus status, List<OrderItem> items) {
-        this(null, generateOrderId(), userId, status, items, null, null, 0);
+    public Order(UUID userId, OrderStatus status, List<OrderItem> items, UUID paymentId) {
+        this(null, generateOrderId(), userId, status, items, null, null, 0, paymentId);
     }
 
     public Order(UUID id, String orderId, UUID userId, OrderStatus status, List<OrderItem> items,
-                 Instant createdAt, Instant updatedAt, int version) {
+                 Instant createdAt, Instant updatedAt, int version, UUID paymentId) {
         this.id = id;
         this.orderId = orderId;
         this.userId = userId;
@@ -32,6 +33,7 @@ public class Order {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.version = version;
+        this.paymentId = paymentId;
 
         validateItems();
         this.totalPrice = calculateTotalPrice();
@@ -71,6 +73,18 @@ public class Order {
 
     public int getVersion() {
         return version;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public void setPaymentId(UUID paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public UUID getPaymentId() {
+        return paymentId;
     }
 
     private static String generateOrderId() {
@@ -116,12 +130,12 @@ public class Order {
                                                                                   order.items) && Objects.equals(
                 totalPrice, order.totalPrice) && Objects.equals(createdAt,
                                                                 order.createdAt) && Objects.equals(
-                updatedAt, order.updatedAt);
+                updatedAt, order.updatedAt) && Objects.equals(paymentId, order.paymentId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, orderId, userId, status, items, totalPrice, createdAt, updatedAt, version);
+        return Objects.hash(id, orderId, userId, status, items, totalPrice, createdAt, updatedAt, version, paymentId);
     }
 
     @Override
@@ -136,6 +150,7 @@ public class Order {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", version=" + version +
+                ", paymentId=" + paymentId +
                 '}';
     }
 }

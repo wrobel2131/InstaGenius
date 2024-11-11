@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public interface OrderPersistencePort {
     Order save(Order order);
-    Order findOrderByUserIdAndOrderId(UUID userId, UUID orderId);
+    Order findOrderByUserIdAndOrderId(UUID userId, String orderId);
+    Order findOrderByUserIdAndId(UUID userId, UUID id);
     List<Order> findOrdersByUserId(UUID userId);
 }

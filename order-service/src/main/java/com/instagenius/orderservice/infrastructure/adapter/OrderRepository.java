@@ -18,6 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OrderRepository implements OrderPersistencePort {
     private final JpaOrderRepository jpaOrderRepository;
+
     @Override
     public Order save(Order order) {
         return OrderMapper.toOrder(
@@ -28,10 +29,17 @@ public class OrderRepository implements OrderPersistencePort {
     }
 
     @Override
-    public Order findOrderByUserIdAndOrderId(UUID userId, UUID orderId) {
+    public Order findOrderByUserIdAndOrderId(UUID userId, String orderId) {
         return OrderMapper.toOrder(
-                jpaOrderRepository.findOrderByUserIdAndId(userId, orderId).orElseThrow(() -> new OrderNotFoundException("Order not found!"))
+                jpaOrderRepository.findOrderByUserIdAndOrderId(userId, orderId)
+                                  .orElseThrow(() -> new OrderNotFoundException("Order not found!"))
         );
+    }
+
+    @Override
+    public Order findOrderByUserIdAndId(UUID userId, UUID id) {
+        return OrderMapper.toOrder(jpaOrderRepository.findOrderByUserIdAndId(userId, id).orElseThrow(
+                () -> new OrderNotFoundException("Order not found!")));
     }
 
     @Override
@@ -50,6 +58,9 @@ interface JpaOrderRepository extends JpaRepository<OrderEntity, UUID> {
     @Query(value = "SELECT o FROM OrderEntity o WHERE o.userId = :userId")
     List<OrderEntity> findOrdersByUserId(@Param("userId") UUID userId);
 
-    @Query(value = "SELECT o FROM OrderEntity o WHERE o.userId = :userId AND o.id = :id")
+    @Query(value = "SELECT o FROM OrderEntity o WHERE o.userId = :userId AND o.orderId= :orderId")
+    Optional<OrderEntity> findOrderByUserIdAndOrderId(@Param("userId") UUID userId, @Param("orderId") String orderId);
+
+    @Query(value = "SELECT o FROM OrderEntity o WHERE o.userId = :userId AND o.id= :id")
     Optional<OrderEntity> findOrderByUserIdAndId(@Param("userId") UUID userId, @Param("id") UUID id);
 }

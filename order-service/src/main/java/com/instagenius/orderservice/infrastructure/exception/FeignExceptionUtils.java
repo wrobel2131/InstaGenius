@@ -17,12 +17,9 @@ import java.util.List;
 @UtilityClass
 public class FeignExceptionUtils {
     public ErrorResponse parseErrorResponse(FeignException e) {
-        String responseBody = null;
-
-        if (e.responseBody().isPresent()) {
-            ByteBuffer byteBuffer = e.responseBody().get();
-            responseBody = StandardCharsets.UTF_8.decode(byteBuffer).toString();
-        }
+        String responseBody = e.responseBody()
+                               .map(byteBuffer -> StandardCharsets.UTF_8.decode(byteBuffer).toString())
+                               .orElse(null);
 
         if (responseBody != null && !responseBody.isEmpty()) {
             ObjectMapper objectMapper = new ObjectMapper();

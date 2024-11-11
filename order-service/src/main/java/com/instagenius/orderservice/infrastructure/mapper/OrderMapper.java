@@ -3,12 +3,14 @@ package com.instagenius.orderservice.infrastructure.mapper;
 import com.instagenius.orderservice.domain.*;
 import com.instagenius.orderservice.infrastructure.adapter.OrderEntity;
 import com.instagenius.orderservice.infrastructure.adapter.OrderItemEntity;
+import com.instagenius.orderservice.infrastructure.dto.OrderItemDto;
+import com.instagenius.orderservice.infrastructure.dto.OrderResponseDto;
 import lombok.experimental.UtilityClass;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @UtilityClass
@@ -26,22 +28,7 @@ public class OrderMapper {
                 .map(OrderMapper::toOrderItem)
                 .toList();
         int version = orderEntity.getVersion();
-        return new Order(id, orderId, userId, status, items, createdAt, updatedAt, version);
-    }
-
-    private OrderItem toOrderItem(OrderItemEntity orderItemEntity) {
-        UUID id = orderItemEntity.getId();
-        Product product = new Product(
-                orderItemEntity.getProductId(), orderItemEntity.getProductName(),
-                orderItemEntity.getProductDescription(), orderItemEntity.getProductType(),
-                new Price(orderItemEntity.getUnitPrice(), orderItemEntity.getCurrency()));
-        int quantity = orderItemEntity.getQuantity();
-        Price unitPrice = new Price(orderItemEntity.getUnitPrice(), orderItemEntity.getCurrency());
-        Price totalPrice = new Price(orderItemEntity.getTotalPrice(), orderItemEntity.getCurrency());
-        Instant createdAt = orderItemEntity.getCreatedAt();
-        int version = orderItemEntity.getVersion();
-        UUID orderId = orderItemEntity.getOrder().getId();
-        return new OrderItem(id, product, quantity, unitPrice, totalPrice, createdAt, version, orderId);
+        return new Order(id, orderId, userId, status, items, createdAt, updatedAt, version, orderEntity.getPaymentId());
     }
 
     public OrderEntity toOrderEntity(Order order) {
@@ -54,6 +41,7 @@ public class OrderMapper {
         Instant createdAt = order.getCreatedAt();
         Instant updatedAt = order.getUpdatedAt();
         int version = order.getVersion();
+        UUID paymentId = order.getPaymentId();
 
         OrderEntity orderEntity = OrderEntity
                 .builder()
@@ -66,6 +54,7 @@ public class OrderMapper {
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .version(version)
+                .paymentId(paymentId)
                 .build();
         List<OrderItemEntity> items = order
                 .getItems()
@@ -76,6 +65,34 @@ public class OrderMapper {
         return orderEntity;
 
     }
+
+    public OrderResponseDto toOrderResponseDto(Order order) {
+        String orderId = order.getOrderId();
+        Instant createdAt = order.getCreatedAt();
+        String status = order.getStatus().name();
+        BigDecimal totalPrice = order.getTotalPrice().price();
+        String currency = order.getTotalPrice().currency();
+        List<OrderItemDto> items = order
+                .getItems()
+                .stream()
+                .map(OrderMapper::toOrderItemDto)
+                .toList();
+        return new OrderResponseDto(orderId, createdAt, status, totalPrice, currency, items);
+    }
+
+    private OrderItemDto toOrderItemDto(OrderItem orderItem) {
+        String productName = orderItem.getProduct().name();
+        String productDescription = orderItem.getProduct().description();
+        int quantity = orderItem.getQuantity();
+        BigDecimal unitPrice = orderItem.getUnitPrice().price();
+        BigDecimal totalPrice = orderItem.getTotalPrice().price();
+        String currency = orderItem.getTotalPrice().currency();
+
+        Map<String, Object> attributes = orderItem.getProduct().attributes();
+        return new OrderItemDto(productName, productDescription, quantity, unitPrice, totalPrice, currency, attributes);
+    }
+
+
 
     private OrderItemEntity toOrderItemEntity(OrderItem orderItem, OrderEntity orderEntity) {
         UUID id = orderItem.getId();
@@ -89,10 +106,24 @@ public class OrderMapper {
         int quantity = orderItem.getQuantity();
         String currency = orderItem.getTotalPrice().currency();
         int version = orderItem.getVersion();
+        Map<String, Object> attributes = orderItem.getProduct().attributes();
 
         return new OrderItemEntity(id, productId, productName, productDescription, productType, unitPrice, totalPrice
-                , currency, quantity, createdAt, version, orderEntity);
+                , currency, quantity, createdAt, version, attributes, orderEntity);
     }
 
+    private OrderItem toOrderItem(OrderItemEntity orderItemEntity) {
+        UUID id = orderItemEntity.getId();
+        Product product = new Product(
+                orderItemEntity.getProductId(), orderItemEntity.getProductName(),
+                orderItemEntity.getProductDescription(), orderItemEntity.getProductType(),
+                new Price(orderItemEntity.getUnitPrice(), orderItemEntity.getCurrency()), orderItemEntity.getAttributes());
+        int quantity = orderItemEntity.getQuantity();
+        Price unitPrice = new Price(orderItemEntity.getUnitPrice(), orderItemEntity.getCurrency());
+        Price totalPrice = new Price(orderItemEntity.getTotalPrice(), orderItemEntity.getCurrency());
+        Instant createdAt = orderItemEntity.getCreatedAt();
+        int version = orderItemEntity.getVersion();
+        return new OrderItem(id, product, quantity, unitPrice, totalPrice, createdAt, version);
+    }
 
 }

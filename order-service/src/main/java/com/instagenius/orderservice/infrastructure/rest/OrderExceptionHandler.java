@@ -1,6 +1,10 @@
 package com.instagenius.orderservice.infrastructure.rest;
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
+import com.instagenius.orderservice.infrastructure.exception.CoinManagementException;
+import com.instagenius.orderservice.infrastructure.exception.CoinPackageManagementException;
+import com.instagenius.orderservice.infrastructure.exception.OrderNotFoundException;
+import com.instagenius.orderservice.infrastructure.exception.PaymentException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -13,7 +17,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestControllerAdvice
@@ -38,6 +41,28 @@ class OrderExceptionHandler {
     public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         return new ResponseEntity<>(new ErrorResponse("Invalid Id format!", Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorResponse> handleOrderNotFound(OrderNotFoundException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CoinManagementException.class)
+    ResponseEntity<ErrorResponse> handleCoinManagementException(CoinManagementException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
+    }
+
+    @ExceptionHandler(CoinPackageManagementException.class)
+    ResponseEntity<ErrorResponse> handleCoinPackageManagementException(CoinPackageManagementException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
+    }
+
+    @ExceptionHandler(PaymentException.class)
+    ResponseEntity<ErrorResponse> handlePaymentException(PaymentException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
+    }
+
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

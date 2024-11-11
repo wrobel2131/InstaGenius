@@ -9,6 +9,8 @@ import com.instagenius.orderservice.domain.ProductType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -20,8 +22,11 @@ public class CoinPackageServiceClient implements ProductServiceClient {
     public Product getProductById(UUID productId) {
         System.out.println("Getting product by id: " + productId);
         CoinPackage coinPackage = coinPackageManagementPort.getCoinPackage(productId);
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("coins", coinPackage.coins());
+
         return new Product(coinPackage.id(), coinPackage.name(), coinPackage.description(),
-                           getProductType(), new Price(coinPackage.price(), coinPackage.currency()));
+                           getProductType(), new Price(coinPackage.price(), coinPackage.currency()), attributes);
     }
 
     @Override

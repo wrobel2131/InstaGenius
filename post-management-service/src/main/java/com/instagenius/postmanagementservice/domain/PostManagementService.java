@@ -1,10 +1,8 @@
 package com.instagenius.postmanagementservice.domain;
 
 import com.instagenius.postmanagementservice.application.*;
-import com.instagenius.postmanagementservice.infrastructure.exception.CoinManagementException;
 import com.instagenius.postmanagementservice.infrastructure.exception.ImageStorageException;
 import com.instagenius.postmanagementservice.infrastructure.exception.PostGenerationException;
-import feign.FeignException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;

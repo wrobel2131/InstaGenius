@@ -50,6 +50,9 @@ public class OrderEntity {
     @Column(name = "version")
     private int version;
 
+    @Column(name = "payment_id", nullable = true)
+    private UUID paymentId;
+
     @Builder.Default
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItemEntity> items = new ArrayList<>();

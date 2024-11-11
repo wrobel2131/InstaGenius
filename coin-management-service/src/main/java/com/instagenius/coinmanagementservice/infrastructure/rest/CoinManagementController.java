@@ -83,7 +83,7 @@ class CoinManagementController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> addCoins(@Valid @RequestBody AddCoinsDto addCoinsDto, @AuthenticationPrincipal Jwt jwt) {
         System.out.println("Add Coins endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);

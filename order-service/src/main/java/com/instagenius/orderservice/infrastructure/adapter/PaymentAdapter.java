@@ -23,7 +23,7 @@ public class PaymentAdapter implements PaymentPort {
 
     @Override
     public CreatedPayment initializePaymentSession(InitializePayment initializePayment) {
-        try {
+        try {/* TODO mocked data*/
             return new CreatedPayment(UUID.fromString("c849c511-63cd-429a-bf56-f3a9de0a59e7"), "mockedSessionId");
 //            return paymentMapper.toCreatedPayment(
 //                    paymentServiceClient.initializePayment(

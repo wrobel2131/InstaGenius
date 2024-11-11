@@ -12,9 +12,10 @@ class OrderConfig {
     private final OrderPersistencePort orderPersistencePort;
     private final PaymentPort paymentPort;
     private final ProductServiceClientFactory productServiceClientFactory;
+    private final OrderCompletionHandlerFactory orderCompletionHandlerFactory;
 
     @Bean
     OrderUseCase orderUseCase() {
-        return new OrderService(orderPersistencePort, paymentPort, productServiceClientFactory);
+        return new OrderService(orderPersistencePort, paymentPort, productServiceClientFactory, orderCompletionHandlerFactory);
     }
 }

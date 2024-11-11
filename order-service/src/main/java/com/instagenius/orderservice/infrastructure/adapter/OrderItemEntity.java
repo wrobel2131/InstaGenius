@@ -1,11 +1,14 @@
 package com.instagenius.orderservice.infrastructure.adapter;
 
 import com.instagenius.orderservice.domain.ProductType;
+import com.instagenius.orderservice.infrastructure.config.OrderItemAttributesConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -52,6 +55,10 @@ public class OrderItemEntity {
     @Version
     @Column(name = "version")
     private int version;
+
+    @Convert(converter = OrderItemAttributesConverter.class)
+    @Column(name = "attributes", columnDefinition = "TEXT")
+    private Map<String, Object> attributes = new HashMap<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
