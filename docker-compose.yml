@@ -169,6 +169,21 @@ services:
       - instagenius-net
     restart: unless-stopped
 
+  postgres_payments:
+    image: postgres:latest
+    container_name: postgres_payments
+    environment:
+      POSTGRES_USER: payment_service_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_payments
+    volumes:
+      - postgres_payments:/var/lib/postgresql/data
+    ports:
+      - "5437:5432"
+    networks:
+      - instagenius-net
+    restart: unless-stopped
+
   keycloak:
     image: quay.io/keycloak/keycloak:26.0.1
     container_name: keycloak
@@ -226,6 +241,7 @@ volumes:
   postgres_posts:
   postgres_coins:
   postgres_orders:
+  postgres_payments:
   keycloak_db_data:
   pgadmin_data:
 
