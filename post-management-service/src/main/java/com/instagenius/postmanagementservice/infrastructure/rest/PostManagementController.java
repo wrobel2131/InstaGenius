@@ -11,7 +11,6 @@ import com.instagenius.postmanagementservice.infrastructure.mapper.ImageGenerati
 import com.instagenius.postmanagementservice.infrastructure.mapper.PostMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,7 +22,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
-@Slf4j
 class PostManagementController {
     private final PostManagementUseCase postManagementUseCase;
     private static final DescriptionGenerationOptionsMapper descriptionGenerationOptionsMapper = DescriptionGenerationOptionsMapper.INSTANCE;

@@ -2,9 +2,9 @@ package com.instagenius.coinmanagementservice.domain;
 
 import java.math.BigDecimal;
 
-public record Price(BigDecimal amount, String currency) {
+public record Price(BigDecimal price, String currency) {
     public Price {
-        if (amount == null || BigDecimal.ZERO.compareTo(amount) >= 0) {
+        if (price == null || BigDecimal.ZERO.compareTo(price) >= 0) {
             throw new IllegalArgumentException("Price must be greater than zero!");
         }
     }

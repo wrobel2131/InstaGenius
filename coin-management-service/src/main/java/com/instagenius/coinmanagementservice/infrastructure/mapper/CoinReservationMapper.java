@@ -2,8 +2,8 @@ package com.instagenius.coinmanagementservice.infrastructure.mapper;
 
 import com.instagenius.coinmanagementservice.domain.CoinAmount;
 import com.instagenius.coinmanagementservice.domain.CoinReservation;
-import com.instagenius.coinmanagementservice.infrastructure.adapters.CoinReservationEntity;
-import com.instagenius.coinmanagementservice.infrastructure.dto.CoinReservationDto;
+import com.instagenius.coinmanagementservice.infrastructure.adapter.CoinReservationEntity;
+import com.instagenius.coinmanagementservice.infrastructure.dto.CoinReservationResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -16,7 +16,7 @@ public interface CoinReservationMapper {
     @Mapping(source = "id", target = "reservationId")
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "amount", target = "amount", qualifiedByName = "coinAmountToInt")
-    CoinReservationDto toCoinReservationDto(CoinReservation coinReservation);
+    CoinReservationResponseDto toCoinReservationDto(CoinReservation coinReservation);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "userId", target = "userId")

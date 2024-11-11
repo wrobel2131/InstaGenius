@@ -3,7 +3,7 @@ package com.instagenius.postmanagementservice.infrastructure.mapper;
 import com.instagenius.postmanagementservice.domain.FileKeyName;
 import com.instagenius.postmanagementservice.domain.GeneratedDescription;
 import com.instagenius.postmanagementservice.domain.Post;
-import com.instagenius.postmanagementservice.infrastructure.adapters.PostEntity;
+import com.instagenius.postmanagementservice.infrastructure.adapter.PostEntity;
 import com.instagenius.postmanagementservice.infrastructure.dto.PostResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -33,7 +33,7 @@ public interface PostMapper {
     @Mapping(source = "imageKeyName", target = "imageKeyName", qualifiedByName = "stringToFileKeyName")
     @Mapping(source = "description", target = "generatedDescription", qualifiedByName = "stringToGeneratedDescription")
     @Mapping(source = "createdAt", target = "createdAt")
-    @Mapping(source = "lastModified", target = "lastModified")
+    @Mapping(source = "updatedAt", target = "updatedAt")
     Post toPost(PostEntity postEntity);
 
 

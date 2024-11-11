@@ -1,9 +1,6 @@
 package com.instagenius.coinmanagementservice.application;
 
-import com.instagenius.coinmanagementservice.domain.CoinReservation;
-import com.instagenius.coinmanagementservice.domain.CoinTransaction;
-import com.instagenius.coinmanagementservice.domain.TransactionType;
-import com.instagenius.coinmanagementservice.domain.UserBalance;
+import com.instagenius.coinmanagementservice.domain.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,4 +14,4 @@ public interface CoinManagementUseCase {
     void completeReservation(UUID userId, UUID reservationId);
     void cancelReservation(UUID userId, UUID reservationId);
     void addCoins(UUID userId, int amount, TransactionType transactionType);
-    }
+}

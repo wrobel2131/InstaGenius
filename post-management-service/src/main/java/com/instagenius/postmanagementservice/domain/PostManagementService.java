@@ -32,6 +32,7 @@ public class PostManagementService implements PostManagementUseCase {
         UUID operationId = UUID.randomUUID();
         CoinReservation coinReservation = coinManagementPort.reserveCoins(new ReserveCoins(generationCost.coins(), operationId));
 
+
         GeneratedDescription generatedDescription;
         GeneratedImage generatedImage;
 
