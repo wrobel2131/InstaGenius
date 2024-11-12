@@ -2,12 +2,12 @@ package com.instagenius.productmanagementservice.infrastructure.rest;
 
 import com.instagenius.productmanagementservice.application.ProductManagementUseCase;
 import com.instagenius.productmanagementservice.domain.Price;
-import com.instagenius.productmanagementservice.domain.Product;
 import com.instagenius.productmanagementservice.domain.ProductType;
-import com.instagenius.productmanagementservice.infrastructure.dto.CreateProductRequest;
-import com.instagenius.productmanagementservice.infrastructure.dto.ProductResponse;
-import com.instagenius.productmanagementservice.infrastructure.dto.ProductsResponse;
-import com.instagenius.productmanagementservice.infrastructure.dto.UpdateProductRequest;
+import com.instagenius.productmanagementservice.infrastructure.dto.CreateProductRequestDto;
+import com.instagenius.productmanagementservice.infrastructure.dto.ProductResponseDto;
+import com.instagenius.productmanagementservice.infrastructure.dto.ProductsResponseDto;
+import com.instagenius.productmanagementservice.infrastructure.dto.UpdateProductRequestDto;
+import com.instagenius.productmanagementservice.infrastructure.mapper.ProductMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -16,62 +16,74 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping ("/api/v1/products")
+@RequestMapping("/api/v1/products")
 public class ProductManagementController {
     private final ProductManagementUseCase productManagementUseCase;
+    private static final ProductMapper productMapper = ProductMapper.INSTANCE;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<ProductsResponse> getProducts(@AuthenticationPrincipal Jwt jwt) {
-        List<ProductResponse> products = productManagementUseCase.getProducts().stream().map().toList();
+    ResponseEntity<ProductsResponseDto> getActiveProducts(
+            @RequestParam(required = false) ProductType type,
+            @AuthenticationPrincipal Jwt jwt) {
 
-        return ResponseEntity.ok(new ProductsResponse(products));
+        return ResponseEntity.ok(new ProductsResponseDto(productManagementUseCase
+                                                                 .getActiveProducts(type)
+                                                                 .stream()
+                                                                 .map(productMapper::toProductResponseDto)
+                                                                 .toList()));
     }
 
     @GetMapping(value = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<ProductResponse> getProductById(@PathVariable("productId") UUID productId,
-                                                   @AuthenticationPrincipal Jwt jwt) {
-        ProductResponse productResponse = productManagementUseCase.getProductById(productId);
-
-        return ResponseEntity.ok();
+    ResponseEntity<ProductResponseDto> getProductById(
+            @PathVariable("productId") UUID productId, @AuthenticationPrincipal Jwt jwt) {
+        return ResponseEntity.ok(
+                productMapper.toProductResponseDto(productManagementUseCase.getActiveProductById(productId)));
     }
 
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductResponse> createProduct(@AuthenticationPrincipal Jwt jwt,
-                                                         @Valid @RequestBody CreateProductRequest createProductRequest) {
-        ProductResponse productResponse = productManagementUseCase.createProduct(createProductRequest.name(),
-                createProductRequest.description(),
-                ProductType.valueOf(createProductRequest.type()), new Price(createProductRequest.price(), createProductRequest.currency())
-                , createProductRequest.attributes());
+    public ResponseEntity<ProductResponseDto> createProduct(
+            @AuthenticationPrincipal Jwt jwt,
+            @Valid @RequestBody CreateProductRequestDto createProductRequestDto) {
 
-        return ResponseEntity.ok(productResponse);
+        return ResponseEntity.ok(
+                productMapper.toProductResponseDto(
+                        productManagementUseCase.createProduct(createProductRequestDto.name(),
+                                                               createProductRequestDto.description(),
+                                                               ProductType.valueOf(createProductRequestDto.type()),
+                                                               new Price(createProductRequestDto.price(),
+                                                                       createProductRequestDto.currency())
+                                , createProductRequestDto.attributes())
+                )
+        );
     }
 
     @PutMapping(value = "/{productId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
             MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductResponse> updateProduct(@PathVariable("productId") UUID productId,
-                                                         @AuthenticationPrincipal Jwt jwt,
-                                                         @Valid @RequestBody UpdateProductRequest updateProductRequest) {
-        Product updatedProduct = productManagementUseCase.updateProduct(productId, updateProductRequest.name(),
-                updateProductRequest.description(), ProductType.valueOf(updateProductRequest.type()),
-                new Price(updateProductRequest.price(), updateProductRequest.currency()),
-                updateProductRequest.attributes(), updateProductRequest.isActive());
+    public ResponseEntity<ProductResponseDto> updateProduct(
+            @PathVariable("productId") UUID productId,
+            @AuthenticationPrincipal Jwt jwt,
+            @Valid @RequestBody UpdateProductRequestDto updateProductRequestDto) {
 
-        return ResponseEntity.ok(updatedProduct);
+        return ResponseEntity.ok(productMapper.toProductResponseDto(
+                productManagementUseCase.updateProduct(productId, updateProductRequestDto.name(),
+                                                       updateProductRequestDto.description(),
+                                                       ProductType.valueOf(
+                                                               updateProductRequestDto.type()),
+                                                       new Price(updateProductRequestDto.price(),
+                                                                 updateProductRequestDto.currency()),
+                                                       updateProductRequestDto.attributes(),
+                                                       updateProductRequestDto.isActive())
+        ));
     }
 
     @DeleteMapping(value = "/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable("productId") UUID productId) {
         productManagementUseCase.deleteProduct(productId);
         return ResponseEntity.noContent().build();
-    }
-
-    private UUID getUserUUIDFromJwtToken(Jwt jwt) {
-        return UUID.fromString(jwt.getClaim("sub"));
     }
 }
