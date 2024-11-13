@@ -67,13 +67,18 @@ public class ProductManagementService implements ProductManagementUseCase {
     }
 
     @Override
-    public Product getActiveProductById(UUID id) {
-        return productPersistencePort.getProductById(id, true);
+    public Product getProductById(UUID id) {
+        return productPersistencePort.getProductById(id, null);
     }
 
     @Override
     public List<Product> getActiveProducts(ProductType type) {
         return productPersistencePort.getProducts(type, true);
+    }
+
+    @Override
+    public List<Product> getProductsByIds(List<UUID> ids) {
+        return productPersistencePort.getProductsByIds(ids);
     }
 
     private void setPaymentGatewayParams(PaymentGatewayProduct paymentGatewayProduct, Product product) {

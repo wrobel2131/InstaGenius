@@ -62,6 +62,14 @@ public class ProductRepository implements ProductPersistencePort {
                 .map(productMapper::toProduct)
                 .toList();
     }
+
+    @Override
+    public List<Product> getProductsByIds(List<UUID> ids) {
+        return jpaProductRepository.findProductEntitiesByIds(ids)
+                .stream()
+                .map(productMapper::toProduct)
+                .toList();
+    }
 }
 
 @Repository
@@ -70,5 +78,8 @@ interface JpaProductRepository extends JpaRepository<ProductEntity, UUID>, JpaSp
     @Modifying
     @Query(value = "DELETE FROM ProductEntity p WHERE p.id := id")
     void deleteProductEntityById(@Param("id") UUID id);
+
+    @Query(value = "SELECT p FROM ProductEntity p WHERE p.id IN :ids")
+    List<ProductEntity> findProductEntitiesByIds(@Param("ids") List<UUID> ids);
 
 }

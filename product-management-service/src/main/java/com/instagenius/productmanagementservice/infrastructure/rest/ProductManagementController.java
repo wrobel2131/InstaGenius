@@ -3,10 +3,7 @@ package com.instagenius.productmanagementservice.infrastructure.rest;
 import com.instagenius.productmanagementservice.application.ProductManagementUseCase;
 import com.instagenius.productmanagementservice.domain.Price;
 import com.instagenius.productmanagementservice.domain.ProductType;
-import com.instagenius.productmanagementservice.infrastructure.dto.CreateProductRequestDto;
-import com.instagenius.productmanagementservice.infrastructure.dto.ProductResponseDto;
-import com.instagenius.productmanagementservice.infrastructure.dto.ProductsResponseDto;
-import com.instagenius.productmanagementservice.infrastructure.dto.UpdateProductRequestDto;
+import com.instagenius.productmanagementservice.infrastructure.dto.*;
 import com.instagenius.productmanagementservice.infrastructure.mapper.ProductMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +34,20 @@ public class ProductManagementController {
                                                                  .toList()));
     }
 
+    @PostMapping(value = "/batch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ProductsResponseDto> getProductsByIds(@RequestBody ProductIdsRequestDto productIdsRequestDto, @AuthenticationPrincipal Jwt jwt) {
+        return ResponseEntity.ok(new ProductsResponseDto(productManagementUseCase
+                                                                 .getProductsByIds(productIdsRequestDto.productIds())
+                                                                 .stream()
+                                                                 .map(productMapper::toProductResponseDto)
+                                                                 .toList()));
+    }
+
     @GetMapping(value = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ProductResponseDto> getProductById(
             @PathVariable("productId") UUID productId, @AuthenticationPrincipal Jwt jwt) {
         return ResponseEntity.ok(
-                productMapper.toProductResponseDto(productManagementUseCase.getActiveProductById(productId)));
+                productMapper.toProductResponseDto(productManagementUseCase.getProductById(productId)));
     }
 
 

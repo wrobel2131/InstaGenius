@@ -12,6 +12,7 @@ public interface ProductManagementUseCase {
     Product createProduct(String name, String description, ProductType type, Price price, Map<String, Object> attributes);
     Product updateProduct(UUID id, String name, String description, ProductType type, Price price, Map<String, Object> attributes, Boolean isActive);
     void deleteProduct(UUID id);
-    Product getActiveProductById(UUID id);
+    Product getProductById(UUID id);
     List<Product> getActiveProducts(ProductType type);
+    List<Product> getProductsByIds(List<UUID> ids);
 }

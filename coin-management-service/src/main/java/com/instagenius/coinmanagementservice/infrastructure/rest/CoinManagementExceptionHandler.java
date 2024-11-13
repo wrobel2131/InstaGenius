@@ -1,7 +1,6 @@
 package com.instagenius.coinmanagementservice.infrastructure.rest;
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
-import com.instagenius.coinmanagementservice.infrastructure.exception.CoinPackageNotFoundException;
 import com.instagenius.coinmanagementservice.infrastructure.exception.CoinReservationNotFoundException;
 import com.instagenius.coinmanagementservice.infrastructure.exception.InsufficientBalanceException;
 import com.instagenius.coinmanagementservice.infrastructure.exception.UserNotFoundException;
@@ -27,12 +26,6 @@ class CoinManagementExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(CoinPackageNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    ResponseEntity<ErrorResponse> handleCoinPackageNotFoundException(CoinPackageNotFoundException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.NOT_FOUND);
     }
 
