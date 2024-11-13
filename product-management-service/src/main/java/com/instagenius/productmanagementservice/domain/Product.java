@@ -15,12 +15,13 @@ public class Product {
     private final Instant updatedAt;
     private boolean isActive;
     private final int version;
+    private Map<String, Object> paymentGatewayProductParams;
     private Map<String, Object> attributes;
 
     public Product(
             UUID id, String name, String description, ProductType type, Price price, Instant createdAt,
             Instant updatedAt,
-            boolean isActive, int version, Map<String, Object> attributes) {
+            boolean isActive, int version, Map<String, Object> attributes, Map<String, Object> paymentGatewayProductParams) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -31,6 +32,15 @@ public class Product {
         this.isActive = isActive;
         this.version = version;
         this.attributes = attributes;
+        this.paymentGatewayProductParams = paymentGatewayProductParams;
+    }
+
+    public Product(String name, String description, ProductType type, Price price, Instant createdAt,
+            Instant updatedAt,
+            boolean isActive, int version, Map<String, Object> attributes, Map<String, Object> paymentGatewayProductParams) {
+
+        this(UUID.randomUUID(), name, description, type, price, createdAt, updatedAt, isActive, version, attributes,
+                paymentGatewayProductParams);
     }
 
     public UUID getId() {
@@ -97,22 +107,32 @@ public class Product {
         this.attributes = attributes;
     }
 
+    public Map<String, Object> getPaymentGatewayProductParams() {
+        return paymentGatewayProductParams;
+    }
+
+    public void setPaymentGatewayProductParams(Map<String, Object> paymentGatewayProductParams) {
+        this.paymentGatewayProductParams = paymentGatewayProductParams;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return isActive == product.isActive && version == product.version && Objects.equals(id,
-                                                                                            product.id) && Objects.equals(
-                name, product.name) && Objects.equals(description,
-                                                      product.description) && type == product.type && Objects.equals(
-                price, product.price) && Objects.equals(createdAt, product.createdAt) && Objects.equals(
-                updatedAt, product.updatedAt) && Objects.equals(attributes, product.attributes);
+        return isActive == product.isActive && version == product.version && Objects.equals(id, product.id) &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(description, product.description) && type == product.type &&
+                Objects.equals(price, product.price) && Objects.equals(createdAt, product.createdAt) &&
+                Objects.equals(updatedAt, product.updatedAt) &&
+                Objects.equals(paymentGatewayProductParams, product.paymentGatewayProductParams) &&
+                Objects.equals(attributes, product.attributes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, type, price, createdAt, updatedAt, isActive, version, attributes);
+        return Objects.hash(id, name, description, type, price, createdAt, updatedAt, isActive, version,
+                paymentGatewayProductParams, attributes);
     }
 
     @Override
@@ -127,6 +147,7 @@ public class Product {
                 ", updatedAt=" + updatedAt +
                 ", isActive=" + isActive +
                 ", version=" + version +
+                ", paymentGatewayProductParams=" + paymentGatewayProductParams +
                 ", attributes=" + attributes +
                 '}';
     }

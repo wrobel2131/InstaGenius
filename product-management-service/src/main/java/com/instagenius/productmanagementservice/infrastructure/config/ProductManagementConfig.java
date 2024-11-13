@@ -1,5 +1,6 @@
 package com.instagenius.productmanagementservice.infrastructure.config;
 
+import com.instagenius.productmanagementservice.application.PaymentGatewayResourcePort;
 import com.instagenius.productmanagementservice.application.ProductPersistencePort;
 import com.instagenius.productmanagementservice.application.ProductManagementUseCase;
 import com.instagenius.productmanagementservice.domain.ProductManagementService;
@@ -11,9 +12,10 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 class ProductManagementConfig {
     private final ProductPersistencePort productPersistencePort;
+    private final PaymentGatewayResourcePort paymentGatewayResourcePort;
 
     @Bean
     ProductManagementUseCase paymentUseCase() {
-        return new ProductManagementService(productPersistencePort);
+        return new ProductManagementService(productPersistencePort, paymentGatewayResourcePort);
     }
 }

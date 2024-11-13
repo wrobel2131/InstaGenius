@@ -43,7 +43,7 @@ public class ProductRepository implements ProductPersistencePort {
 
     @Override
     public void deleteProduct(UUID id) {
-        jpaProductRepository.deleteById(id);
+        jpaProductRepository.deleteProductEntityById(id);
     }
 
     @Override

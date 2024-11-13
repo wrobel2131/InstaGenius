@@ -21,7 +21,7 @@ import java.util.UUID;
 @Entity
 public class ProductEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
 
@@ -57,9 +57,22 @@ public class ProductEntity {
     @Column(name = "attributes", columnDefinition = "TEXT")
     private Map<String, Object> attributes = new HashMap<>();
 
+    @Convert(converter = ProductAttributesConverter.class)
+    @Column(name = "payment_gateway_product_params", columnDefinition = "TEXT")
+    private Map<String, Object> paymentGatewayProductParams;
+
+
     @PrePersist
     protected void onCreate() {
         createdAt = Instant.now();
+    }
+
+    @PostPersist
+    protected void onPostCreate() {
+        /* id should be set in domain object first, if not, then it's generated here */
+        if (id == null) {
+            id = UUID.randomUUID();
+        }
     }
 
     @PreUpdate

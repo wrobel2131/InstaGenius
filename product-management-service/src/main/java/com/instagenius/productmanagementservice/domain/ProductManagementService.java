@@ -1,5 +1,6 @@
 package com.instagenius.productmanagementservice.domain;
 
+import com.instagenius.productmanagementservice.application.PaymentGatewayResourcePort;
 import com.instagenius.productmanagementservice.application.ProductPersistencePort;
 import com.instagenius.productmanagementservice.application.ProductManagementUseCase;
 import jakarta.transaction.Transactional;
@@ -11,16 +12,19 @@ import java.util.UUID;
 
 public class ProductManagementService implements ProductManagementUseCase {
     private final ProductPersistencePort productPersistencePort;
+    private final PaymentGatewayResourcePort paymentGatewayResourcePort;
 
-    public ProductManagementService(ProductPersistencePort productPersistencePort) {
+    public ProductManagementService(ProductPersistencePort productPersistencePort, PaymentGatewayResourcePort paymentGatewayResourcePort) {
         this.productPersistencePort = productPersistencePort;
+        this.paymentGatewayResourcePort = paymentGatewayResourcePort;
     }
 
     @Override
-    public Product createProduct(
-            String name, String description, ProductType type, Price price, Map<String, Object> attributes) {
-        return productPersistencePort.saveProduct(new Product(null, name, description, type, price, Instant.now(),
-                                                              null, true, 0, attributes));
+    public Product createProduct(String name, String description, ProductType type, Price price, Map<String, Object> attributes) {
+        Product product = new Product(name, description, type, price, Instant.now(), Instant.now(), true, 0, attributes, null);
+        PaymentGatewayProduct paymentGatewayProduct = paymentGatewayResourcePort.createPaymentGatewayProduct(product);
+        setPaymentGatewayParams(paymentGatewayProduct, product);
+        return productPersistencePort.saveProduct(product);
     }
 
     @Transactional
@@ -49,12 +53,16 @@ public class ProductManagementService implements ProductManagementUseCase {
             product.setActive(isActive);
         }
 
+        PaymentGatewayProduct paymentGatewayProduct = paymentGatewayResourcePort.updatePaymentGatewayProduct(product);
+        setPaymentGatewayParams(paymentGatewayProduct, product);
         return productPersistencePort.saveProduct(product);
     }
 
     @Transactional
     @Override
     public void deleteProduct(UUID id) {
+        Product product = productPersistencePort.getProductById(id, null);
+        paymentGatewayResourcePort.deletePaymentGatewayProduct(product);
         productPersistencePort.deleteProduct(id);
     }
 
@@ -66,5 +74,13 @@ public class ProductManagementService implements ProductManagementUseCase {
     @Override
     public List<Product> getActiveProducts(ProductType type) {
         return productPersistencePort.getProducts(type, true);
+    }
+
+    private void setPaymentGatewayParams(PaymentGatewayProduct paymentGatewayProduct, Product product) {
+        Map<String, Object> paymentGatewayProductParams = Map.of(
+                "paymentGatewayProductId", paymentGatewayProduct.id(),
+                "paymentGatewayProductPriceId", paymentGatewayProduct.priceId()
+        );
+        product.setPaymentGatewayProductParams(paymentGatewayProductParams);
     }
 }

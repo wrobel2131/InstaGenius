@@ -21,6 +21,7 @@ public interface ProductMapper {
     @Mapping(source = "isActive", target = "isActive")
     @Mapping(source = "version", target = "version")
     @Mapping(source = "attributes", target = "attributes")
+    @Mapping(source = "paymentGatewayProductParams", target = "paymentGatewayProductParams")
     Product toProduct(ProductEntity productEntity);
 
 
@@ -35,6 +36,7 @@ public interface ProductMapper {
     @Mapping(source = "isActive", target = "isActive")
     @Mapping(source = "version", target = "version")
     @Mapping(source = "attributes", target = "attributes")
+    @Mapping(source = "paymentGatewayProductParams", target = "paymentGatewayProductParams")
     ProductEntity toProductEntity(Product product);
 
     @Mapping(source = "id", target = "id")
