@@ -6,22 +6,24 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Product {
-    private final UUID id;
+    private  UUID id;
     private String name;
     private String description;
     private ProductType type;
     private Price price;
-    private final Instant createdAt;
-    private final Instant updatedAt;
-    private boolean isActive;
-    private final int version;
+    private Instant createdAt;
+    private Instant updatedAt;
+    private boolean active;
+    private int version;
+    private String imageUrl;
     private Map<String, Object> paymentGatewayProductParams;
     private Map<String, Object> attributes;
 
-    public Product(
-            UUID id, String name, String description, ProductType type, Price price, Instant createdAt,
-            Instant updatedAt,
-            boolean isActive, int version, Map<String, Object> attributes, Map<String, Object> paymentGatewayProductParams) {
+    public Product() {
+    }
+
+    public Product(UUID id, String name, String description, ProductType type, Price price, Instant createdAt,
+            Instant updatedAt, boolean isActive, int version, String imageUrl, Map<String, Object> attributes, Map<String, Object> paymentGatewayProductParams) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -29,17 +31,17 @@ public class Product {
         this.price = price;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.isActive = isActive;
+        this.active = isActive;
         this.version = version;
+        this.imageUrl = imageUrl;
         this.attributes = attributes;
         this.paymentGatewayProductParams = paymentGatewayProductParams;
     }
 
-    public Product(String name, String description, ProductType type, Price price, Instant createdAt,
-            Instant updatedAt,
-            boolean isActive, int version, Map<String, Object> attributes, Map<String, Object> paymentGatewayProductParams) {
+    public Product(String name, String description, ProductType type, Price price, Instant createdAt, Instant updatedAt,
+            boolean isActive, int version, String imageUrl, Map<String, Object> attributes, Map<String, Object> paymentGatewayProductParams) {
 
-        this(UUID.randomUUID(), name, description, type, price, createdAt, updatedAt, isActive, version, attributes,
+        this(UUID.randomUUID(), name, description, type, price, createdAt, updatedAt, isActive, version, imageUrl, attributes,
                 paymentGatewayProductParams);
     }
 
@@ -72,7 +74,7 @@ public class Product {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public int getVersion() {
@@ -100,7 +102,31 @@ public class Product {
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void setAttributes(Map<String, Object> attributes) {
@@ -120,19 +146,21 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return isActive == product.isActive && version == product.version && Objects.equals(id, product.id) &&
-                Objects.equals(name, product.name) &&
-                Objects.equals(description, product.description) && type == product.type &&
-                Objects.equals(price, product.price) && Objects.equals(createdAt, product.createdAt) &&
-                Objects.equals(updatedAt, product.updatedAt) &&
-                Objects.equals(paymentGatewayProductParams, product.paymentGatewayProductParams) &&
-                Objects.equals(attributes, product.attributes);
+        return active == product.active && version == product.version && Objects.equals(id,
+                                                                                        product.id) && Objects.equals(
+                name, product.name) && Objects.equals(description,
+                                                      product.description) && type == product.type && Objects.equals(
+                price, product.price) && Objects.equals(createdAt, product.createdAt) && Objects.equals(
+                updatedAt, product.updatedAt) && Objects.equals(imageUrl,
+                                                                product.imageUrl) && Objects.equals(
+                paymentGatewayProductParams, product.paymentGatewayProductParams) && Objects.equals(attributes,
+                                                                                                    product.attributes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, type, price, createdAt, updatedAt, isActive, version,
-                paymentGatewayProductParams, attributes);
+        return Objects.hash(id, name, description, type, price, createdAt, updatedAt, active, version, imageUrl,
+                            paymentGatewayProductParams, attributes);
     }
 
     @Override
@@ -145,8 +173,9 @@ public class Product {
                 ", price=" + price +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", isActive=" + isActive +
+                ", active=" + active +
                 ", version=" + version +
+                ", imageUrl='" + imageUrl + '\'' +
                 ", paymentGatewayProductParams=" + paymentGatewayProductParams +
                 ", attributes=" + attributes +
                 '}';

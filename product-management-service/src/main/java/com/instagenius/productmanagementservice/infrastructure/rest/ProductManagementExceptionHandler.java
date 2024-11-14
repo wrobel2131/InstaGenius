@@ -1,6 +1,10 @@
 package com.instagenius.productmanagementservice.infrastructure.rest;
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
+import com.instagenius.productmanagementservice.infrastructure.exception.ImageStorageException;
+import com.instagenius.productmanagementservice.infrastructure.exception.InvalidProductImageUrlException;
+import com.instagenius.productmanagementservice.infrastructure.exception.PaymentGatewayException;
+import com.instagenius.productmanagementservice.infrastructure.exception.ProductNotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -35,7 +39,20 @@ class ProductManagementExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-        return new ResponseEntity<>(new ErrorResponse("Invalid Id format!", Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse("Invalid parameter in path!", Instant.now(), List.of()),
+                                    HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PaymentGatewayException.class)
+    public ResponseEntity<ErrorResponse> handlePaymentGatewayException(PaymentGatewayException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
+
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorResponse> handleProductNotFoundException(ProductNotFoundException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -62,6 +79,18 @@ class ProductManagementExceptionHandler {
                 List.of()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ImageStorageException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    ResponseEntity<ErrorResponse> handleImageStorageException(ImageStorageException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(InvalidProductImageUrlException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ResponseEntity<ErrorResponse> handleInvalidProductImageUrlException(InvalidProductImageUrlException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

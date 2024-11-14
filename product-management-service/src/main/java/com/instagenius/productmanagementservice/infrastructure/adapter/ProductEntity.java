@@ -48,10 +48,15 @@ public class ProductEntity {
     private Instant updatedAt;
 
     @Column(name = "is_active")
-    private boolean isActive;
+    private boolean active;
 
+    @Version
     @Column(name = "version")
     private int version;
+
+    @Column(name = "image_url", length = 1000)
+    private String imageUrl;
+
 
     @Convert(converter = ProductAttributesConverter.class)
     @Column(name = "attributes", columnDefinition = "TEXT")

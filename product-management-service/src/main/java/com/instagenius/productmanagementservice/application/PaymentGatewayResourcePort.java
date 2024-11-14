@@ -8,5 +8,5 @@ import java.util.UUID;
 public interface PaymentGatewayResourcePort {
     PaymentGatewayProduct createPaymentGatewayProduct(Product product);
     PaymentGatewayProduct updatePaymentGatewayProduct(Product product);
-    void deletePaymentGatewayProduct(Product product);
+    void archivePaymentGatewayProduct(Product product);
 }

@@ -9,7 +9,6 @@ import java.util.UUID;
 public interface ProductPersistencePort {
     Product saveProduct(Product product);
     Product getProductById(UUID id, Boolean active);
-    void deleteProduct(UUID id);
     List<Product> getProducts(ProductType type, Boolean active);
     List<Product> getProductsByIds(List<UUID> ids);
 }

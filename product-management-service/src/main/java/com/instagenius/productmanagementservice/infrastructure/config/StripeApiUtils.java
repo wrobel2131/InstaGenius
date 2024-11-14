@@ -14,7 +14,6 @@ import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpStatus;
 
 
-@RequiredArgsConstructor
 @UtilityClass
 public class StripeApiUtils {
 
@@ -25,6 +24,7 @@ public class StripeApiUtils {
     }
 
     public Product createProduct(ProductCreateParams productCreateParams, RequestOptions requestOptions) {
+        System.out.println("Creating stripe product");
         try {
             return Product.create(productCreateParams, requestOptions);
         } catch (StripeException e) {
@@ -33,6 +33,7 @@ public class StripeApiUtils {
     }
 
     public Product updateProduct(String productId, ProductUpdateParams productUpdateParams, RequestOptions requestOptions) {
+        System.out.println("Updating stripe product: " + productUpdateParams);
         try {
             Product product = Product.retrieve(productId, requestOptions);
             return product.update(productUpdateParams, requestOptions);
@@ -41,16 +42,8 @@ public class StripeApiUtils {
         }
     }
 
-    public void deleteProduct(String productId, RequestOptions requestOptions) {
-        try {
-            Product product = Product.retrieve(productId, requestOptions);
-            product.delete();
-        } catch (StripeException e) {
-            throw new PaymentGatewayException(e.getUserMessage(), HttpStatus.valueOf(e.getStatusCode()));
-        }
-    }
-
     public Price createPrice(PriceCreateParams priceCreateParams, RequestOptions requestOptions) {
+        System.out.println("Creating stripe price");
         try {
             return Price.create(priceCreateParams, requestOptions);
         } catch (StripeException e) {
@@ -59,6 +52,7 @@ public class StripeApiUtils {
     }
 
     public Price updatePrice(String priceId, PriceUpdateParams priceUpdateParams, RequestOptions requestOptions) {
+        System.out.println("Updating stripe price: " + priceUpdateParams);
         try {
             Price price = Price.retrieve(priceId, requestOptions);
             return price.update(priceUpdateParams, requestOptions);

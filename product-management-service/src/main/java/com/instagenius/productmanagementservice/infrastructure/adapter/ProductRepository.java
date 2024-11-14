@@ -42,11 +42,6 @@ public class ProductRepository implements ProductPersistencePort {
     }
 
     @Override
-    public void deleteProduct(UUID id) {
-        jpaProductRepository.deleteProductEntityById(id);
-    }
-
-    @Override
     public List<Product> getProducts(ProductType type, Boolean active) {
         Specification<ProductEntity> specification = Specification.where(null);
 
@@ -74,10 +69,6 @@ public class ProductRepository implements ProductPersistencePort {
 
 @Repository
 interface JpaProductRepository extends JpaRepository<ProductEntity, UUID>, JpaSpecificationExecutor<ProductEntity> {
-
-    @Modifying
-    @Query(value = "DELETE FROM ProductEntity p WHERE p.id := id")
-    void deleteProductEntityById(@Param("id") UUID id);
 
     @Query(value = "SELECT p FROM ProductEntity p WHERE p.id IN :ids")
     List<ProductEntity> findProductEntitiesByIds(@Param("ids") List<UUID> ids);

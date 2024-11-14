@@ -18,9 +18,10 @@ public interface ProductMapper {
     @Mapping(target = "price", expression = "java(new Price(productEntity.getPrice(), productEntity.getCurrency()))")
     @Mapping(source = "createdAt", target = "createdAt")
     @Mapping(source = "updatedAt", target = "updatedAt")
-    @Mapping(source = "isActive", target = "isActive")
+    @Mapping(source = "active", target = "active")
     @Mapping(source = "version", target = "version")
     @Mapping(source = "attributes", target = "attributes")
+    @Mapping(source = "imageUrl", target = "imageUrl")
     @Mapping(source = "paymentGatewayProductParams", target = "paymentGatewayProductParams")
     Product toProduct(ProductEntity productEntity);
 
@@ -29,12 +30,13 @@ public interface ProductMapper {
     @Mapping(source = "name", target = "name")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "type", target = "type")
-    @Mapping(source = "price.price", target = "price")
+    @Mapping(source = "price.amount", target = "price")
     @Mapping(source = "price.currency", target = "currency")
     @Mapping(source = "createdAt", target = "createdAt")
     @Mapping(source = "updatedAt", target = "updatedAt", ignore = true)
-    @Mapping(source = "isActive", target = "isActive")
+    @Mapping(source = "active", target = "active")
     @Mapping(source = "version", target = "version")
+    @Mapping(source = "imageUrl", target = "imageUrl")
     @Mapping(source = "attributes", target = "attributes")
     @Mapping(source = "paymentGatewayProductParams", target = "paymentGatewayProductParams")
     ProductEntity toProductEntity(Product product);
@@ -43,8 +45,10 @@ public interface ProductMapper {
     @Mapping(source = "name", target = "name")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "type", target = "type")
-    @Mapping(source = "price.price", target = "price")
+    @Mapping(source = "price.amount", target = "price")
     @Mapping(source = "price.currency", target = "currency")
+    @Mapping(source = "imageUrl", target = "imageUrl")
     @Mapping(source = "attributes", target = "attributes")
     ProductResponseDto toProductResponseDto(Product product);
+
 }

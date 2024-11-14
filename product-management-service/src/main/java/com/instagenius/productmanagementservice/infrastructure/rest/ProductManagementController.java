@@ -35,7 +35,8 @@ public class ProductManagementController {
     }
 
     @PostMapping(value = "/batch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<ProductsResponseDto> getProductsByIds(@RequestBody ProductIdsRequestDto productIdsRequestDto, @AuthenticationPrincipal Jwt jwt) {
+    ResponseEntity<ProductsResponseDto> getProductsByIds(
+            @RequestBody ProductIdsRequestDto productIdsRequestDto, @AuthenticationPrincipal Jwt jwt) {
         return ResponseEntity.ok(new ProductsResponseDto(productManagementUseCase
                                                                  .getProductsByIds(productIdsRequestDto.productIds())
                                                                  .stream()
@@ -45,7 +46,7 @@ public class ProductManagementController {
 
     @GetMapping(value = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ProductResponseDto> getProductById(
-            @PathVariable("productId") UUID productId, @AuthenticationPrincipal Jwt jwt) {
+            @PathVariable("productId") UUID productId) {
         return ResponseEntity.ok(
                 productMapper.toProductResponseDto(productManagementUseCase.getProductById(productId)));
     }
@@ -53,7 +54,6 @@ public class ProductManagementController {
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductResponseDto> createProduct(
-            @AuthenticationPrincipal Jwt jwt,
             @Valid @RequestBody CreateProductRequestDto createProductRequestDto) {
 
         return ResponseEntity.ok(
@@ -62,8 +62,8 @@ public class ProductManagementController {
                                                                createProductRequestDto.description(),
                                                                ProductType.valueOf(createProductRequestDto.type()),
                                                                new Price(createProductRequestDto.price(),
-                                                                       createProductRequestDto.currency())
-                                , createProductRequestDto.attributes())
+                                                                         createProductRequestDto.currency()),
+                                                               createProductRequestDto.imageUrl(), createProductRequestDto.attributes())
                 )
         );
     }
@@ -72,24 +72,27 @@ public class ProductManagementController {
             MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductResponseDto> updateProduct(
             @PathVariable("productId") UUID productId,
-            @AuthenticationPrincipal Jwt jwt,
             @Valid @RequestBody UpdateProductRequestDto updateProductRequestDto) {
 
         return ResponseEntity.ok(productMapper.toProductResponseDto(
                 productManagementUseCase.updateProduct(productId, updateProductRequestDto.name(),
                                                        updateProductRequestDto.description(),
-                                                       ProductType.valueOf(
-                                                               updateProductRequestDto.type()),
+                                                       updateProductRequestDto.type(),
                                                        new Price(updateProductRequestDto.price(),
                                                                  updateProductRequestDto.currency()),
+                                                       updateProductRequestDto.imageUrl(),
                                                        updateProductRequestDto.attributes(),
                                                        updateProductRequestDto.isActive())
         ));
     }
 
-    @DeleteMapping(value = "/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable("productId") UUID productId) {
-        productManagementUseCase.deleteProduct(productId);
-        return ResponseEntity.noContent().build();
+    @PutMapping(value = "/{productId}")
+    public ResponseEntity<ProductResponseDto> deleteProduct(@PathVariable("productId") UUID productId) {
+        productManagementUseCase.archiveProduct(productId);
+        return ResponseEntity.ok(
+                productMapper.toProductResponseDto(
+                        productManagementUseCase.archiveProduct(productId)
+                )
+        );
     }
 }

@@ -9,8 +9,8 @@ import java.util.UUID;
 @UtilityClass
 public class ProductSpecifications {
 
-    public Specification<ProductEntity> isActive(boolean isActive) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("isActive"), isActive);
+    public Specification<ProductEntity> isActive(boolean active) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("active"), active);
     }
 
     public Specification<ProductEntity> hasType(ProductType productType) {
