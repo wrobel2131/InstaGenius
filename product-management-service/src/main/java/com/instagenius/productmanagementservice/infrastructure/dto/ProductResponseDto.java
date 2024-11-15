@@ -7,5 +7,5 @@ import java.util.Map;
 import java.util.UUID;
 
 public record ProductResponseDto(UUID id, String name, String description, ProductType type, BigDecimal price,
-                                 String currency, String imageUrl, Map<String, Object> attributes) {
+                                 String currency, String imageUrl, Map<String, Object> paymentGatewayProductParams, Map<String, Object> attributes) {
 }

@@ -1,4 +1,4 @@
-package com.instagenius.orderservice.infrastructure.dto;
+package com.instagenius.paymentservice.infrastructure.dto;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public record InitializePaymentRequestDto(@NotNull(message = "Order Id is required!") UUID orderId,
                                           @NotNull(message = "Reference id is required!") String referenceId,
-                                          List<ProductsToPayRequestDto> orderedProducts) {
+                                          List<OrderedProductRequestDto> orderedProducts) {
 }

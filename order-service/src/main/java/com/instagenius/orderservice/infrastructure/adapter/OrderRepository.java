@@ -29,9 +29,9 @@ public class OrderRepository implements OrderPersistencePort {
     }
 
     @Override
-    public Order findOrderByUserIdAndOrderId(UUID userId, String orderId) {
+    public Order findOrderByUserIdAndReferenceId(UUID userId, String referenceId) {
         return OrderMapper.toOrder(
-                jpaOrderRepository.findOrderByUserIdAndOrderId(userId, orderId)
+                jpaOrderRepository.findOrderByUserIdAndReferenceId(userId, referenceId)
                                   .orElseThrow(() -> new OrderNotFoundException("Order not found!"))
         );
     }
@@ -58,8 +58,8 @@ interface JpaOrderRepository extends JpaRepository<OrderEntity, UUID> {
     @Query(value = "SELECT o FROM OrderEntity o WHERE o.userId = :userId")
     List<OrderEntity> findOrdersByUserId(@Param("userId") UUID userId);
 
-    @Query(value = "SELECT o FROM OrderEntity o WHERE o.userId = :userId AND o.orderId= :orderId")
-    Optional<OrderEntity> findOrderByUserIdAndOrderId(@Param("userId") UUID userId, @Param("orderId") String orderId);
+    @Query(value = "SELECT o FROM OrderEntity o WHERE o.userId = :userId AND o.referenceId = :referenceId")
+    Optional<OrderEntity> findOrderByUserIdAndReferenceId(@Param("userId") UUID userId, @Param("referenceId") String referenceId);
 
     @Query(value = "SELECT o FROM OrderEntity o WHERE o.userId = :userId AND o.id= :id")
     Optional<OrderEntity> findOrderByUserIdAndId(@Param("userId") UUID userId, @Param("id") UUID id);

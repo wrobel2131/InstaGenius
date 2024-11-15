@@ -65,15 +65,15 @@ public class OrderService implements OrderUseCase {
 
         Order newOrder = orderPersistencePort.save(new Order(userID, OrderStatus.PENDING, orderItems, null));
 
-        CreatedPayment createdPayment = paymentPort.initializePaymentSession(new InitializePayment(newOrder.getId(), newOrder.getTotalPrice()));
+        CreatedPayment createdPayment = paymentPort.initializePaymentSession(new InitializePayment());
 
-        return new CreatedOrder(newOrder.getOrderId(), newOrder.getStatus(), createdPayment.paymentGatewaySessionId());
+        return new CreatedOrder(newOrder.getReferenceId(), newOrder.getStatus(), createdPayment.paymentGatewaySessionId());
     }
 
     @Override
-    public Order findOrderByUserIdAndOrderId(UUID userId, String orderId) {
+    public Order findOrderByUserIdAndReferenceId(UUID userId, String referenceId) {
         System.out.println("Finding order");
-        return orderPersistencePort.findOrderByUserIdAndOrderId(userId, orderId);
+        return orderPersistencePort.findOrderByUserIdAndReferenceId(userId, referenceId);
     }
 
     @Transactional

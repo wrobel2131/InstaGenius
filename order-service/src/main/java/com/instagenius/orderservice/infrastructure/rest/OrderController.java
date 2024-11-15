@@ -30,7 +30,7 @@ class OrderController {
                                                        @AuthenticationPrincipal Jwt jwt) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
-                OrderMapper.toOrderResponseDto(orderUseCase.findOrderByUserIdAndOrderId(userId, orderId))
+                OrderMapper.toOrderResponseDto(orderUseCase.findOrderByUserIdAndReferenceId(userId, orderId))
         );
     }
 

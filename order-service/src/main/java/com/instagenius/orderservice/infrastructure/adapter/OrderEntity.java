@@ -24,8 +24,8 @@ public class OrderEntity {
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
 
-    @Column(name = "order_id", nullable = false, updatable = false)
-    private String orderId;
+    @Column(name = "reference_id", nullable = false, updatable = false)
+    private String referenceId;
 
     @Column(name = "user_id", nullable = false)
     private UUID userId;

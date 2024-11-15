@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Order {
     private final UUID id;
-    private final String orderId;
+    private final String referenceId;
     private final UUID userId;
     private OrderStatus status;
     private final List<OrderItem> items;
@@ -23,10 +23,10 @@ public class Order {
         this(null, generateOrderId(), userId, status, items, null, null, 0, paymentId);
     }
 
-    public Order(UUID id, String orderId, UUID userId, OrderStatus status, List<OrderItem> items,
+    public Order(UUID id, String referenceId, UUID userId, OrderStatus status, List<OrderItem> items,
                  Instant createdAt, Instant updatedAt, int version, UUID paymentId) {
         this.id = id;
-        this.orderId = orderId;
+        this.referenceId = referenceId;
         this.userId = userId;
         this.status = status;
         this.items = List.copyOf(items);
@@ -43,8 +43,8 @@ public class Order {
         return id;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getReferenceId() {
+        return referenceId;
     }
 
     public UUID getUserId() {
@@ -124,8 +124,8 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return version == order.version && Objects.equals(id, order.id) && Objects.equals(orderId,
-                                                                                          order.orderId) && Objects.equals(
+        return version == order.version && Objects.equals(id, order.id) && Objects.equals(referenceId,
+                                                                                          order.referenceId) && Objects.equals(
                 userId, order.userId) && status == order.status && Objects.equals(items,
                                                                                   order.items) && Objects.equals(
                 totalPrice, order.totalPrice) && Objects.equals(createdAt,
@@ -135,14 +135,14 @@ public class Order {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, orderId, userId, status, items, totalPrice, createdAt, updatedAt, version, paymentId);
+        return Objects.hash(id, referenceId, userId, status, items, totalPrice, createdAt, updatedAt, version, paymentId);
     }
 
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", orderId='" + orderId + '\'' +
+                ", referenceId='" + referenceId + '\'' +
                 ", userId=" + userId +
                 ", status=" + status +
                 ", items=" + items +
