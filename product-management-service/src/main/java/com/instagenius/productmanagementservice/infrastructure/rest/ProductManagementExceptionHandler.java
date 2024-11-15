@@ -1,9 +1,10 @@
-package com.instagenius.orderservice.infrastructure.rest;
+package com.instagenius.productmanagementservice.infrastructure.rest;
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
-import com.instagenius.orderservice.infrastructure.exception.CoinManagementException;
-import com.instagenius.orderservice.infrastructure.exception.OrderNotFoundException;
-import com.instagenius.orderservice.infrastructure.exception.PaymentException;
+import com.instagenius.productmanagementservice.infrastructure.exception.ImageStorageException;
+import com.instagenius.productmanagementservice.infrastructure.exception.InvalidProductImageUrlException;
+import com.instagenius.productmanagementservice.infrastructure.exception.PaymentGatewayException;
+import com.instagenius.productmanagementservice.infrastructure.exception.ProductNotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-class OrderExceptionHandler {
+class ProductManagementExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -38,25 +39,21 @@ class OrderExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-        return new ResponseEntity<>(new ErrorResponse("Invalid Id format!", Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse("Invalid parameter in path!", Instant.now(), List.of()),
+                                    HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(OrderNotFoundException.class)
+    @ExceptionHandler(PaymentGatewayException.class)
+    public ResponseEntity<ErrorResponse> handlePaymentGatewayException(PaymentGatewayException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
+
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorResponse> handleOrderNotFound(OrderNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleProductNotFoundException(ProductNotFoundException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.NOT_FOUND);
     }
-
-    @ExceptionHandler(CoinManagementException.class)
-    ResponseEntity<ErrorResponse> handleCoinManagementException(CoinManagementException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
-    }
-
-    @ExceptionHandler(PaymentException.class)
-    ResponseEntity<ErrorResponse> handlePaymentException(PaymentException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
-    }
-
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -76,7 +73,6 @@ class OrderExceptionHandler {
             }
         }
 
-        // Fallback for other HttpMessageNotReadableException cases
         ErrorResponse errorResponse = new ErrorResponse(
                 "Malformed JSON request",
                 Instant.now(),
@@ -85,7 +81,18 @@ class OrderExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    // Handler for overall exception thrown by this service, i
+    @ExceptionHandler(ImageStorageException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    ResponseEntity<ErrorResponse> handleImageStorageException(ImageStorageException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(InvalidProductImageUrlException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ResponseEntity<ErrorResponse> handleInvalidProductImageUrlException(InvalidProductImageUrlException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {

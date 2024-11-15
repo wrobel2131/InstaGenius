@@ -9,11 +9,11 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.instagenius</groupId>
-	<artifactId>payment-service</artifactId>
+	<artifactId>product-management-service</artifactId>
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
-	<name>payment-service</name>
-	<description>payment-service</description>
+	<name>product-management-service</name>
+	<description>product-management-service</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -79,6 +79,16 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>28.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<version>2.27.1</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
