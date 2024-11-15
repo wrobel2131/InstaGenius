@@ -58,6 +58,7 @@ jobs:
           - coin-management-service
           - order-service
           - payment-service
+          - product-management-service
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
