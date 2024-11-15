@@ -9,8 +9,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -24,8 +22,7 @@ public class ProductManagementController {
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ProductsResponseDto> getActiveProducts(
-            @RequestParam(required = false) ProductType type,
-            @AuthenticationPrincipal Jwt jwt) {
+            @RequestParam(required = false) ProductType type) {
 
         return ResponseEntity.ok(new ProductsResponseDto(productManagementUseCase
                                                                  .getActiveProducts(type)
@@ -36,7 +33,7 @@ public class ProductManagementController {
 
     @PostMapping(value = "/batch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ProductsResponseDto> getProductsByIds(
-            @RequestBody ProductIdsRequestDto productIdsRequestDto, @AuthenticationPrincipal Jwt jwt) {
+            @RequestBody ProductIdsRequestDto productIdsRequestDto) {
         return ResponseEntity.ok(new ProductsResponseDto(productManagementUseCase
                                                                  .getProductsByIds(productIdsRequestDto.productIds())
                                                                  .stream()

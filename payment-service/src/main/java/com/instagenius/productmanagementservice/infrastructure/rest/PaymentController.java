@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequestMapping ("/api/v1/payments")
 public class PaymentController {
     private final PaymentUseCase paymentUseCase;
-    private final PaymentMapper paymentMapper = PaymentMapper.INSTANCE;
+    private static final PaymentMapper paymentMapper = PaymentMapper.INSTANCE;
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CreatedPaymentDto> initializePayment(@RequestBody @Valid InitializePaymentRequestDto initializePaymentRequestDto, @AuthenticationPrincipal Jwt jwt) {
