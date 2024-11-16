@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface PaymentUseCase {
     InitializedPayment initializePayment(UUID userId, UUID orderId, String orderReferenceId,
                                          List<OrderedProduct> orderedProducts);
+
+    void handlePaymentSuccess(String eventPayload, String signatureHeader);
 }

@@ -1,6 +1,8 @@
 package com.instagenius.paymentservice.domain;
 
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,34 +13,32 @@ public class Payment {
     private String orderReferenceId;
     private PaymentStatus status;
     private Price price;
-    private String paymentGatewayCheckoutSessionId;
-    private String paymentGatewayPaymentId;
-    private String paymentMethod;
+    private Map<String, String> paymentGatewayMetadata;
     private Instant createdAt;
     private Instant updatedAt;
     private int version;
 
+    public Payment() {
+    }
+
     public Payment(UUID id, UUID userId, UUID orderId, String orderReferenceId, PaymentStatus status, Price price,
-                   String paymentGatewayCheckoutSessionId, String paymentGatewayPaymentId, String paymentMethod,
-                   Instant createdAt, Instant updatedAt, int version) {
+                   Map<String, String> paymentGatewayMetadata, Instant createdAt, Instant updatedAt, int version) {
         this.id = id;
         this.userId = userId;
         this.orderId = orderId;
         this.orderReferenceId = orderReferenceId;
         this.status = status;
         this.price = price;
-        this.paymentGatewayCheckoutSessionId = paymentGatewayCheckoutSessionId;
-        this.paymentGatewayPaymentId = paymentGatewayPaymentId;
-        this.paymentMethod = paymentMethod;
+        this.paymentGatewayMetadata = paymentGatewayMetadata != null ? paymentGatewayMetadata : new HashMap<>();
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.version = version;
     }
 
     public Payment(UUID userId, UUID orderId, String orderReferenceId, PaymentStatus status, Price price,
-                   String paymentGatewayCheckoutSessionId, String paymentGatewayPaymentId, String paymentMethod,
+                   Map<String, String> paymentGatewayMetadata,
                    Instant createdAt, Instant updatedAt, int version) {
-        this(UUID.randomUUID(), userId, orderId, orderReferenceId, status, price, paymentGatewayCheckoutSessionId, paymentGatewayPaymentId, paymentMethod, createdAt, updatedAt, version);
+        this(UUID.randomUUID(), userId, orderId, orderReferenceId, status, price, paymentGatewayMetadata, createdAt, updatedAt, version);
     }
 
     public UUID getId() {
@@ -65,6 +65,14 @@ public class Payment {
         this.orderId = orderId;
     }
 
+    public String getOrderReferenceId() {
+        return orderReferenceId;
+    }
+
+    public void setOrderReferenceId(String orderReferenceId) {
+        this.orderReferenceId = orderReferenceId;
+    }
+
     public PaymentStatus getStatus() {
         return status;
     }
@@ -81,28 +89,12 @@ public class Payment {
         this.price = price;
     }
 
-    public String getPaymentGatewayCheckoutSessionId() {
-        return paymentGatewayCheckoutSessionId;
+    public Map<String, String> getPaymentGatewayMetadata() {
+        return paymentGatewayMetadata;
     }
 
-    public void setPaymentGatewayCheckoutSessionId(String paymentGatewayCheckoutSessionId) {
-        this.paymentGatewayCheckoutSessionId = paymentGatewayCheckoutSessionId;
-    }
-
-    public String getPaymentGatewayPaymentId() {
-        return paymentGatewayPaymentId;
-    }
-
-    public void setPaymentGatewayPaymentId(String paymentGatewayPaymentId) {
-        this.paymentGatewayPaymentId = paymentGatewayPaymentId;
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    public void setPaymentGatewayMetadata(Map<String, String> paymentGatewayMetadata) {
+        this.paymentGatewayMetadata = paymentGatewayMetadata;
     }
 
     public Instant getCreatedAt() {
@@ -129,12 +121,24 @@ public class Payment {
         this.version = version;
     }
 
-    String getOrderReferenceId() {
-        return orderReferenceId;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Payment payment = (Payment) o;
+        return version == payment.version && Objects.equals(id, payment.id) && Objects.equals(userId,
+                                                                                              payment.userId) && Objects.equals(
+                orderId, payment.orderId) && Objects.equals(orderReferenceId,
+                                                            payment.orderReferenceId) && status == payment.status && Objects.equals(
+                price, payment.price) && Objects.equals(paymentGatewayMetadata,
+                                                        payment.paymentGatewayMetadata) && Objects.equals(
+                createdAt, payment.createdAt) && Objects.equals(updatedAt, payment.updatedAt);
     }
 
-    void setOrderReferenceId(String orderReferenceId) {
-        this.orderReferenceId = orderReferenceId;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId, orderId, orderReferenceId, status, price, paymentGatewayMetadata, createdAt,
+                            updatedAt, version);
     }
 
     @Override
@@ -146,35 +150,10 @@ public class Payment {
                 ", orderReferenceId='" + orderReferenceId + '\'' +
                 ", status=" + status +
                 ", price=" + price +
-                ", paymentGatewayCheckoutSessionId='" + paymentGatewayCheckoutSessionId + '\'' +
-                ", paymentGatewayPaymentId='" + paymentGatewayPaymentId + '\'' +
-                ", paymentMethod='" + paymentMethod + '\'' +
+                ", paymentGatewayMetadata=" + paymentGatewayMetadata +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", version=" + version +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Payment payment = (Payment) o;
-        return version == payment.version && Objects.equals(id, payment.id) &&
-                Objects.equals(userId, payment.userId) && Objects.equals(orderId, payment.orderId) &&
-                Objects.equals(orderReferenceId, payment.orderReferenceId) && status == payment.status &&
-                Objects.equals(price, payment.price) &&
-                Objects.equals(paymentGatewayCheckoutSessionId, payment.paymentGatewayCheckoutSessionId) &&
-                Objects.equals(paymentGatewayPaymentId, payment.paymentGatewayPaymentId) &&
-                Objects.equals(paymentMethod, payment.paymentMethod) &&
-                Objects.equals(createdAt, payment.createdAt) &&
-                Objects.equals(updatedAt, payment.updatedAt);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, userId, orderId, orderReferenceId, status, price,
-                paymentGatewayCheckoutSessionId,
-                paymentGatewayPaymentId, paymentMethod, createdAt, updatedAt, version);
     }
 }

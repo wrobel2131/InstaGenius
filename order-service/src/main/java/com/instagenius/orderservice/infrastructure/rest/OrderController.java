@@ -49,8 +49,7 @@ class OrderController {
         );
     }
 
-    @PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
-            MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{id}/complete", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> completeOrder(@PathVariable("id") UUID id, @RequestBody CompleteOrderRequestDto completeOrderRequestDto,
                                        @AuthenticationPrincipal Jwt jwt) {
         UUID userId = getUserUUIDFromJwtToken(jwt);

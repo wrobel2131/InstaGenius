@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface PaymentPersistencePort {
     Payment save(Payment payment);
-    Payment findPaymentByUserIdAndOrderId(UUID userId, UUID orderId);
+    Payment getPaymentById(UUID id);
 }

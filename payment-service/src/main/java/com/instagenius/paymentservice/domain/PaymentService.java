@@ -1,12 +1,11 @@
 package com.instagenius.paymentservice.domain;
 
-import com.instagenius.paymentservice.application.PaymentGatewayPort;
-import com.instagenius.paymentservice.application.PaymentPersistencePort;
-import com.instagenius.paymentservice.application.PaymentUseCase;
-import com.instagenius.paymentservice.application.ProductManagementPort;
+import com.instagenius.paymentservice.application.*;
 import com.instagenius.paymentservice.infrastructure.exception.PaymentGatewayException;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -16,11 +15,14 @@ public class PaymentService implements PaymentUseCase {
     private final PaymentPersistencePort paymentPersistencePort;
     private final PaymentGatewayPort paymentGatewayPort;
     private final ProductManagementPort productManagementPort;
+    private final AsyncPaymentProcessPort asyncPaymentProcessPort;
 
-    public PaymentService(PaymentPersistencePort paymentPersistencePort, PaymentGatewayPort paymentGatewayPort, ProductManagementPort productManagementPort) {
+    public PaymentService(PaymentPersistencePort paymentPersistencePort, PaymentGatewayPort paymentGatewayPort,
+                          ProductManagementPort productManagementPort, AsyncPaymentProcessPort asyncPaymentProcessPort) {
         this.paymentPersistencePort = paymentPersistencePort;
         this.paymentGatewayPort = paymentGatewayPort;
         this.productManagementPort = productManagementPort;
+        this.asyncPaymentProcessPort = asyncPaymentProcessPort;
     }
 
 
@@ -46,11 +48,20 @@ public class PaymentService implements PaymentUseCase {
         );
 
         // Create a payment session
-        Payment initializedPayment = paymentGatewayPort.createPaymentSession( new Payment(userId, orderId, orderReferenceId, PaymentStatus.PENDING, null, null, null, null, null, null, 0), productQuantityMap);
+        Payment initializedPayment = paymentGatewayPort.createPaymentSession( new Payment(userId, orderId, orderReferenceId, PaymentStatus.PENDING, null, new HashMap<>(), null, null, 0), productQuantityMap);
 
         // Save the payment in the database
         Payment createdPayment = paymentPersistencePort.save(initializedPayment);
         System.out.println("PaymentService.initializePayment: createdPayment = " + createdPayment);
-        return new InitializedPayment(createdPayment.getId(), createdPayment.getPaymentGatewayCheckoutSessionId());
+        return new InitializedPayment(createdPayment.getId(), createdPayment.getPaymentGatewayMetadata().get("paymentGatewayCheckoutSessionId"));
     }
+
+    @Override
+    public void handlePaymentSuccess(String eventPayload, String signatureHeader) {
+        PaymentData paymentData = paymentGatewayPort.getPaymentDataFromEvent(eventPayload, signatureHeader);
+
+        asyncPaymentProcessPort.processPaymentData(paymentData);
+    }
+
+
 }

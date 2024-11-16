@@ -17,7 +17,9 @@ public class OrderService implements OrderUseCase {
     private final PaymentPort paymentPort;
     private final OrderCompletionHandlerFactory orderCompletionHandlerFactory;
 
-    public OrderService(OrderPersistencePort orderPersistencePort, ProductManagementPort productManagementPort,PaymentPort paymentPort, OrderCompletionHandlerFactory orderCompletionHandlerFactory) {
+    public OrderService(
+            OrderPersistencePort orderPersistencePort, ProductManagementPort productManagementPort,
+            PaymentPort paymentPort, OrderCompletionHandlerFactory orderCompletionHandlerFactory) {
         this.orderPersistencePort = orderPersistencePort;
         this.productManagementPort = productManagementPort;
         this.paymentPort = paymentPort;
@@ -31,43 +33,52 @@ public class OrderService implements OrderUseCase {
 
         /* Get list of ids from ordered products */
         List<UUID> productIds = orderedProducts.stream()
-                .map(OrderedProduct::id)
-                .toList();
+                                               .map(OrderedProduct::id)
+                                               .toList();
         /* Get list of products from external service based on the ids */
         List<Product> products = productManagementPort.getProductsByIds(productIds);
 
         /* Create a map of products for easy access */
         Map<UUID, Product> productMap = products.stream()
-                .collect(Collectors.toMap(Product::id, Function.identity()));
+                                                .collect(Collectors.toMap(Product::id, Function.identity()));
 
         /* Create order items from ordered products */
         List<OrderItem> orderItems = orderedProducts.stream()
-                .map(orderedProduct -> {
-                    Product product = productMap.get(orderedProduct.id());
+                                                    .map(orderedProduct -> {
+                                                        Product product = productMap.get(orderedProduct.id());
 
-                    if (product == null) {
-                        throw new ProductManagementException("Product not found!", HttpStatus.NOT_FOUND);
-                    }
+                                                        if (product == null) {
+                                                            throw new ProductManagementException("Product not found!",
+                                                                                                 HttpStatus.NOT_FOUND);
+                                                        }
 
-                    return new OrderItem(
-                            null,
-                            product.id(),
-                            product.name(),
-                            product.description(),
-                            product.type(),
-                            orderedProduct.quantity(),
-                            product.price(),
-                            null,
-                            product.attributes()
-                    );
-                })
-                .toList();
+                                                        return new OrderItem(
+                                                                null,
+                                                                product.id(),
+                                                                product.name(),
+                                                                product.description(),
+                                                                product.type(),
+                                                                orderedProduct.quantity(),
+                                                                product.price(),
+                                                                null,
+                                                                product.attributes()
+                                                        );
+                                                    })
+                                                    .toList();
 
         Order newOrder = orderPersistencePort.save(new Order(userID, OrderStatus.PENDING, orderItems, null));
 
-        CreatedPayment createdPayment = paymentPort.initializePaymentSession(new InitializePayment());
+        CreatedPayment createdPayment = paymentPort.initializePaymentSession(
+                new InitializePayment(newOrder.getId(), newOrder.getReferenceId(),
+                                      newOrder
+                                              .getItems()
+                                              .stream()
+                                              .map(i -> new ProductsToPay(i.getProduct().id(), i.getQuantity()))
+                                              .toList())
+        );
 
-        return new CreatedOrder(newOrder.getReferenceId(), newOrder.getStatus(), createdPayment.paymentGatewaySessionId());
+        return new CreatedOrder(newOrder.getReferenceId(), newOrder.getStatus(),
+                                createdPayment.paymentCheckoutSessionId());
     }
 
     @Override

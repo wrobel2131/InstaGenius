@@ -1,6 +1,7 @@
 package com.instagenius.paymentservice.infrastructure.rest;
 
 import com.instagenius.paymentservice.application.PaymentUseCase;
+import com.instagenius.paymentservice.infrastructure.config.StripeApiUtils;
 import com.instagenius.paymentservice.infrastructure.dto.InitializePaymentRequestDto;
 import com.instagenius.paymentservice.infrastructure.dto.InitializedPaymentResponseDto;
 import com.instagenius.paymentservice.infrastructure.mapper.PaymentMapper;
@@ -11,10 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -39,6 +37,18 @@ public class PaymentController {
                                 .map(productRelatedMapper::toOrderedProduct)
                                 .toList())
         ));
+    }
+
+    @PostMapping(value = "/webhooks/successful-payment")
+    ResponseEntity<Void> handleSuccessfulPayment(@RequestBody String eventPayload,
+                                                 @RequestHeader("Stripe-Signature") String signatureHeader) {
+//        System.out.println(eventPayload);
+
+        paymentUseCase.handlePaymentSuccess(eventPayload, signatureHeader);
+
+        System.out.println("Payment successful");
+        return ResponseEntity.ok().build();
+
     }
 
     private UUID getUserUUIDFromJwtToken(Jwt jwt) {

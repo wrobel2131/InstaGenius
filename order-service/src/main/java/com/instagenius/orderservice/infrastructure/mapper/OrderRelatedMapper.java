@@ -19,7 +19,7 @@ public interface OrderRelatedMapper {
     @Mapping(source = "quantity", target = "quantity")
     OrderedProduct toOrderedProduct(OrderedProductRequestDto orderedProductRequestDto);
 
-    @Mapping(source = "orderId", target = "orderId")
+    @Mapping(source = "referenceId", target = "referenceId")
     @Mapping(source = "orderStatus", target = "orderStatus")
     @Mapping(source = "paymentGatewaySessionId", target = "paymentGatewaySessionId")
     CreatedOrderResponseDto toCreatedOrderResponseDto(CreatedOrder createdOrder);
