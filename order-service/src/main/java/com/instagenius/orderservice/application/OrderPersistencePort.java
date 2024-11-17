@@ -9,5 +9,6 @@ public interface OrderPersistencePort {
     Order save(Order order);
     Order findOrderByUserIdAndReferenceId(UUID userId, String referenceId);
     Order findOrderByUserIdAndId(UUID userId, UUID id);
+    Order findOrderById(UUID id);
     List<Order> findOrdersByUserId(UUID userId);
 }

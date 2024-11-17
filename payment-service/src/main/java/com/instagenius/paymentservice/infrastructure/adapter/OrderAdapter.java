@@ -24,8 +24,11 @@ public class OrderAdapter implements OrderPort {
     @Override
     public void completeOrder(UUID orderId, CompleteOrder completeOrder) {
         try {
+            System.out.println("Completing order...");
             orderClient.completeOrder(orderId, orderRelatedMapper.toCompleteOrderRequestDto(completeOrder));
         } catch(FeignException e) {
+            e.printStackTrace();
+            System.out.println(e.status());
             String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
 
             throw new OrderException(errorMessage, HttpStatus.valueOf(e.status()));

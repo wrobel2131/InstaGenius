@@ -24,6 +24,7 @@ public class UserBalanceRepository implements UserBalancePersistencePort {
 
     @Override
     public UserBalance findUserBalanceByUserId(UUID userId) {
+        System.out.println("findUserBalanceByUserId: " + userId);
         return userBalanceMapper.toUserBalance(
                 jpaUserBalanceRepository.findUserBalanceEntityByUserId(userId)
                         .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found!"))

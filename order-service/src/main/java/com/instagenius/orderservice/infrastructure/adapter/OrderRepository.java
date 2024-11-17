@@ -43,6 +43,12 @@ public class OrderRepository implements OrderPersistencePort {
     }
 
     @Override
+    public Order findOrderById(UUID id) {
+        return OrderMapper.toOrder(jpaOrderRepository.findOrderById(id).orElseThrow(
+                () -> new OrderNotFoundException("Order not found!")));
+    }
+
+    @Override
     public List<Order> findOrdersByUserId(UUID userId) {
         return jpaOrderRepository
                 .findOrdersByUserId(userId)
@@ -63,4 +69,7 @@ interface JpaOrderRepository extends JpaRepository<OrderEntity, UUID> {
 
     @Query(value = "SELECT o FROM OrderEntity o WHERE o.userId = :userId AND o.id= :id")
     Optional<OrderEntity> findOrderByUserIdAndId(@Param("userId") UUID userId, @Param("id") UUID id);
+
+    @Query(value = "SELECT o FROM OrderEntity o WHERE o.id= :id")
+    Optional<OrderEntity> findOrderById(@Param("id") UUID id);
 }

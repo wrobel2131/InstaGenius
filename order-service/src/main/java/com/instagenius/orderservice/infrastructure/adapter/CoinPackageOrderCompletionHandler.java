@@ -6,6 +6,8 @@ import com.instagenius.orderservice.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class CoinPackageOrderCompletionHandler implements OrderCompletionHandler {
@@ -16,11 +18,11 @@ public class CoinPackageOrderCompletionHandler implements OrderCompletionHandler
     }
 
     @Override
-    public void handleOrderItemCompletion(OrderItem orderItem) {
+    public void handleOrderItemCompletion(UUID userId, OrderItem orderItem) {
         System.out.println("Handling order completion");
         int coins = calculateCoinAmountFromOrder(orderItem);
 
-        coinManagementPort.addCoins(new AddCoins(coins, "PURCHASE"));
+        coinManagementPort.addCoins(userId, new AddCoins(coins, "PURCHASE"));
     }
 
     private int calculateCoinAmountFromOrder(OrderItem orderItem) {

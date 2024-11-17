@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class CoinManagementAdapter implements CoinManagementPort {
@@ -18,10 +20,13 @@ public class CoinManagementAdapter implements CoinManagementPort {
     private static final CoinRelatedMapper coinRelatedMapper = CoinRelatedMapper.INSTANCE;
 
     @Override
-    public void addCoins(AddCoins addCoins) {
+    public void addCoins(UUID userId, AddCoins addCoins) {
         try {
-            coinManagementClient.addCoins(coinRelatedMapper.toAddCoinsDto(addCoins));
+            System.out.println("Calling addCoins from order service");
+            coinManagementClient.addCoins(userId, coinRelatedMapper.toAddCoinsDto(addCoins));
         } catch (FeignException e) {
+            System.out.println("Exception occurred while adding coins from order service");
+            e.printStackTrace();
             String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
             throw new CoinManagementException(errorMessage, HttpStatus.valueOf(e.status()));
         }

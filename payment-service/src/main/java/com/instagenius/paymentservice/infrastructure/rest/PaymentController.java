@@ -42,8 +42,7 @@ public class PaymentController {
     @PostMapping(value = "/webhooks/successful-payment")
     ResponseEntity<Void> handleSuccessfulPayment(@RequestBody String eventPayload,
                                                  @RequestHeader("Stripe-Signature") String signatureHeader) {
-//        System.out.println(eventPayload);
-
+        System.out.println("eventPayload: " + eventPayload);
         paymentUseCase.handlePaymentSuccess(eventPayload, signatureHeader);
 
         System.out.println("Payment successful");

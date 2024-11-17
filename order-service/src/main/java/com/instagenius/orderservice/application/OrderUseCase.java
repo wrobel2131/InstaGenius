@@ -8,5 +8,5 @@ import java.util.UUID;
 public interface OrderUseCase {
     CreatedOrder createOrder(List<OrderedProduct> orderedProducts, UUID userId);
     Order findOrderByUserIdAndReferenceId(UUID userId, String referenceId);
-    void completeOrder(UUID userId, UUID id, CompleteOrder completeOrder);
+    void completeOrder(UUID id, CompleteOrder completeOrder);
 }

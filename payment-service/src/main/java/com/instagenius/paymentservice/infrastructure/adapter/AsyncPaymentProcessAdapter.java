@@ -30,10 +30,12 @@ public class AsyncPaymentProcessAdapter implements AsyncPaymentProcessPort {
     @Override
     public void processPaymentData(PaymentData paymentData) {
         if (paymentData == null) return;
+        System.out.println("Processing payment data: " + paymentData);
         RequestOptions requestOptions = StripeApiUtils.createRequestOptions(stripeProperties.getApiKey());
         Charge charge = StripeApiUtils.getCharge(paymentData.latestCharge(), requestOptions);
 
         String paymentId = paymentData.paymentGatewayPaymentMetadata().get("paymentId");
+        System.out.println("Payment ID: " + paymentId);
         Payment payment = paymentRepository.getPaymentById(UUID.fromString(paymentId));
 
         Map<String, String> metadata = payment.getPaymentGatewayMetadata();

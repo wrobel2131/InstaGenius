@@ -39,6 +39,6 @@ public class PaymentRepository implements PaymentPersistencePort {
 @Repository
 interface JpaPaymentRepository extends JpaRepository<PaymentEntity, UUID> {
 
-    @Query(value = "SELECT p FROM PaymentEntity p WHERE p.id =: id")
+    @Query(value = "SELECT p FROM PaymentEntity p WHERE p.id = :id")
     Optional<PaymentEntity> findPaymentEntityById(@Param("id") UUID id);
 }

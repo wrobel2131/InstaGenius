@@ -52,9 +52,11 @@ class OrderController {
     @PostMapping(value = "/{id}/complete", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> completeOrder(@PathVariable("id") UUID id, @RequestBody CompleteOrderRequestDto completeOrderRequestDto,
                                        @AuthenticationPrincipal Jwt jwt) {
-        UUID userId = getUserUUIDFromJwtToken(jwt);
-        orderUseCase.completeOrder(userId, id, orderRelatedMapper.toCompleteOrder(completeOrderRequestDto));
+        System.out.println("completeOrder");
 
+        orderUseCase.completeOrder(id, orderRelatedMapper.toCompleteOrder(completeOrderRequestDto));
+
+        System.out.println("completedOrder");
         return ResponseEntity.noContent().build();
     }
 

@@ -89,13 +89,14 @@ public class OrderService implements OrderUseCase {
 
     @Transactional
     @Override
-    public void completeOrder(UUID userId, UUID id, CompleteOrder completeOrder) {
+    public void completeOrder(UUID id, CompleteOrder completeOrder) {
         System.out.println("Completing order");
-        Order order = orderPersistencePort.findOrderByUserIdAndId(userId, id);
+        Order order = orderPersistencePort.findOrderById(id);
         order.setStatus(OrderStatus.COMPLETED);
         order.setPaymentId(completeOrder.paymentId());
 
         Order completedOrder = orderPersistencePort.save(order);
+        UUID userId = completedOrder.getUserId();
 
 
         /* Perform some action to complete the order */
@@ -103,7 +104,7 @@ public class OrderService implements OrderUseCase {
             System.out.println("Handling order item");
             OrderCompletionHandler orderCompletionHandler =
                     orderCompletionHandlerFactory.getHandler(o.getProduct().type());
-            orderCompletionHandler.handleOrderItemCompletion(o);
+            orderCompletionHandler.handleOrderItemCompletion(userId, o);
         });
         System.out.println("Order completed");
     }
