@@ -1,7 +1,9 @@
 package com.instagenius.paymentservice.infrastructure.adapter;
 
 import com.instagenius.paymentservice.application.OrderPort;
+import com.instagenius.paymentservice.domain.CancelOrder;
 import com.instagenius.paymentservice.domain.CompleteOrder;
+import com.instagenius.paymentservice.domain.FailOrder;
 import com.instagenius.paymentservice.infrastructure.dto.ProductIdsRequestDto;
 import com.instagenius.paymentservice.infrastructure.exception.FeignExceptionUtils;
 import com.instagenius.paymentservice.infrastructure.exception.OrderException;
@@ -28,7 +30,32 @@ public class OrderAdapter implements OrderPort {
             orderClient.completeOrder(orderId, orderRelatedMapper.toCompleteOrderRequestDto(completeOrder));
         } catch(FeignException e) {
             e.printStackTrace();
-            System.out.println(e.status());
+            String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
+
+            throw new OrderException(errorMessage, HttpStatus.valueOf(e.status()));
+        }
+    }
+
+    @Override
+    public void cancelOrder(UUID orderId, CancelOrder cancelOrder) {
+        try {
+            System.out.println("Cancelling order...");
+            orderClient.cancelOrder(orderId, orderRelatedMapper.toCancelOrderRequestDto(cancelOrder));
+        } catch(FeignException e) {
+            e.printStackTrace();
+            String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
+
+            throw new OrderException(errorMessage, HttpStatus.valueOf(e.status()));
+        }
+    }
+
+    @Override
+    public void failOrder(UUID orderId, FailOrder failOrder) {
+        try {
+            System.out.println("Failing order...");
+            orderClient.failOrder(orderId, orderRelatedMapper.toFailOrderRequestDto(failOrder));
+        } catch(FeignException e) {
+            e.printStackTrace();
             String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
 
             throw new OrderException(errorMessage, HttpStatus.valueOf(e.status()));

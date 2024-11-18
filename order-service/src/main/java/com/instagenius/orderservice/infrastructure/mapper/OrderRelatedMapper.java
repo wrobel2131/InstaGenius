@@ -1,11 +1,7 @@
 package com.instagenius.orderservice.infrastructure.mapper;
 
-import com.instagenius.orderservice.domain.CompleteOrder;
-import com.instagenius.orderservice.domain.CreatedOrder;
-import com.instagenius.orderservice.domain.OrderedProduct;
-import com.instagenius.orderservice.infrastructure.dto.CompleteOrderRequestDto;
-import com.instagenius.orderservice.infrastructure.dto.CreatedOrderResponseDto;
-import com.instagenius.orderservice.infrastructure.dto.OrderedProductRequestDto;
+import com.instagenius.orderservice.domain.*;
+import com.instagenius.orderservice.infrastructure.dto.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -26,4 +22,10 @@ public interface OrderRelatedMapper {
 
     @Mapping(source = "paymentId", target = "paymentId")
     CompleteOrder toCompleteOrder(CompleteOrderRequestDto completeOrderRequestDto);
+
+    @Mapping(source = "paymentId", target = "paymentId")
+    CancelOrder toCancelOrder(CancelOrderRequestDto cancelOrderRequestDto);
+
+    @Mapping(source = "paymentId", target = "paymentId")
+    FailOrder toFailOrder(FailOrderRequestDto failOrderRequestDto);
 }

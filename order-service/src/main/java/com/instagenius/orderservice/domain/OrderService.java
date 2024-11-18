@@ -109,4 +109,24 @@ public class OrderService implements OrderUseCase {
         System.out.println("Order completed");
     }
 
+    @Transactional
+    @Override
+    public void cancelOrder(UUID id, CancelOrder cancelOrder) {
+        System.out.println("Cancelling order");
+        Order order = orderPersistencePort.findOrderById(id);
+        order.setStatus(OrderStatus.CANCELED);
+        order.setPaymentId(cancelOrder.paymentId());
+        orderPersistencePort.save(order);
+    }
+
+    @Transactional
+    @Override
+    public void failOrder(UUID id, FailOrder failOrder) {
+        System.out.println("Failing order");
+        Order order = orderPersistencePort.findOrderById(id);
+        order.setStatus(OrderStatus.FAILED);
+        order.setPaymentId(failOrder.paymentId());
+        orderPersistencePort.save(order);
+    }
+
 }

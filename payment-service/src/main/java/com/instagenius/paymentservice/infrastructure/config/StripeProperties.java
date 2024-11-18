@@ -12,4 +12,6 @@ import org.springframework.stereotype.Component;
 public class StripeProperties {
     private String apiKey;
     private String successfulPaymentKey;
+    private String failedPaymentKey;
+    private String cancelledPaymentKey;
 }

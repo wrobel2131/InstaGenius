@@ -49,9 +49,9 @@ public class StripeApiUtils {
         }
     }
 
-    public Event constructEvent(String eventPayload, String signatureHeader, String successfulPaymentSecretKey) {
+    public Event constructEvent(String eventPayload, String signatureHeader, String endpointSecretKey) {
         try {
-            return Webhook.constructEvent(eventPayload, signatureHeader, successfulPaymentSecretKey);
+            return Webhook.constructEvent(eventPayload, signatureHeader, endpointSecretKey);
         } catch (StripeException e) {
             e.printStackTrace();
             throw new PaymentGatewayException(e.getUserMessage(), HttpStatus.valueOf(e.getStatusCode()));

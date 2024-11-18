@@ -1,7 +1,7 @@
 package com.instagenius.paymentservice.infrastructure.rest;
 
 import com.instagenius.paymentservice.application.PaymentUseCase;
-import com.instagenius.paymentservice.infrastructure.config.StripeApiUtils;
+import com.instagenius.paymentservice.domain.PaymentStatus;
 import com.instagenius.paymentservice.infrastructure.dto.InitializePaymentRequestDto;
 import com.instagenius.paymentservice.infrastructure.dto.InitializedPaymentResponseDto;
 import com.instagenius.paymentservice.infrastructure.mapper.PaymentMapper;
@@ -42,12 +42,30 @@ public class PaymentController {
     @PostMapping(value = "/webhooks/successful-payment")
     ResponseEntity<Void> handleSuccessfulPayment(@RequestBody String eventPayload,
                                                  @RequestHeader("Stripe-Signature") String signatureHeader) {
-        System.out.println("eventPayload: " + eventPayload);
-        paymentUseCase.handlePaymentSuccess(eventPayload, signatureHeader);
+//        System.out.println(eventPayload);
+        paymentUseCase.handlePaymentWebhook(eventPayload, signatureHeader, PaymentStatus.COMPLETED);
 
         System.out.println("Payment successful");
         return ResponseEntity.ok().build();
+    }
 
+    @PostMapping(value = "/webhooks/canceled-payment")
+    ResponseEntity<Void> handleCanceledPayment(@RequestBody String eventPayload, @RequestHeader("Stripe-Signature") String signatureHeader) {
+
+
+        System.out.println("Payment canceled");
+        paymentUseCase.handlePaymentWebhook(eventPayload, signatureHeader, PaymentStatus.CANCELLED);
+        System.out.println("Finished payment cancellation");
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/webhooks/failed-payment")
+    ResponseEntity<Void> handleFailedPayment(@RequestBody String eventPayload,
+                                             @RequestHeader("Stripe-Signature") String signatureHeader) {
+
+        System.out.println("Payment failed");
+        paymentUseCase.handlePaymentWebhook(eventPayload, signatureHeader, PaymentStatus.FAILED);
+        return ResponseEntity.ok().build();
     }
 
     private UUID getUserUUIDFromJwtToken(Jwt jwt) {

@@ -1,10 +1,7 @@
 package com.instagenius.paymentservice.infrastructure.adapter;
 
 import com.instagenius.paymentservice.application.PaymentGatewayPort;
-import com.instagenius.paymentservice.domain.PaymentData;
-import com.instagenius.paymentservice.domain.Payment;
-import com.instagenius.paymentservice.domain.Price;
-import com.instagenius.paymentservice.domain.Product;
+import com.instagenius.paymentservice.domain.*;
 import com.instagenius.paymentservice.infrastructure.config.StripeApiUtils;
 import com.instagenius.paymentservice.infrastructure.config.StripeProperties;
 import com.instagenius.paymentservice.infrastructure.exception.PaymentGatewayException;
@@ -21,7 +18,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -84,21 +80,44 @@ public class StripeAdapter implements PaymentGatewayPort {
     }
 
     @Override
-    public PaymentData getPaymentDataFromEvent(String payload, String header) {
-        com.stripe.model.Event stripeEvent = StripeApiUtils.constructEvent(payload, header, stripeProperties.getSuccessfulPaymentKey());
-        if (stripeEvent.getType().equals("payment_intent.succeeded")) {
+    public PaymentData getPaymentDataFromEvent(String payload, String header, PaymentStatus paymentStatus) {
+        System.out.println("getting payment data from event");
+        String webhookSigningKey = getValidWebhookSigningSecretKey(paymentStatus);
+        com.stripe.model.Event stripeEvent = StripeApiUtils.constructEvent(payload, header, webhookSigningKey);
+        String eventType = stripeEvent.getType();
+        System.out.println("event type: " + eventType);
+        System.out.println("payment status: " + paymentStatus);
+        if ((paymentStatus.equals(PaymentStatus.COMPLETED) && eventType.equals("payment_intent.succeeded")) ||
+                (paymentStatus.equals(PaymentStatus.CANCELLED) && eventType.equals("payment_intent.canceled")) ||
+                (paymentStatus.equals(PaymentStatus.FAILED) && eventType.equals("payment_intent.payment_failed"))) {
+            System.out.println("Valid type of event");
             Optional<StripeObject> stripeObject =
-                     stripeEvent.getDataObjectDeserializer().getObject();
+                    stripeEvent.getDataObjectDeserializer().getObject();
             if (stripeObject.isPresent()) {
                 PaymentIntent paymentIntent = (PaymentIntent) stripeObject.get();
-                return new PaymentData(paymentIntent.getId(), paymentIntent.getMetadata(),
-                                       paymentIntent.getPaymentMethod(), paymentIntent.getLatestCharge());
+                return new PaymentData(paymentIntent.getId(), eventType, paymentIntent.getMetadata(),
+                                       paymentIntent.getPaymentMethod(), paymentIntent.getLatestCharge(),
+                                       paymentIntent.getCancellationReason());
             }
         }
+        System.out.println("No valid type of event");
         return null;
-
     }
 
+    private String getValidWebhookSigningSecretKey(PaymentStatus paymentStatus) {
+        switch (paymentStatus) {
+            case COMPLETED -> {
+                return stripeProperties.getSuccessfulPaymentKey();
+            }
+            case CANCELLED -> {
+                return stripeProperties.getCancelledPaymentKey();
+            }
+            case FAILED -> {
+                return stripeProperties.getFailedPaymentKey();
+            }
+            default -> throw new PaymentGatewayException("Unauthorized!", HttpStatus.UNAUTHORIZED);
+        }
+    }
 
     private Map<String, String> createPaymentIntentMetaData(Payment payment) {
         return Map.of("paymentId", payment.getId().toString());
@@ -109,12 +128,5 @@ public class StripeAdapter implements PaymentGatewayPort {
                 "paymentGatewayCheckoutSessionId", session.getId(),
                 "paymentGatewayCheckoutSessionUrl", session.getUrl()
                 );
-    }
-
-    private Map<String, String> extractPaymentData(com.stripe.model.Event event) {
-        Map<String, String> paymentData = new HashMap<>();
-        //TODO add data
-
-        return paymentData;
     }
 }

@@ -57,11 +57,10 @@ public class PaymentService implements PaymentUseCase {
     }
 
     @Override
-    public void handlePaymentSuccess(String eventPayload, String signatureHeader) {
-        PaymentData paymentData = paymentGatewayPort.getPaymentDataFromEvent(eventPayload, signatureHeader);
+    public void handlePaymentWebhook(String eventPayload, String signatureHeader, PaymentStatus paymentStatus) {
+        System.out.println("handle payment webhook: " + paymentStatus);
+        PaymentData paymentData = paymentGatewayPort.getPaymentDataFromEvent(eventPayload, signatureHeader, paymentStatus);
 
         asyncPaymentProcessPort.processPaymentData(paymentData);
     }
-
-
 }
