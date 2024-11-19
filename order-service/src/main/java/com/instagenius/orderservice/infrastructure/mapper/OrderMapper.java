@@ -17,7 +17,7 @@ import java.util.UUID;
 public class OrderMapper {
     public Order toOrder(OrderEntity orderEntity) {
         UUID id = orderEntity.getId();
-        String orderId = orderEntity.getOrderId();
+        String referenceId = orderEntity.getReferenceId();
         UUID userId = orderEntity.getUserId();
         OrderStatus status = orderEntity.getStatus();
         Instant createdAt = orderEntity.getCreatedAt();
@@ -28,12 +28,12 @@ public class OrderMapper {
                 .map(OrderMapper::toOrderItem)
                 .toList();
         int version = orderEntity.getVersion();
-        return new Order(id, orderId, userId, status, items, createdAt, updatedAt, version, orderEntity.getPaymentId());
+        return new Order(id, referenceId, userId, status, items, createdAt, updatedAt, version, orderEntity.getPaymentId());
     }
 
     public OrderEntity toOrderEntity(Order order) {
         UUID id = order.getId();
-        String orderId = order.getOrderId();
+        String referenceId = order.getReferenceId();
         UUID userId = order.getUserId();
         OrderStatus status = order.getStatus();
         BigDecimal totalPrice = order.getTotalPrice().price();
@@ -46,7 +46,7 @@ public class OrderMapper {
         OrderEntity orderEntity = OrderEntity
                 .builder()
                 .id(id)
-                .orderId(orderId)
+                .referenceId(referenceId)
                 .userId(userId)
                 .status(status)
                 .totalPrice(totalPrice)
@@ -67,7 +67,7 @@ public class OrderMapper {
     }
 
     public OrderResponseDto toOrderResponseDto(Order order) {
-        String orderId = order.getOrderId();
+        String referenceId = order.getReferenceId();
         Instant createdAt = order.getCreatedAt();
         String status = order.getStatus().name();
         BigDecimal totalPrice = order.getTotalPrice().price();
@@ -77,7 +77,7 @@ public class OrderMapper {
                 .stream()
                 .map(OrderMapper::toOrderItemDto)
                 .toList();
-        return new OrderResponseDto(orderId, createdAt, status, totalPrice, currency, items);
+        return new OrderResponseDto(referenceId, createdAt, status, totalPrice, currency, items);
     }
 
     private OrderItemDto toOrderItemDto(OrderItem orderItem) {

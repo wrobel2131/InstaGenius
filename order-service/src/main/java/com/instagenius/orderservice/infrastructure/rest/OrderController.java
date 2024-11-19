@@ -1,10 +1,7 @@
 package com.instagenius.orderservice.infrastructure.rest;
 
 import com.instagenius.orderservice.application.OrderUseCase;
-import com.instagenius.orderservice.infrastructure.dto.CompleteOrderRequestDto;
-import com.instagenius.orderservice.infrastructure.dto.CreateOrderRequestDto;
-import com.instagenius.orderservice.infrastructure.dto.CreatedOrderResponseDto;
-import com.instagenius.orderservice.infrastructure.dto.OrderResponseDto;
+import com.instagenius.orderservice.infrastructure.dto.*;
 import com.instagenius.orderservice.infrastructure.mapper.OrderRelatedMapper;
 import com.instagenius.orderservice.infrastructure.mapper.OrderMapper;
 import jakarta.validation.Valid;
@@ -30,7 +27,7 @@ class OrderController {
                                                        @AuthenticationPrincipal Jwt jwt) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
-                OrderMapper.toOrderResponseDto(orderUseCase.findOrderByUserIdAndOrderId(userId, orderId))
+                OrderMapper.toOrderResponseDto(orderUseCase.findOrderByUserIdAndReferenceId(userId, orderId))
         );
     }
 
@@ -49,13 +46,36 @@ class OrderController {
         );
     }
 
-    @PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
-            MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{id}/complete", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> completeOrder(@PathVariable("id") UUID id, @RequestBody CompleteOrderRequestDto completeOrderRequestDto,
                                        @AuthenticationPrincipal Jwt jwt) {
-        UUID userId = getUserUUIDFromJwtToken(jwt);
-        orderUseCase.completeOrder(userId, id, orderRelatedMapper.toCompleteOrder(completeOrderRequestDto));
+        System.out.println("completeOrder");
 
+        orderUseCase.completeOrder(id, orderRelatedMapper.toCompleteOrder(completeOrderRequestDto));
+
+        System.out.println("completedOrder");
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/{id}/cancel", consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> cancelOrder(@PathVariable("id") UUID id, @RequestBody CancelOrderRequestDto cancelOrderRequestDto,
+                                       @AuthenticationPrincipal Jwt jwt) {
+        System.out.println("cancelOrder");
+
+        orderUseCase.cancelOrder(id, orderRelatedMapper.toCancelOrder(cancelOrderRequestDto));
+
+        System.out.println("canceledOrder");
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/{id}/fail", consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> failOrder(@PathVariable("id") UUID id, @RequestBody FailOrderRequestDto failOrderRequestDto,
+                                     @AuthenticationPrincipal Jwt jwt) {
+        System.out.println("failOrder");
+
+        orderUseCase.failOrder(id, orderRelatedMapper.toFailOrder(failOrderRequestDto));
+
+        System.out.println("failedOrder");
         return ResponseEntity.noContent().build();
     }
 

@@ -1,0 +1,16 @@
+package com.instagenius.paymentservice.infrastructure.rest;
+
+
+import com.instagenius.paymentservice.infrastructure.config.FeignConfig;
+import com.instagenius.paymentservice.infrastructure.dto.ProductIdsRequestDto;
+import com.instagenius.paymentservice.infrastructure.dto.ProductsResponseDto;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+@FeignClient(name = "product-management-service", configuration = FeignConfig.class)
+public interface ProductManagementClient {
+    @PostMapping(value = "/api/v1/products/batch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ProductsResponseDto getProductsByIds(@RequestBody ProductIdsRequestDto productIdsRequestDto);
+}

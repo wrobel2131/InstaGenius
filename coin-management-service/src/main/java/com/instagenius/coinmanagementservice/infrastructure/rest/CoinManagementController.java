@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/coins")
+@RequestMapping("/api/v1/coins/")
 @RequiredArgsConstructor
 class CoinManagementController {
     private final CoinManagementUseCase coinManagementUseCase;
@@ -61,7 +61,8 @@ class CoinManagementController {
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 coinReservationMapper.toCoinReservationDto(
-                        coinManagementUseCase.reserveCoins(userId, reserveCoinsDto.amount(), reserveCoinsDto.operationId()
+                        coinManagementUseCase.reserveCoins(userId, reserveCoinsDto.amount(),
+                                                           reserveCoinsDto.operationId()
                         )
                 )
         );
@@ -76,18 +77,21 @@ class CoinManagementController {
     }
 
     @PostMapping(value = "/cancel/{reservationId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> cancelReservation(@PathVariable("reservationId") UUID reservationId, @AuthenticationPrincipal Jwt jwt) {
+    ResponseEntity<Void> cancelReservation(
+            @PathVariable("reservationId") UUID reservationId, @AuthenticationPrincipal Jwt jwt) {
         System.out.println("Cancel Reservation endpoint");
         UUID userId = getUserUUIDFromJwtToken(jwt);
         coinManagementUseCase.cancelReservation(userId, reservationId);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> addCoins(@Valid @RequestBody AddCoinsDto addCoinsDto, @AuthenticationPrincipal Jwt jwt) {
+    @PostMapping(value = "/{userId}/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
+            MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> addCoins(@PathVariable("userId") UUID userId, @Valid @RequestBody AddCoinsDto addCoinsDto) {
         System.out.println("Add Coins endpoint");
-        UUID userId = getUserUUIDFromJwtToken(jwt);
         coinManagementUseCase.addCoins(userId, addCoinsDto.coins(), addCoinsDto.type());
+
+        System.out.println("Added Coins");
         return ResponseEntity.noContent().build();
     }
 
