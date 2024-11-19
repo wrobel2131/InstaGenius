@@ -5,7 +5,6 @@ import com.instagenius.orderservice.infrastructure.dto.CreatedPaymentResponseDto
 import com.instagenius.orderservice.infrastructure.dto.InitializePaymentRequestDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 

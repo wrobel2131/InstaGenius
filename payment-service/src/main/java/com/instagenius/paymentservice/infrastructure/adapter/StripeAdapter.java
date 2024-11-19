@@ -1,5 +1,6 @@
 package com.instagenius.paymentservice.infrastructure.adapter;
 
+import com.instagenius.paymentservice.application.EventPersistencePort;
 import com.instagenius.paymentservice.application.PaymentGatewayPort;
 import com.instagenius.paymentservice.domain.*;
 import com.instagenius.paymentservice.infrastructure.config.StripeApiUtils;
@@ -26,6 +27,7 @@ import java.util.Optional;
 @Service
 public class StripeAdapter implements PaymentGatewayPort {
     private final StripeProperties stripeProperties;
+    private final EventPersistencePort eventPersistencePort;
 
     @Override
     public Payment createPaymentSession(Payment payment, Map<Product, Integer> products) {
@@ -87,10 +89,16 @@ public class StripeAdapter implements PaymentGatewayPort {
         String eventType = stripeEvent.getType();
         System.out.println("event type: " + eventType);
         System.out.println("payment status: " + paymentStatus);
+        if(eventPersistencePort.existsByEventId(stripeEvent.getId())) {
+            System.out.println("Event already exists");
+            return null;
+        }
         if ((paymentStatus.equals(PaymentStatus.COMPLETED) && eventType.equals("payment_intent.succeeded")) ||
                 (paymentStatus.equals(PaymentStatus.CANCELLED) && eventType.equals("payment_intent.canceled")) ||
                 (paymentStatus.equals(PaymentStatus.FAILED) && eventType.equals("payment_intent.payment_failed"))) {
             System.out.println("Valid type of event");
+            eventPersistencePort.saveEvent(new Event(null, stripeEvent.getId(), eventType, stripeEvent.getLivemode(),
+                                                     stripeEvent.getCreated(), 0));
             Optional<StripeObject> stripeObject =
                     stripeEvent.getDataObjectDeserializer().getObject();
             if (stripeObject.isPresent()) {

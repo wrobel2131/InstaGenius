@@ -20,17 +20,17 @@ import java.util.UUID;
 @Setter
 @ToString
 public class PaymentEntity {
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     @Id
     private UUID id;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false, updatable = false)
     private UUID userId;
 
-    @Column(name = "order_id", nullable = false)
+    @Column(name = "order_id", nullable = false, updatable = false)
     private UUID orderId;
 
-    @Column(name = "order_reference_id", nullable = false)
+    @Column(name = "order_reference_id", nullable = false, updatable = false)
     private String orderReferenceId;
 
     @Enumerated(EnumType.STRING)
@@ -42,15 +42,6 @@ public class PaymentEntity {
 
     @Column(name = "currency", length = 3, nullable = false)
     private String currency;
-
-//    @Column(name = "payment_gateway_checkout_session_id")
-//    private String paymentGatewayCheckoutSessionId;
-//
-//    @Column(name = "payment_gateway_payment_id")
-//    private String paymentGatewayPaymentId;
-//
-//    @Column(name = "payment_method")
-//    private String paymentMethod;
 
     @Column(name = "payment_gateway_metadata", columnDefinition = "TEXT")
     @Convert(converter = PaymentGatewayMetadataConverter.class)

@@ -9,7 +9,6 @@ import feign.FeignException;
 import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.List;

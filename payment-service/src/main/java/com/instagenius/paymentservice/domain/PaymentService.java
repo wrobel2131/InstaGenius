@@ -3,7 +3,6 @@ package com.instagenius.paymentservice.domain;
 import com.instagenius.paymentservice.application.*;
 import com.instagenius.paymentservice.infrastructure.exception.PaymentGatewayException;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Async;
 
 import java.util.HashMap;
 import java.util.List;

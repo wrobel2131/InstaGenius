@@ -27,7 +27,10 @@ public class AsyncPaymentProcessAdapter implements AsyncPaymentProcessPort {
     @Transactional
     @Override
     public void processPaymentData(PaymentData paymentData) {
-        if (paymentData == null) return;
+        if (paymentData == null) {
+            System.out.println("Payment data is null");
+            return;
+        }
         System.out.println("Processing payment data: " + paymentData);
         RequestOptions requestOptions = StripeApiUtils.createRequestOptions(stripeProperties.getApiKey());
         String eventType = paymentData.eventType();
@@ -53,6 +56,8 @@ public class AsyncPaymentProcessAdapter implements AsyncPaymentProcessPort {
                 break;
             case "payment_intent.payment_failed":
                 handleFailedPayment(paymentData, payment);
+                break;
+            default:
                 break;
         }
     }
