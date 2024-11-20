@@ -10,8 +10,6 @@
     <packaging>jar</packaging>
     <name>keycloak-event-listener</name>
     <description>keycloak-event-listener</description>
-
-
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -19,7 +17,6 @@
         <maven-wildfly-plugin.version>5.1.0.Alpha1</maven-wildfly-plugin.version>
         <keycloak.version>25.0.6</keycloak.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.keycloak</groupId>

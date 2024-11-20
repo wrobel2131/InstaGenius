@@ -26,6 +26,16 @@ public class EventHandler {
         }
     }
 
+    public void handleDeleteAccountEvent(Event event, KeycloakSession keycloakSession) {
+        EventType eventType = event.getType();
+        if(eventType.equals(EventType.DELETE_ACCOUNT)) {
+            String userId = event.getUserId();
+            String realmId = event.getRealmId();
+
+            //TODO perform API call to userService to delete user with given id and realmid
+        }
+    }
+
 
     private UserDto getUser(KeycloakSession keycloakSession, String userId, String realmId) {
         RealmModel realm = keycloakSession.realms().getRealm(realmId);
