@@ -1,5 +1,6 @@
 package com.instagenius.user;
 
+import com.instagenius.user.utils.EventHandler;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.events.Event;
 import org.keycloak.events.EventListenerProvider;
@@ -20,17 +21,36 @@ public class UserEventListenerProvider implements EventListenerProvider {
         logger.info("Event occurred: " + event.getType());
 
         switch (eventType) {
-            case REGISTER -> logger.info("Register event");
-            case DELETE_ACCOUNT -> logger.info("Delete account event");
-            case USER_DISABLED_BY_PERMANENT_LOCKOUT -> logger.info("Permanent lockout user disabled event");
-            case USER_DISABLED_BY_TEMPORARY_LOCKOUT -> logger.info("Temporary lockout user disabled event");
-            case UPDATE_EMAIL -> logger.info("Update email event");
-            case UPDATE_PROFILE -> logger.info("Update profile event");
-            case VERIFY_EMAIL -> logger.info("Verify email event");
-            case VERIFY_PROFILE -> logger.info("Verify profile event");
+            case REGISTER -> {
+                logger.info("Register event");
+                EventHandler.handleRegisterEvent(event, keycloakSession);
+            }
+            case DELETE_ACCOUNT -> {
+                logger.info("Delete account event");
+                EventHandler.handleDeleteAccountEvent(event, keycloakSession);
+            }
+            case USER_DISABLED_BY_PERMANENT_LOCKOUT -> {
+                logger.info("Permanent lockout user disabled event");
+                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
+            }
+            case USER_DISABLED_BY_TEMPORARY_LOCKOUT -> {
+                logger.info("Temporary lockout user disabled event");
+                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
+            }
+            case UPDATE_EMAIL -> {
+                logger.info("Update email event");
+                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
+            }
+            case UPDATE_PROFILE -> {
+                logger.info("Update profile event");
+                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
+            }
+            case VERIFY_EMAIL -> {
+                logger.info("Verify email event");
+                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
+            }
             default -> logger.info("Other event occurred");
         }
-
     }
 
     @Override
