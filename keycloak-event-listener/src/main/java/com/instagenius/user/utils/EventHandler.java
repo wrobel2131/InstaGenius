@@ -9,8 +9,11 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
+import java.util.logging.Logger;
+
 @UtilityClass
 public class EventHandler {
+    private static final Logger logger = Logger.getLogger(EventHandler.class.getName());
 
     public void handleRegisterEvent(Event event, KeycloakSession keycloakSession) {
         EventType eventType = event.getType();
@@ -20,6 +23,7 @@ public class EventHandler {
             String realmId = event.getRealmId();
             UserDto user = getUser(keycloakSession, userId, realmId);
 
+            logger.info("Adding user");
             ExternalApiUtils.performExternalPOSTApiCall("http://localhost:8080/api/v1/users", user, keycloakSession);
         }
     }
@@ -30,6 +34,8 @@ public class EventHandler {
             String userId = event.getUserId();
             String realmId = event.getRealmId();
 
+            logger.info("Deleting user");
+
             ExternalApiUtils.performExternalDELETEApiCall(String.format("http://localhost:8080/api/v1/users/%s/%s", userId,
                     realmId), keycloakSession);
         }
@@ -37,7 +43,12 @@ public class EventHandler {
 
     public void handleUpdateUserRelatedEvent(Event event, KeycloakSession keycloakSession) {
         EventType eventType = event.getType();
-        if(eventType.equals(EventType.UPDATE_EMAIL)) {
+        if(eventType.equals(EventType.UPDATE_EMAIL)
+                || eventType.equals(EventType.USER_DISABLED_BY_PERMANENT_LOCKOUT)
+                || eventType.equals(EventType.USER_DISABLED_BY_TEMPORARY_LOCKOUT)
+                || eventType.equals(EventType.UPDATE_PROFILE)
+                || eventType.equals(EventType.VERIFY_EMAIL)
+        ) {
             String userId = event.getUserId();
             String realmId = event.getRealmId();
             UserDto user = getUser(keycloakSession, userId, realmId);
@@ -49,6 +60,8 @@ public class EventHandler {
                     .enabled(user.enabled())
                     .emailVerified(user.emailVerified())
                     .build();
+
+            logger.info("Updating user");
 
             ExternalApiUtils.performExternalPUTApiCall(String.format("http://localhost:8080/api/v1/users/%s/%s", userId,
                     realmId), updateUserDto, keycloakSession);

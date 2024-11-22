@@ -216,12 +216,15 @@ services:
       KC_DB_PASSWORD: admin
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_LOG_LEVEL: INFO
     ports:
       - "8180:8080"
     restart: unless-stopped
     command: ["start-dev"]
     depends_on:
       - postgres_keycloak
+    volumes:
+      - ./keycloak-event-listener/target/keycloak-event-listener-0.0.1.jar:/opt/keycloak/providers/event-listener.jar
     networks:
       - instagenius-net
 

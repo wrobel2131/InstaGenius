@@ -18,6 +18,7 @@ public class UserEventListenerProvider implements EventListenerProvider {
     @Override
     public void onEvent(Event event) {
         EventType eventType = event.getType();
+//        logger.warning("Received event " + eventType + " for user " + event.getUserId());
         logger.info("Event occurred: " + event.getType());
 
         switch (eventType) {
@@ -56,6 +57,8 @@ public class UserEventListenerProvider implements EventListenerProvider {
     @Override
     public void onEvent(AdminEvent adminEvent, boolean b) {
         // Do nothing
+        //TODO handle update events by admin console
+        logger.info("Admin Event occurred:" + adminEvent.getResourceTypeAsString());
     }
 
     @Override

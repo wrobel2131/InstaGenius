@@ -30,9 +30,10 @@ public class ExternalApiUtils {
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(JsonSerialization.writeValueAsString(requestBody)))
                     .build();
+            logger.info("Sending created user to user-service!");
 
-            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            logger.info("Response from API: " + response.body());
+//            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+//            logger.info("Response from API: " + response.body());
         } catch (Exception e) {
             logger.warning("Exception caught: " + e.getMessage());
             throw new InternalServerErrorException(e.getMessage());
@@ -54,8 +55,9 @@ public class ExternalApiUtils {
                     .DELETE()
                     .build();
 
-            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            logger.info("Response from API: " + response.body());
+            logger.info("Deleting user from user-service");
+//            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+//            logger.info("Response from API: " + response.body());
         } catch (Exception e) {
             logger.warning("Exception caught: " + e.getMessage());
             throw new InternalServerErrorException(e.getMessage());
@@ -77,8 +79,9 @@ public class ExternalApiUtils {
                     .PUT(HttpRequest.BodyPublishers.ofString(JsonSerialization.writeValueAsString(requestBody)))
                     .build();
 
-            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            logger.info("Response from API: " + response.body());
+            logger.info("Updating user to user-service");
+//            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+//            logger.info("Response from API: " + response.body());
         } catch (Exception e) {
             logger.warning("Exception caught: " + e.getMessage());
             throw new InternalServerErrorException(e.getMessage());
