@@ -8,7 +8,6 @@ import org.keycloak.util.JsonSerialization;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.logging.Logger;
 
@@ -17,7 +16,7 @@ public class ExternalApiUtils {
     private static final Logger logger = Logger.getLogger(ExternalApiUtils.class.getName());
 
     public void performExternalPOSTApiCall(String url, Object requestBody, KeycloakSession keycloakSession) {
-        String signedAccessToken = TokenUtils.generateSignedAccessToken(keycloakSession);
+        String signedAccessToken = TokenUtils.getAccessToken(keycloakSession);
 
         HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -42,7 +41,7 @@ public class ExternalApiUtils {
     }
 
     public void performExternalDELETEApiCall(String url, KeycloakSession keycloakSession) {
-        String signedAccessToken = TokenUtils.generateSignedAccessToken(keycloakSession);
+        String signedAccessToken = TokenUtils.getAccessToken(keycloakSession);
 
         HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -66,7 +65,7 @@ public class ExternalApiUtils {
     }
 
     public void performExternalPUTApiCall(String url, Object requestBody, KeycloakSession keycloakSession) {
-        String signedAccessToken = TokenUtils.generateSignedAccessToken(keycloakSession);
+        String signedAccessToken = TokenUtils.getAccessToken(keycloakSession);
 
         HttpClient httpClient = HttpClient.newHttpClient();
 

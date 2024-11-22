@@ -1,4 +1,4 @@
 package com.instagenius.userservice.domain;
 
-public record UpdateUser() {
+public record CreatedUser() {
 }
