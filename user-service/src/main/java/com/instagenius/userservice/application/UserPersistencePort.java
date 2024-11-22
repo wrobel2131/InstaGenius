@@ -5,8 +5,7 @@ import com.instagenius.userservice.domain.User;
 import java.util.UUID;
 
 public interface UserPersistencePort {
-    void createUser(User user);
-    void updateUser(User user);
-    void deleteUser(String kcUserId, String kcRealmId);
+    User saveUser(User user);
+    void deleteUser(UUID id);
     User findUserById(UUID id);
 }

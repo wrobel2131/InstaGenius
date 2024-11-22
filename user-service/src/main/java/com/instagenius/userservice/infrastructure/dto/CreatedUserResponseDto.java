@@ -1,4 +1,6 @@
 package com.instagenius.userservice.infrastructure.dto;
 
-public record CreatedUserResponseDto() {
+import java.util.UUID;
+
+public record CreatedUserResponseDto(UUID id, String kcUserId, String kcRealmId) {
 }

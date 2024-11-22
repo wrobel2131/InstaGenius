@@ -1,4 +1,4 @@
 package com.instagenius.userservice.domain;
 
-public record UpdateUser() {
+public record UpdateUser(String email, String username, String firstName, String lastName) {
 }

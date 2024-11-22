@@ -2,8 +2,10 @@ package com.instagenius.userservice.domain;
 
 import com.instagenius.userservice.application.UserPersistencePort;
 import com.instagenius.userservice.application.UserUseCase;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
 
 public class UserService implements UserUseCase {
     private final UserPersistencePort userPersistencePort;
@@ -14,22 +16,30 @@ public class UserService implements UserUseCase {
     }
 
     @Override
-    public User createUser(CreateUser createUser) {
-        return null;
+    public User findUserById(UUID id) {
+        return userPersistencePort.findUserById(id);
     }
 
+    @Transactional
     @Override
-    public User updateUser(String kcRealmId, String kcUserId, UpdateUser updateUser) {
-        return null;
-    }
-
-    @Override
-    public void deleteUser(String kcRealmId, String kcUserId,) {
-
-    }
-
-    @Override
-    public User getUserById(UUID id) {
-        return null;
+    public User updateUser(UUID id, UpdateUser updateUser) {
+        User user = userPersistencePort.findUserById(id);
+        String updatedEmail = updateUser.email();
+        String updatedUsername = updateUser.username();
+        String updatedFirstName = updateUser.firstName();
+        String updatedLastName = updateUser.lastName();
+        if (updatedEmail != null) {
+            user.setEmail(updatedEmail);
+        }
+        if (updatedUsername != null) {
+            user.setUsername(updatedUsername);
+        }
+        if (updatedFirstName != null) {
+            user.setFirstName(updatedFirstName);
+        }
+        if (updatedLastName != null) {
+            user.setLastName(updatedLastName);
+        }
+        return userPersistencePort.saveUser(user);
     }
 }

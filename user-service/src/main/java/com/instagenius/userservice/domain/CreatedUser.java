@@ -1,4 +1,6 @@
 package com.instagenius.userservice.domain;
 
-public record CreatedUser() {
+import java.util.UUID;
+
+public record CreatedUser(UUID id, String kcUserId, String kcRealmId) {
 }
