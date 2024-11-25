@@ -8,6 +8,7 @@ import org.keycloak.util.JsonSerialization;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.logging.Logger;
 
@@ -17,6 +18,7 @@ public class ExternalApiUtils {
 
     public void performExternalPOSTApiCall(String url, Object requestBody, KeycloakSession keycloakSession) {
         String signedAccessToken = TokenUtils.getAccessToken(keycloakSession);
+        logger.info("Signed access token: " + signedAccessToken);
 
         HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -31,8 +33,10 @@ public class ExternalApiUtils {
                     .build();
             logger.info("Sending created user to user-service!");
 
-//            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-//            logger.info("Response from API: " + response.body());
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            logger.info("Response from API: " + response.body());
+            logger.info("Response status: " + response.statusCode());
+
         } catch (Exception e) {
             logger.warning("Exception caught: " + e.getMessage());
             throw new InternalServerErrorException(e.getMessage());

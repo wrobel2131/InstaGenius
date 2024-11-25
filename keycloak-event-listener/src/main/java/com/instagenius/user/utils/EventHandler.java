@@ -24,7 +24,7 @@ public class EventHandler {
             UserDto user = getUser(keycloakSession, userId, realmId);
 
             logger.info("Adding user");
-            ExternalApiUtils.performExternalPOSTApiCall("http://localhost:8080/api/v1/users", user, keycloakSession);
+            ExternalApiUtils.performExternalPOSTApiCall("http://host.docker.internal:8120/api/v1/sync/users", user, keycloakSession);
         }
     }
 
@@ -36,8 +36,8 @@ public class EventHandler {
 
             logger.info("Deleting user");
 
-            ExternalApiUtils.performExternalDELETEApiCall(String.format("http://localhost:8080/api/v1/users/%s/%s", userId,
-                    realmId), keycloakSession);
+//            ExternalApiUtils.performExternalDELETEApiCall(String.format("http://localhost:8080/api/v1/users/%s/%s", userId,
+//                    realmId), keycloakSession);
         }
     }
 
@@ -63,17 +63,15 @@ public class EventHandler {
 
             logger.info("Updating user");
 
-            ExternalApiUtils.performExternalPUTApiCall(String.format("http://localhost:8080/api/v1/users/%s/%s", userId,
-                    realmId), updateUserDto, keycloakSession);
+//            ExternalApiUtils.performExternalPUTApiCall(String.format("http://localhost:8080/api/v1/users/%s/%s", userId,
+//                    realmId), updateUserDto, keycloakSession);
         }
     }
-
-
 
     private UserDto getUser(KeycloakSession keycloakSession, String userId, String realmId) {
         RealmModel realm = keycloakSession.realms().getRealm(realmId);
         UserModel user = keycloakSession.users().getUserById(realm, userId);
-        return new UserDto(user.getId(), realm.getId(), user.getUsername(), user.getEmail(), user.getFirstName(), user.getLastName(),
+        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getFirstName(), user.getLastName(),
                 user.isEmailVerified(), user.isEnabled(), user.getCreatedTimestamp());
     }
 }

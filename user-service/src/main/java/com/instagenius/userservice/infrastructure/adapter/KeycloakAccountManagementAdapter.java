@@ -19,21 +19,11 @@ public class KeycloakResourceAdapter implements KeycloakResourcePort {
 
 
     @Override
-    public void updateUser(UUID id, String kcUserId, String kcRealmId, UpdateUser updateUser) {
-        Map<String, String>
+    public void updateUser(UUID id, UpdateUser updateUser) {
 
 
-        restTemplate.put("http://localhost:8080/auth/realms/{realmId}/users/{id}",
-                kcRealmId,
-                kcUserId
-        );
+
+
     }
 
-    private String getAccessToken() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof Jwt jwt) {
-            return jwt.getTokenValue();
-        }
-        return null;
-    }
 }
