@@ -1,4 +1,6 @@
 package com.instagenius.userservice.infrastructure.dto;
 
-public record UserResponseDto() {
+import java.util.UUID;
+
+public record UserResponseDto(UUID id, String username, String email, String firstName, String lastName) {
 }

@@ -6,8 +6,6 @@ import java.util.UUID;
 
 public class User {
     private UUID id;
-    private String kcUserId;
-    private String kcRealmId;
     private String username;
     private String email;
     private String firstName;
@@ -18,17 +16,19 @@ public class User {
     private Instant updatedAt;
     private int version;
 
-    User(UUID id, String kcUserId, String kcRealmId, String username, String email, String firstName, String lastName,
+    public User() {
+
+    }
+
+    public User(String kcUserId, String username, String email, String firstName, String lastName,
          boolean emailVerified, boolean enabled, Long createdAt) {
-        this(id, kcUserId, kcRealmId, username, email, firstName, lastName, emailVerified, enabled,
+        this(UUID.fromString(kcUserId), username, email, firstName, lastName, emailVerified, enabled,
                 Instant.ofEpochMilli(createdAt), null, 0);
     }
 
-    User(UUID id, String kcUserId, String kcRealmId, String username, String email, String firstName, String lastName,
+    public User(UUID id, String username, String email, String firstName, String lastName,
          boolean emailVerified, boolean enabled, Instant createdAt, Instant updatedAt, int version) {
         this.id = id;
-        this.kcUserId = kcUserId;
-        this.kcRealmId = kcRealmId;
         this.username = username;
         this.email = email;
         this.firstName = firstName;
@@ -40,99 +40,83 @@ public class User {
         this.version = version;
     }
 
-    UUID getId() {
+    public UUID getId() {
         return id;
     }
 
-    void setId(UUID id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    String getKcUserId() {
-        return kcUserId;
-    }
-
-    void setKcUserId(String kcUserId) {
-        this.kcUserId = kcUserId;
-    }
-
-    String getKcRealmId() {
-        return kcRealmId;
-    }
-
-    void setKcRealmId(String kcRealmId) {
-        this.kcRealmId = kcRealmId;
-    }
-
-    String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    void setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    void setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    boolean isEmailVerified() {
+    public boolean isEmailVerified() {
         return emailVerified;
     }
 
-    void setEmailVerified(boolean emailVerified) {
+    public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
     }
 
-    boolean isEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 
-    void setEnabled(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    Instant getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
-    Instant getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    void setUpdatedAt(Instant updatedAt) {
+    public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    int getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    void setVersion(int version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 
@@ -142,8 +126,6 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return emailVerified == user.emailVerified && enabled == user.enabled && version == user.version &&
-                Objects.equals(id, user.id) && Objects.equals(kcUserId, user.kcUserId) &&
-                Objects.equals(kcRealmId, user.kcRealmId) && Objects.equals(username, user.username) &&
                 Objects.equals(email, user.email) && Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) && Objects.equals(createdAt, user.createdAt) &&
                 Objects.equals(updatedAt, user.updatedAt);
@@ -151,7 +133,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, kcUserId, kcRealmId, username, email, firstName, lastName, emailVerified, enabled,
+        return Objects.hash(id, username, email, firstName, lastName, emailVerified, enabled,
                 createdAt, updatedAt, version);
     }
 
@@ -159,8 +141,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", kcUserId='" + kcUserId + '\'' +
-                ", kcRealmId='" + kcRealmId + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +

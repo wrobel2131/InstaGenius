@@ -1,7 +1,9 @@
 package com.instagenius.userservice.infrastructure.rest;
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
+import com.instagenius.userservice.infrastructure.exception.FailedUserUpdateException;
 import com.instagenius.userservice.infrastructure.exception.UserNotFoundException;
+import jakarta.ws.rs.NotAuthorizedException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,18 @@ class UserExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    ResponseEntity<ErrorResponse> handleNotAuthorizedException(NotAuthorizedException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ResponseEntity<ErrorResponse> handleFailedUserUpdateException(FailedUserUpdateException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

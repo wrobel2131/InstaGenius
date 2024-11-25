@@ -2,8 +2,6 @@ package com.instagenius.userservice.infrastructure.rest;
 
 import com.instagenius.userservice.application.UserSynchronizationUseCase;
 import com.instagenius.userservice.infrastructure.dto.CreateUserRequestDto;
-import com.instagenius.userservice.infrastructure.dto.CreatedUserResponseDto;
-import com.instagenius.userservice.infrastructure.dto.SyncUpdateUserRequestDto;
 import com.instagenius.userservice.infrastructure.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -22,29 +20,17 @@ public class UserSynchronizationController {
 
     @PreAuthorize("hasRole('ROLE_EVENT_LISTENER')")
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CreatedUserResponseDto> createUser(@RequestBody CreateUserRequestDto createUserRequestDto) {
-        return ResponseEntity.ok(
-                userMapper.toCreatedUserResponseDto(
-                        userSynchronizationUseCase.createUser(
-                                userMapper.toCreateUser(createUserRequestDto)
-                        )
-                )
+    public ResponseEntity<Void> createUser(@RequestBody CreateUserRequestDto createUserRequestDto) {
+        System.out.println("creaitng user");
+        userSynchronizationUseCase.createUser(
+                userMapper.toCreateUser(createUserRequestDto)
         );
-    }
-
-    @PreAuthorize("hasRole('ROLE_EVENT_LISTENER')")
-    @PutMapping(value = "/{id}")
-    ResponseEntity<Void> updateUser(@PathVariable("id") UUID id,
-                                    @RequestBody SyncUpdateUserRequestDto syncUpdateUserRequestDto) {
-
-        userSynchronizationUseCase.updateUser(id, userMapper.toSyncUpdateUser(syncUpdateUserRequestDto));
-
         return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('ROLE_EVENT_LISTENER')")
     @DeleteMapping(value = "/{id}")
-    ResponseEntity<Void> deleteUser(@PathVariable("id") UUID id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") UUID id) {
         userSynchronizationUseCase.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

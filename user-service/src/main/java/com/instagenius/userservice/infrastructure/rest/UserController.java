@@ -15,12 +15,13 @@ import java.util.UUID;
 
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+@RestController
 public class UserController {
     private static final UserMapper userMapper = UserMapper.INSTANCE;
     private final UserUseCase userUseCase;
 
     @GetMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<UserResponseDto> getUserProfile(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<UserResponseDto> getUserProfile(@AuthenticationPrincipal Jwt jwt) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
                 userMapper.toUserResponseDto(
@@ -30,9 +31,10 @@ public class UserController {
     }
 
     @PatchMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<UserResponseDto> updateUserProfile(@AuthenticationPrincipal Jwt jwt, @RequestBody
+    public ResponseEntity<UserResponseDto> updateUserProfile(@AuthenticationPrincipal Jwt jwt, @RequestBody
     UpdateUserRequestDto updateUserRequestDto) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
+        System.out.println("userId = " + userId);
         return ResponseEntity.ok(
                 userMapper.toUserResponseDto(
                         userUseCase.updateUser(userId, userMapper.toUpdateUser(updateUserRequestDto))
@@ -42,6 +44,6 @@ public class UserController {
 
 
     private UUID getUserUUIDFromJwtToken(Jwt jwt) {
-        return UUID.fromString(jwt.getClaim("instagenius_user_id"));
+        return UUID.fromString(jwt.getClaim("sub"));
     }
 }

@@ -4,6 +4,6 @@ import com.instagenius.userservice.domain.UpdateUser;
 
 import java.util.UUID;
 
-public interface KeycloakResourcePort {
+public interface KeycloakAccountManagementPort {
     void updateUser(UUID id, UpdateUser updateUser);
 }

@@ -1,18 +1,20 @@
 package com.instagenius.userservice.domain;
 
+import com.instagenius.userservice.application.KeycloakAccountManagementPort;
 import com.instagenius.userservice.application.UserPersistencePort;
 import com.instagenius.userservice.application.UserUseCase;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-
 public class UserService implements UserUseCase {
     private final UserPersistencePort userPersistencePort;
+    private final KeycloakAccountManagementPort keycloakAccountManagementPort;
 
 
-    public UserService(UserPersistencePort userPersistencePort) {
+    public UserService(UserPersistencePort userPersistencePort, KeycloakAccountManagementPort keycloakAccountManagementPort) {
         this.userPersistencePort = userPersistencePort;
+        this.keycloakAccountManagementPort = keycloakAccountManagementPort;
     }
 
     @Override
@@ -23,6 +25,7 @@ public class UserService implements UserUseCase {
     @Transactional
     @Override
     public User updateUser(UUID id, UpdateUser updateUser) {
+        keycloakAccountManagementPort.updateUser(id, updateUser);
         User user = userPersistencePort.findUserById(id);
         String updatedEmail = updateUser.email();
         String updatedUsername = updateUser.username();

@@ -17,14 +17,8 @@ import java.util.UUID;
 public class UserEntity {
     @Column(name = "id", unique = true, nullable = false, updatable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-    @Column(name = "kc_user_id", nullable = false)
-    private String kcUserId;
-
-    @Column(name = "kc_realm_id", nullable = false)
-    private String kcRealmId;
 
     @Column(name = "username", nullable = false)
     private String username;
