@@ -59,8 +59,8 @@ public class ExternalApiUtils {
                     .build();
 
             logger.info("Deleting user from user-service");
-//            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-//            logger.info("Response from API: " + response.body());
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            logger.info("Response from API: " + response.body());
         } catch (Exception e) {
             logger.warning("Exception caught: " + e.getMessage());
             throw new InternalServerErrorException(e.getMessage());

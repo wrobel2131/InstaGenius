@@ -24,7 +24,8 @@ public class EventHandler {
             UserDto user = getUser(keycloakSession, userId, realmId);
 
             logger.info("Adding user");
-            ExternalApiUtils.performExternalPOSTApiCall("http://host.docker.internal:8120/api/v1/sync/users", user, keycloakSession);
+            ExternalApiUtils.performExternalPOSTApiCall("http://host.docker.internal:8200/api/v1/sync/users", user,
+                                                        keycloakSession);
         }
     }
 
@@ -32,12 +33,11 @@ public class EventHandler {
         EventType eventType = event.getType();
         if(eventType.equals(EventType.DELETE_ACCOUNT)) {
             String userId = event.getUserId();
-            String realmId = event.getRealmId();
 
             logger.info("Deleting user");
 
-//            ExternalApiUtils.performExternalDELETEApiCall(String.format("http://localhost:8080/api/v1/users/%s/%s", userId,
-//                    realmId), keycloakSession);
+            ExternalApiUtils.performExternalDELETEApiCall("http://host.docker.internal:8200/api/v1/sync/users/" + userId,
+                                                          keycloakSession);
         }
     }
 

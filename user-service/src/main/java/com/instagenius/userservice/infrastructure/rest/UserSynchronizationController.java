@@ -31,6 +31,7 @@ public class UserSynchronizationController {
     @PreAuthorize("hasRole('ROLE_EVENT_LISTENER')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") UUID id) {
+        System.out.println("deleting user");
         userSynchronizationUseCase.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

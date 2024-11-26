@@ -9,6 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -37,6 +38,18 @@ class UserExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseEntity<ErrorResponse> handleFailedUserUpdateException(FailedUserUpdateException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    ResponseEntity<ErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), HttpStatus.BAD_REQUEST);
     }
 
