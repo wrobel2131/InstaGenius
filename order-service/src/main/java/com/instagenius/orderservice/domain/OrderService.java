@@ -16,14 +16,17 @@ public class OrderService implements OrderUseCase {
     private final ProductManagementPort productManagementPort;
     private final PaymentPort paymentPort;
     private final OrderCompletionHandlerFactory orderCompletionHandlerFactory;
+    private final OrderConfirmationProducerPort orderConfirmationProducerPort;
 
     public OrderService(
             OrderPersistencePort orderPersistencePort, ProductManagementPort productManagementPort,
-            PaymentPort paymentPort, OrderCompletionHandlerFactory orderCompletionHandlerFactory) {
+            PaymentPort paymentPort, OrderCompletionHandlerFactory orderCompletionHandlerFactory,
+            OrderConfirmationProducerPort orderConfirmationProducerPort) {
         this.orderPersistencePort = orderPersistencePort;
         this.productManagementPort = productManagementPort;
         this.paymentPort = paymentPort;
         this.orderCompletionHandlerFactory = orderCompletionHandlerFactory;
+        this.orderConfirmationProducerPort = orderConfirmationProducerPort;
     }
 
     @Transactional
@@ -76,6 +79,16 @@ public class OrderService implements OrderUseCase {
                                               .map(i -> new ProductsToPay(i.getProduct().id(), i.getQuantity()))
                                               .toList())
         );
+
+        orderConfirmationProducerPort.sendOrderConfirmation(new OrderConfirmation(newOrder.getId(),
+                                                                                  newOrder.getReferenceId(),
+                                                                                  newOrder.getUserId(),
+                                                                                  newOrder.getStatus(),
+                                                                                  newOrder.getItems(),
+                                                                                  newOrder.getTotalPrice(),
+                                                                                  newOrder.getCreatedAt(),
+                                                                                  newOrder.getUpdatedAt(),
+                                                                                  newOrder.getPaymentId()));
 
         return new CreatedOrder(newOrder.getReferenceId(), newOrder.getStatus(),
                                 createdPayment.paymentCheckoutSessionId());
