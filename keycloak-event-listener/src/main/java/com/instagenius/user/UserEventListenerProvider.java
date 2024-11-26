@@ -29,33 +29,33 @@ public class UserEventListenerProvider implements EventListenerProvider {
                 logger.info("Delete account event");
                 EventHandler.handleDeleteAccountEvent(event, keycloakSession);
             }
-            case USER_DISABLED_BY_PERMANENT_LOCKOUT -> {
-                logger.info("Permanent lockout user disabled event");
-                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
-            }
-            case USER_DISABLED_BY_TEMPORARY_LOCKOUT -> {
-                logger.info("Temporary lockout user disabled event");
-                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
-            }
-            case UPDATE_EMAIL -> {
-                logger.info("Update email event");
-                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
-            }
-            case UPDATE_PROFILE -> {
-                logger.info("Update profile event");
-                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
-            }
-            case VERIFY_EMAIL -> {
-                logger.info("Verify email event");
-                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
-            }
+//            case USER_DISABLED_BY_PERMANENT_LOCKOUT -> {
+//                logger.info("Permanent lockout user disabled event");
+//                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
+//            }
+//            case USER_DISABLED_BY_TEMPORARY_LOCKOUT -> {
+//                logger.info("Temporary lockout user disabled event");
+//                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
+//            }
+//            case UPDATE_EMAIL -> {
+//                logger.info("Update email event");
+//                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
+//            }
+//            case UPDATE_PROFILE -> {
+//                logger.info("Update profile event");
+//                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
+//            }
+//            case VERIFY_EMAIL -> {
+//                logger.info("Verify email event");
+//                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
+//            }
             default -> logger.info("Other event occurred");
         }
     }
 
     @Override
     public void onEvent(AdminEvent adminEvent, boolean b) {
-        // Do nothing
+        logger.info("Admin Event occurred:" + adminEvent.getResourceTypeAsString());
     }
 
     @Override

@@ -17,7 +17,8 @@ public class ExternalApiUtils {
     private static final Logger logger = Logger.getLogger(ExternalApiUtils.class.getName());
 
     public void performExternalPOSTApiCall(String url, Object requestBody, KeycloakSession keycloakSession) {
-        String signedAccessToken = TokenUtils.generateSignedAccessToken(keycloakSession);
+        String signedAccessToken = TokenUtils.getAccessToken(keycloakSession);
+        logger.info("Signed access token: " + signedAccessToken);
 
         HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -30,9 +31,12 @@ public class ExternalApiUtils {
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(JsonSerialization.writeValueAsString(requestBody)))
                     .build();
+            logger.info("Sending created user to user-service!");
 
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             logger.info("Response from API: " + response.body());
+            logger.info("Response status: " + response.statusCode());
+
         } catch (Exception e) {
             logger.warning("Exception caught: " + e.getMessage());
             throw new InternalServerErrorException(e.getMessage());
@@ -41,7 +45,7 @@ public class ExternalApiUtils {
     }
 
     public void performExternalDELETEApiCall(String url, KeycloakSession keycloakSession) {
-        String signedAccessToken = TokenUtils.generateSignedAccessToken(keycloakSession);
+        String signedAccessToken = TokenUtils.getAccessToken(keycloakSession);
 
         HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -54,6 +58,7 @@ public class ExternalApiUtils {
                     .DELETE()
                     .build();
 
+            logger.info("Deleting user from user-service");
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             logger.info("Response from API: " + response.body());
         } catch (Exception e) {
@@ -64,7 +69,7 @@ public class ExternalApiUtils {
     }
 
     public void performExternalPUTApiCall(String url, Object requestBody, KeycloakSession keycloakSession) {
-        String signedAccessToken = TokenUtils.generateSignedAccessToken(keycloakSession);
+        String signedAccessToken = TokenUtils.getAccessToken(keycloakSession);
 
         HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -77,8 +82,9 @@ public class ExternalApiUtils {
                     .PUT(HttpRequest.BodyPublishers.ofString(JsonSerialization.writeValueAsString(requestBody)))
                     .build();
 
-            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            logger.info("Response from API: " + response.body());
+            logger.info("Updating user to user-service");
+//            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+//            logger.info("Response from API: " + response.body());
         } catch (Exception e) {
             logger.warning("Exception caught: " + e.getMessage());
             throw new InternalServerErrorException(e.getMessage());

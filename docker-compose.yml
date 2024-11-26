@@ -199,10 +199,26 @@ services:
       - instagenius-net
     restart: unless-stopped
 
+  postgres_users:
+    image: postgres:latest
+    container_name: postgres_users
+    environment:
+      POSTGRES_USER: user_service_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_users
+    volumes:
+      - postgres_users:/var/lib/postgresql/data
+    ports:
+      - "5439:5432"
+    networks:
+      - instagenius-net
+    restart: unless-stopped
+
   keycloak:
     image: quay.io/keycloak/keycloak:26.0.1
     container_name: keycloak
     environment:
+      KC_HOSTNAME: localhost
       KC_HOSTNAME_PORT: 8180
       KC_HTTP_ENABLED: true
       KC_HOSTNAME_STRICT_HTTPS: false
@@ -216,14 +232,21 @@ services:
       KC_DB_PASSWORD: admin
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_LOG_LEVEL: INFO
+      EVENT_LISTENER_CLIENT_ID: instagenius-event-listener
+      EVENT_LISTENER_CLIENT_SECRET: X3YPHBRhtR1grRktSagiNSwXoO3b7S0u
     ports:
       - "8180:8080"
     restart: unless-stopped
     command: ["start-dev"]
     depends_on:
       - postgres_keycloak
+    volumes:
+      - ./keycloak-event-listener/target/keycloak-event-listener-0.0.1.jar:/opt/keycloak/providers/event-listener.jar
     networks:
       - instagenius-net
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"
 
   postgres_keycloak:
     image: postgres:latest
@@ -258,6 +281,7 @@ volumes:
   postgres_orders:
   postgres_payments:
   postgres_products:
+  postgres_users:
   keycloak_db_data:
   pgadmin_data:
 

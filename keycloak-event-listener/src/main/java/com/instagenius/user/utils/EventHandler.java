@@ -9,8 +9,11 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
+import java.util.logging.Logger;
+
 @UtilityClass
 public class EventHandler {
+    private static final Logger logger = Logger.getLogger(EventHandler.class.getName());
 
     public void handleRegisterEvent(Event event, KeycloakSession keycloakSession) {
         EventType eventType = event.getType();
@@ -20,7 +23,9 @@ public class EventHandler {
             String realmId = event.getRealmId();
             UserDto user = getUser(keycloakSession, userId, realmId);
 
-            ExternalApiUtils.performExternalPOSTApiCall("http://localhost:8080/api/v1/users", user, keycloakSession);
+            logger.info("Adding user");
+            ExternalApiUtils.performExternalPOSTApiCall("http://host.docker.internal:8200/api/v1/sync/users", user,
+                                                        keycloakSession);
         }
     }
 
@@ -28,16 +33,22 @@ public class EventHandler {
         EventType eventType = event.getType();
         if(eventType.equals(EventType.DELETE_ACCOUNT)) {
             String userId = event.getUserId();
-            String realmId = event.getRealmId();
 
-            ExternalApiUtils.performExternalDELETEApiCall(String.format("http://localhost:8080/api/v1/users/%s/%s", userId,
-                    realmId), keycloakSession);
+            logger.info("Deleting user");
+
+            ExternalApiUtils.performExternalDELETEApiCall("http://host.docker.internal:8200/api/v1/sync/users/" + userId,
+                                                          keycloakSession);
         }
     }
 
     public void handleUpdateUserRelatedEvent(Event event, KeycloakSession keycloakSession) {
         EventType eventType = event.getType();
-        if(eventType.equals(EventType.UPDATE_EMAIL)) {
+        if(eventType.equals(EventType.UPDATE_EMAIL)
+                || eventType.equals(EventType.USER_DISABLED_BY_PERMANENT_LOCKOUT)
+                || eventType.equals(EventType.USER_DISABLED_BY_TEMPORARY_LOCKOUT)
+                || eventType.equals(EventType.UPDATE_PROFILE)
+                || eventType.equals(EventType.VERIFY_EMAIL)
+        ) {
             String userId = event.getUserId();
             String realmId = event.getRealmId();
             UserDto user = getUser(keycloakSession, userId, realmId);
@@ -50,17 +61,17 @@ public class EventHandler {
                     .emailVerified(user.emailVerified())
                     .build();
 
-            ExternalApiUtils.performExternalPUTApiCall(String.format("http://localhost:8080/api/v1/users/%s/%s", userId,
-                    realmId), updateUserDto, keycloakSession);
+            logger.info("Updating user");
+
+//            ExternalApiUtils.performExternalPUTApiCall(String.format("http://localhost:8080/api/v1/users/%s/%s", userId,
+//                    realmId), updateUserDto, keycloakSession);
         }
     }
-
-
 
     private UserDto getUser(KeycloakSession keycloakSession, String userId, String realmId) {
         RealmModel realm = keycloakSession.realms().getRealm(realmId);
         UserModel user = keycloakSession.users().getUserById(realm, userId);
-        return new UserDto(user.getId(), realm.getId(), user.getUsername(), user.getEmail(), user.getFirstName(), user.getLastName(),
+        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getFirstName(), user.getLastName(),
                 user.isEmailVerified(), user.isEnabled(), user.getCreatedTimestamp());
     }
 }
