@@ -22,7 +22,7 @@ public class OrderNotificationEntity {
 
     @Column(name = "order_reference_id", nullable = false)
     private String orderReferenceId;
-
+    
     @Column(name = "user_email", nullable = false)
     private String user_email;
 
@@ -32,7 +32,7 @@ public class OrderNotificationEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false)
     private OrderStatus orderStatus;
-    
+
     @Version
     @Column(name = "version")
     private int version;
