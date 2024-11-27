@@ -68,27 +68,27 @@ public class ExternalApiUtils {
         httpClient.close();
     }
 
-    public void performExternalPUTApiCall(String url, Object requestBody, KeycloakSession keycloakSession) {
-        String signedAccessToken = TokenUtils.getAccessToken(keycloakSession);
-
-        HttpClient httpClient = HttpClient.newHttpClient();
-
-        try {
-            HttpRequest httpRequest = HttpRequest
-                    .newBuilder()
-                    .uri(new URI(url))
-                    .timeout(Duration.ofSeconds(10))
-                    .header("Authorization", "Bearer " + signedAccessToken)
-                    .PUT(HttpRequest.BodyPublishers.ofString(JsonSerialization.writeValueAsString(requestBody)))
-                    .build();
-
-            logger.info("Updating user to user-service");
-//            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-//            logger.info("Response from API: " + response.body());
-        } catch (Exception e) {
-            logger.warning("Exception caught: " + e.getMessage());
-            throw new InternalServerErrorException(e.getMessage());
-        }
-        httpClient.close();
-    }
+//    public void performExternalPUTApiCall(String url, Object requestBody, KeycloakSession keycloakSession) {
+//        String signedAccessToken = TokenUtils.getAccessToken(keycloakSession);
+//
+//        HttpClient httpClient = HttpClient.newHttpClient();
+//
+//        try {
+//            HttpRequest httpRequest = HttpRequest
+//                    .newBuilder()
+//                    .uri(new URI(url))
+//                    .timeout(Duration.ofSeconds(10))
+//                    .header("Authorization", "Bearer " + signedAccessToken)
+//                    .PUT(HttpRequest.BodyPublishers.ofString(JsonSerialization.writeValueAsString(requestBody)))
+//                    .build();
+//
+//            logger.info("Updating user to user-service");
+////            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+////            logger.info("Response from API: " + response.body());
+//        } catch (Exception e) {
+//            logger.warning("Exception caught: " + e.getMessage());
+//            throw new InternalServerErrorException(e.getMessage());
+//        }
+//        httpClient.close();
+//    }
 }

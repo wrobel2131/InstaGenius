@@ -41,32 +41,32 @@ public class EventHandler {
         }
     }
 
-    public void handleUpdateUserRelatedEvent(Event event, KeycloakSession keycloakSession) {
-        EventType eventType = event.getType();
-        if(eventType.equals(EventType.UPDATE_EMAIL)
-                || eventType.equals(EventType.USER_DISABLED_BY_PERMANENT_LOCKOUT)
-                || eventType.equals(EventType.USER_DISABLED_BY_TEMPORARY_LOCKOUT)
-                || eventType.equals(EventType.UPDATE_PROFILE)
-                || eventType.equals(EventType.VERIFY_EMAIL)
-        ) {
-            String userId = event.getUserId();
-            String realmId = event.getRealmId();
-            UserDto user = getUser(keycloakSession, userId, realmId);
-            UpdateUserDto updateUserDto = UpdateUserDto.builder()
-                    .email(user.email())
-                    .username(user.username())
-                    .firstName(user.firstName())
-                    .lastName(user.lastName())
-                    .enabled(user.enabled())
-                    .emailVerified(user.emailVerified())
-                    .build();
-
-            logger.info("Updating user");
-
+//    public void handleUpdateUserRelatedEvent(Event event, KeycloakSession keycloakSession) {
+//        EventType eventType = event.getType();
+//        if(eventType.equals(EventType.UPDATE_EMAIL)
+//                || eventType.equals(EventType.USER_DISABLED_BY_PERMANENT_LOCKOUT)
+//                || eventType.equals(EventType.USER_DISABLED_BY_TEMPORARY_LOCKOUT)
+//                || eventType.equals(EventType.UPDATE_PROFILE)
+//                || eventType.equals(EventType.VERIFY_EMAIL)
+//        ) {
+//            String userId = event.getUserId();
+//            String realmId = event.getRealmId();
+//            UserDto user = getUser(keycloakSession, userId, realmId);
+//            UpdateUserDto updateUserDto = UpdateUserDto.builder()
+//                    .email(user.email())
+//                    .username(user.username())
+//                    .firstName(user.firstName())
+//                    .lastName(user.lastName())
+//                    .enabled(user.enabled())
+//                    .emailVerified(user.emailVerified())
+//                    .build();
+//
+//            logger.info("Updating user");
+//
 //            ExternalApiUtils.performExternalPUTApiCall(String.format("http://localhost:8080/api/v1/users/%s/%s", userId,
 //                    realmId), updateUserDto, keycloakSession);
-        }
-    }
+//        }
+//    }
 
     private UserDto getUser(KeycloakSession keycloakSession, String userId, String realmId) {
         RealmModel realm = keycloakSession.realms().getRealm(realmId);

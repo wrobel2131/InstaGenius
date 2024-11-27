@@ -7,8 +7,6 @@ import com.instagenius.userservice.infrastructure.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -20,9 +18,8 @@ public class UserController {
     private static final UserMapper userMapper = UserMapper.INSTANCE;
     private final UserUseCase userUseCase;
 
-    @GetMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserResponseDto> getUserProfile(@AuthenticationPrincipal Jwt jwt) {
-        UUID userId = getUserUUIDFromJwtToken(jwt);
+    @GetMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserResponseDto> getUserProfile(@PathVariable("userId") UUID userId) {
         return ResponseEntity.ok(
                 userMapper.toUserResponseDto(
                         userUseCase.findUserById(userId)
@@ -30,20 +27,13 @@ public class UserController {
         );
     }
 
-    @PatchMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserResponseDto> updateUserProfile(@AuthenticationPrincipal Jwt jwt, @RequestBody
-    UpdateUserRequestDto updateUserRequestDto) {
-        UUID userId = getUserUUIDFromJwtToken(jwt);
+    @PatchMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserResponseDto> updateUserProfile(@PathVariable("userId") UUID userId, @RequestBody UpdateUserRequestDto updateUserRequestDto) {
         System.out.println("userId = " + userId);
         return ResponseEntity.ok(
                 userMapper.toUserResponseDto(
                         userUseCase.updateUser(userId, userMapper.toUpdateUser(updateUserRequestDto))
                 )
         );
-    }
-
-
-    private UUID getUserUUIDFromJwtToken(Jwt jwt) {
-        return UUID.fromString(jwt.getClaim("sub"));
     }
 }

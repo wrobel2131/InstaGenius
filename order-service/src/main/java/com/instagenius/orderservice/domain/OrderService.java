@@ -16,17 +16,19 @@ public class OrderService implements OrderUseCase {
     private final ProductManagementPort productManagementPort;
     private final PaymentPort paymentPort;
     private final OrderCompletionHandlerFactory orderCompletionHandlerFactory;
-    private final OrderConfirmationProducerPort orderConfirmationProducerPort;
+    private final OrderEventProducerPort orderEventProducerPort;
+    private final UserPort userPort;
 
     public OrderService(
             OrderPersistencePort orderPersistencePort, ProductManagementPort productManagementPort,
             PaymentPort paymentPort, OrderCompletionHandlerFactory orderCompletionHandlerFactory,
-            OrderConfirmationProducerPort orderConfirmationProducerPort) {
+            OrderEventProducerPort orderEventProducerPort, UserPort userPort) {
         this.orderPersistencePort = orderPersistencePort;
         this.productManagementPort = productManagementPort;
         this.paymentPort = paymentPort;
         this.orderCompletionHandlerFactory = orderCompletionHandlerFactory;
-        this.orderConfirmationProducerPort = orderConfirmationProducerPort;
+        this.orderEventProducerPort = orderEventProducerPort;
+        this.userPort = userPort;
     }
 
     @Transactional
@@ -80,15 +82,24 @@ public class OrderService implements OrderUseCase {
                                               .toList())
         );
 
-        orderConfirmationProducerPort.sendOrderConfirmation(new OrderConfirmation(newOrder.getId(),
-                                                                                  newOrder.getReferenceId(),
-                                                                                  newOrder.getUserId(),
-                                                                                  newOrder.getStatus(),
-                                                                                  newOrder.getItems(),
-                                                                                  newOrder.getTotalPrice(),
-                                                                                  newOrder.getCreatedAt(),
-                                                                                  newOrder.getUpdatedAt(),
-                                                                                  newOrder.getPaymentId()));
+        /* Get user information from user service */
+        UserProfile userProfile = userPort.getUserProfile(newOrder.getUserId());
+        String paymentInstructions = "SOME Instructions for user"; //TODO prepare some instructions for user (maybe with stripe link or something
+
+        OrderEvent orderEvent = new OrderEvent(
+                newOrder.getReferenceId(),
+                userProfile.email(),
+                userProfile.firstName(),
+                userProfile.lastName(),
+                newOrder.getStatus(),
+                newOrder.getItems().stream().map(OrderItem::getProduct).toList(),
+                newOrder.getTotalPrice(),
+                newOrder.getCreatedAt(),
+                paymentInstructions
+                );
+
+        /* Publish an event about creation of the order for consumers */
+        orderEventProducerPort.publishOrderEvent(orderEvent);
 
         return new CreatedOrder(newOrder.getReferenceId(), newOrder.getStatus(),
                                 createdPayment.paymentCheckoutSessionId());
@@ -119,6 +130,25 @@ public class OrderService implements OrderUseCase {
                     orderCompletionHandlerFactory.getHandler(o.getProduct().type());
             orderCompletionHandler.handleOrderItemCompletion(userId, o);
         });
+
+        /* Get user information from user service */
+        UserProfile userProfile = userPort.getUserProfile(completedOrder.getUserId());
+        String paymentInstructions = "SOME Instructions for user"; //TODO prepare some instructions for user (maybe with stripe link or something
+
+        OrderEvent orderEvent = new OrderEvent(
+                completedOrder.getReferenceId(),
+                userProfile.email(),
+                userProfile.firstName(),
+                userProfile.lastName(),
+                completedOrder.getStatus(),
+                completedOrder.getItems().stream().map(OrderItem::getProduct).toList(),
+                completedOrder.getTotalPrice(),
+                completedOrder.getCreatedAt(),
+                paymentInstructions
+        );
+
+        /* Publish an event about creation of the order for consumers */
+        orderEventProducerPort.publishOrderEvent(orderEvent);
         System.out.println("Order completed");
     }
 
@@ -129,7 +159,27 @@ public class OrderService implements OrderUseCase {
         Order order = orderPersistencePort.findOrderById(id);
         order.setStatus(OrderStatus.CANCELED);
         order.setPaymentId(cancelOrder.paymentId());
-        orderPersistencePort.save(order);
+        Order canceledOrder = orderPersistencePort.save(order);
+
+        /* Get user information from user service */
+        UserProfile userProfile = userPort.getUserProfile(canceledOrder.getUserId());
+        String paymentInstructions = "SOME Instructions for user"; //TODO prepare some instructions for user (maybe with stripe link or something
+
+        OrderEvent orderEvent = new OrderEvent(
+                canceledOrder.getReferenceId(),
+                userProfile.email(),
+                userProfile.firstName(),
+                userProfile.lastName(),
+                canceledOrder.getStatus(),
+                canceledOrder.getItems().stream().map(OrderItem::getProduct).toList(),
+                canceledOrder.getTotalPrice(),
+                canceledOrder.getCreatedAt(),
+                paymentInstructions
+        );
+
+        /* Publish an event about creation of the order for consumers */
+        orderEventProducerPort.publishOrderEvent(orderEvent);
+        System.out.println("Canceled order");
     }
 
     @Transactional
@@ -139,7 +189,26 @@ public class OrderService implements OrderUseCase {
         Order order = orderPersistencePort.findOrderById(id);
         order.setStatus(OrderStatus.FAILED);
         order.setPaymentId(failOrder.paymentId());
-        orderPersistencePort.save(order);
-    }
+        Order failedOrder = orderPersistencePort.save(order);
 
+        /* Get user information from user service */
+        UserProfile userProfile = userPort.getUserProfile(failedOrder.getUserId());
+        String paymentInstructions = "SOME Instructions for user"; //TODO prepare some instructions for user (maybe with stripe link or something
+
+        OrderEvent orderEvent = new OrderEvent(
+                failedOrder.getReferenceId(),
+                userProfile.email(),
+                userProfile.firstName(),
+                userProfile.lastName(),
+                failedOrder.getStatus(),
+                failedOrder.getItems().stream().map(OrderItem::getProduct).toList(),
+                failedOrder.getTotalPrice(),
+                failedOrder.getCreatedAt(),
+                paymentInstructions
+        );
+
+        /* Publish an event about creation of the order for consumers */
+        orderEventProducerPort.publishOrderEvent(orderEvent);
+        System.out.println("Canceled order");
+    }
 }

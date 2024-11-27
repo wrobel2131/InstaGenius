@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Order notification</title>
+</head>
+<body>
+    <p>Dear [[${data.userFirstName}}]] [[${data.userLastName}}]],</p>
+    <div th:if="${data.orderStatus == 'PENDING'}">
+        <p>Thank you for your order!</p>
+        <p>Your order [[${data.referenceId}]] has been successfully created!</p>
+    </div>
+    <div th:if="${data.orderStatus == 'COMPLETED'}">
+        <p>Your order [[${data.referenceId}]] has been completed!</p>
+    </div>
+    <div th:if="${data.orderStatus == 'CANCELED'}">
+        <p>Your order [[${data.referenceId}]] has been canceled.</p>
+        <p>If you have any questions, please contact support.</p>
+    </div>
+    <div th:if="${data.orderStatus == 'FAILED'}">
+        <p>We're sorry, but there was an issue processing your order [[${data.referenceId}]].</p>
+        <p>Please contact support for assistance.</p>
+    </div>
+    <h3>Order Details:</h3>
+<!--    TODO table with products: name, description price and attributes (coins) -->
+
+    <p>Total price: [[${data.totalPrice}}]][[${data.totalPriceCurrency}}]]</p>
+    <div th:if="${data.additionalInfo != null}">
+        <p>[[${data.additionalInfo}]]</p>
+    </div>
+
+    <p>Thank you for choosing our service!</p>
+
+</body>
+</html>
