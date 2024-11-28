@@ -92,7 +92,7 @@ public class OrderService implements OrderUseCase {
                 userProfile.firstName(),
                 userProfile.lastName(),
                 newOrder.getStatus(),
-                newOrder.getItems().stream().map(OrderItem::getProduct).toList(),
+                newOrder.getItems(),
                 newOrder.getTotalPrice(),
                 newOrder.getCreatedAt(),
                 paymentInstructions
@@ -141,7 +141,7 @@ public class OrderService implements OrderUseCase {
                 userProfile.firstName(),
                 userProfile.lastName(),
                 completedOrder.getStatus(),
-                completedOrder.getItems().stream().map(OrderItem::getProduct).toList(),
+                completedOrder.getItems(),
                 completedOrder.getTotalPrice(),
                 completedOrder.getCreatedAt(),
                 paymentInstructions
@@ -163,7 +163,6 @@ public class OrderService implements OrderUseCase {
 
         /* Get user information from user service */
         UserProfile userProfile = userPort.getUserProfile(canceledOrder.getUserId());
-        String paymentInstructions = "SOME Instructions for user"; //TODO prepare some instructions for user (maybe with stripe link or something
 
         OrderEvent orderEvent = new OrderEvent(
                 canceledOrder.getReferenceId(),
@@ -171,10 +170,10 @@ public class OrderService implements OrderUseCase {
                 userProfile.firstName(),
                 userProfile.lastName(),
                 canceledOrder.getStatus(),
-                canceledOrder.getItems().stream().map(OrderItem::getProduct).toList(),
+                canceledOrder.getItems(),
                 canceledOrder.getTotalPrice(),
                 canceledOrder.getCreatedAt(),
-                paymentInstructions
+                null
         );
 
         /* Publish an event about creation of the order for consumers */
@@ -193,7 +192,6 @@ public class OrderService implements OrderUseCase {
 
         /* Get user information from user service */
         UserProfile userProfile = userPort.getUserProfile(failedOrder.getUserId());
-        String paymentInstructions = "SOME Instructions for user"; //TODO prepare some instructions for user (maybe with stripe link or something
 
         OrderEvent orderEvent = new OrderEvent(
                 failedOrder.getReferenceId(),
@@ -201,10 +199,10 @@ public class OrderService implements OrderUseCase {
                 userProfile.firstName(),
                 userProfile.lastName(),
                 failedOrder.getStatus(),
-                failedOrder.getItems().stream().map(OrderItem::getProduct).toList(),
+                failedOrder.getItems(),
                 failedOrder.getTotalPrice(),
                 failedOrder.getCreatedAt(),
-                paymentInstructions
+                null
         );
 
         /* Publish an event about creation of the order for consumers */

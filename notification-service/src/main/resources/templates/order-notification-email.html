@@ -5,31 +5,66 @@
     <title>Order notification</title>
 </head>
 <body>
-    <p>Dear [[${data.userFirstName}}]] [[${data.userLastName}}]],</p>
-    <div th:if="${data.orderStatus == 'PENDING'}">
+<h1>Dear <span th:text="${userFirstName}"></span> <span th:text="${userLastName}"></span>,</h1>
+    <div th:if="${orderStatus == 'PENDING'}">
         <p>Thank you for your order!</p>
-        <p>Your order [[${data.referenceId}]] has been successfully created!</p>
+        <p>Your order <span th:text="${referenceId}"></span> has been successfully created!</p>
     </div>
-    <div th:if="${data.orderStatus == 'COMPLETED'}">
-        <p>Your order [[${data.referenceId}]] has been completed!</p>
+    <div th:if="${orderStatus == 'COMPLETED'}">
+        <p>Your order <span th:text="${referenceId}"></span> has been completed!</p>
     </div>
-    <div th:if="${data.orderStatus == 'CANCELED'}">
-        <p>Your order [[${data.referenceId}]] has been canceled.</p>
+    <div th:if="${orderStatus == 'CANCELED'}">
+        <p>Your order <span th:text="${referenceId}"></span> has been canceled.</p>
         <p>If you have any questions, please contact support.</p>
     </div>
-    <div th:if="${data.orderStatus == 'FAILED'}">
-        <p>We're sorry, but there was an issue processing your order [[${data.referenceId}]].</p>
+    <div th:if="${orderStatus == 'FAILED'}">
+        <p>We're sorry, but there was an issue processing your order <span th:text="${referenceId}"></span>.</p>
         <p>Please contact support for assistance.</p>
     </div>
     <h3>Order Details:</h3>
-<!--    TODO table with products: name, description price and attributes (coins) -->
+    <table>
+        <caption>Ordered products from order: <span th:text="${referenceId}"></span></caption>
+        <thead>
+        <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Additional</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${items}">
+            <td><span th:text="${item.product.name}"></span></td>
+            <td><span th:text="${item.quantity}"></span></td>
+            <td><span th:text="${item.totalPrice.price}"></span></td>
+            <td>
+                <ul>
+                    <li th:each="attribute : ${item.product.attributes}">
+                        <span th:text="${attribute.key}"></span>: <span th:text="${attribute.value}"></span>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+            <th scope="row" colspan="2">Total price</th>
+            <td><span th:text="${totalPrice.price}"></span><span th:text="${totalPrice.currency}"></span></td>
+        </tfoot>
+    </table>
 
-    <p>Total price: [[${data.totalPrice}}]][[${data.totalPriceCurrency}}]]</p>
-    <div th:if="${data.additionalInfo != null}">
-        <p>[[${data.additionalInfo}]]</p>
+    <div th:if="${additionalInfo != null}">
+        <p><span th:text="${additionalInfo}"></span></p>
     </div>
 
     <p>Thank you for choosing our service!</p>
-
+    <p>This is an automated message. Please do not reply to this email.</p>
+    <p>&copy; 2024 InstaGenius. All rights reserved.</p>
 </body>
+<footer>
+    <div class="contact-info">
+        <p>If you need any further assistance, please contact us at:</p>
+        <p>Email: <a href="mailto:support@example.com">support@example.com</a></p>
+        <p>Phone: +1 (123) 456-7890</p>
+    </div>
+</footer>
 </html>

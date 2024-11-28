@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment notification</title>
+</head>
+<body>
+<h1>Dear <span th:text="${userFirstName}"></span> <span th:text="${userLastName}"></span>,</h1>
+
+<div th:if="${paymentStatus == 'COMPLETED'}">
+    <p>Payment Successful!</p>
+    <p>Thank you! Your payment has been successfully processed.</p>
+</div>
+<div th:if="${paymentStatus == 'CANCELLED'}">
+    <p>Payment Cancelled!</p>
+    <p>Your payment has been cancelled.</p>
+</div>
+<div th:if="${paymentStatus == 'FAILED'}">
+    <p>Payment Failed!</p>
+    <p>Unfortunately, your payment could not be processed.</p>
+</div>
+
+<h3>Payment Details:</h3>
+<table>
+  <caption>Payment for order: <span th:text="${referenceId}"></span></caption>
+  <thead>
+    <tr>
+      <th scope="col">Number</th>
+      <th scope="col">Payment status</th>
+      <th scope="col">Total price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span th:text="paymentId"></span></td>
+      <td><span th:text="paymentStatus"></span></td>
+      <td><span th:text="paymentTotalPrice"></span></td>
+    </tr>
+  </tbody>
+  <tfoot>
+
+  </tfoot>
+</table>
+
+<p>This is an automated message. Please do not reply to this email.</p>
+<p>&copy; 2024 InstaGenius. All rights reserved.</p>
+</body>
+<footer>
+  <div class="contact-info">
+    <p>If you need any further assistance, please contact us at:</p>
+    <p>Email: <a href="mailto:support@example.com">support@example.com</a></p>
+    <p>Phone: +1 (123) 456-7890</p>
+  </div>
+</footer>
+</html>
