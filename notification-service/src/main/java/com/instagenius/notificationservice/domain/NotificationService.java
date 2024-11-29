@@ -19,12 +19,18 @@ public class NotificationService implements NotificationUseCase {
 
 
     @Override
-    public void processOrderRelatedNotification(OrderNotification orderNotification) {
+    public void processOrderRelatedNotification(OrderEvent orderEvent) {
+        orderNotificationPersistencePort.save(new OrderNotification(null, orderEvent.getReferenceId(),
+                orderEvent.getUserEmail(), null, orderEvent.getOrderStatus(), 0));
 
+        emailSenderPort.sendOrderRelatedEmail(orderEvent);
+        System.out.println("Saved order notification and sent ");
     }
 
     @Override
-    public void processPaymentRelatedNotification(PaymentNotification paymentNotification) {
+    public void processPaymentRelatedNotification(PaymentEvent paymentEvent) {
+        paymentNotificationPersistencePort.save(new PaymentNotification()); //TODO create fields in PaymentNotification domain object
+        emailSenderPort.sendPaymentRelatedEmail(paymentEvent);
 
     }
 }

@@ -55,12 +55,33 @@ public class EmailSenderAdapter implements EmailSenderPort {
             javaMailSender.send(mimeMessage);
 
         } catch(MessagingException messagingException) {
-
+            System.out.println("Failed to send payment related email to: " + orderEvent.getUserEmail());
         }
     }
 
     @Override
     public void sendPaymentRelatedEmail(PaymentEvent paymentEvent) {
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage,
+                    MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, UTF_8);
+            messageHelper.setFrom("contact@instagenius.com");
 
+            final String templateName = "payment-notification-email.html";
+
+            Map<String, Object> variables = new HashMap<>();
+
+
+            Context context = new Context(); //TODO set variables
+            context.setVariables(variables);
+
+            String htmlContent = springTemplateEngine.process(templateName, context);
+            messageHelper.setText(htmlContent, true);
+
+            javaMailSender.send(mimeMessage);
+
+        } catch(MessagingException messagingException) {
+            System.out.println("Failed to send order related email to: ");
+        }
     }
 }
