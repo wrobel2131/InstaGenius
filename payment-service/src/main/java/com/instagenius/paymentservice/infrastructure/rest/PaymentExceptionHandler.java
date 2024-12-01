@@ -2,6 +2,7 @@ package com.instagenius.paymentservice.infrastructure.rest;
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import com.instagenius.paymentservice.infrastructure.exception.ProductManagementException;
+import com.instagenius.paymentservice.infrastructure.exception.UserManagementException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,11 @@ class PaymentExceptionHandler {
 
     @ExceptionHandler(ProductManagementException.class)
     ResponseEntity<ErrorResponse> handleProductManagementException(ProductManagementException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
+    }
+
+    @ExceptionHandler(UserManagementException.class)
+    ResponseEntity<ErrorResponse> handleUserManagementException(UserManagementException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
     }
 

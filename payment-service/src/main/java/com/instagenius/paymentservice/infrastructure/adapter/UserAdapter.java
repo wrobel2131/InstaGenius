@@ -1,12 +1,11 @@
-package com.instagenius.orderservice.infrastructure.adapter;
+package com.instagenius.paymentservice.infrastructure.adapter;
 
-import com.instagenius.orderservice.application.UserPort;
-import com.instagenius.orderservice.domain.UserProfile;
-import com.instagenius.orderservice.infrastructure.exception.CoinManagementException;
-import com.instagenius.orderservice.infrastructure.exception.FeignExceptionUtils;
-import com.instagenius.orderservice.infrastructure.exception.UserManagementException;
-import com.instagenius.orderservice.infrastructure.mapper.UserRelatedMapper;
-import com.instagenius.orderservice.infrastructure.rest.UserClient;
+import com.instagenius.paymentservice.application.UserPort;
+import com.instagenius.paymentservice.domain.UserProfile;
+import com.instagenius.paymentservice.infrastructure.exception.FeignExceptionUtils;
+import com.instagenius.paymentservice.infrastructure.exception.UserManagementException;
+import com.instagenius.paymentservice.infrastructure.mapper.UserRelatedMapper;
+import com.instagenius.paymentservice.infrastructure.rest.UserClient;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

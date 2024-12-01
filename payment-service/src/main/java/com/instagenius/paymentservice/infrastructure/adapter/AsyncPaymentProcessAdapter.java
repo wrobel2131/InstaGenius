@@ -2,6 +2,8 @@ package com.instagenius.paymentservice.infrastructure.adapter;
 
 import com.instagenius.paymentservice.application.AsyncPaymentProcessPort;
 import com.instagenius.paymentservice.application.OrderPort;
+import com.instagenius.paymentservice.application.PaymentEventProducerPort;
+import com.instagenius.paymentservice.application.UserPort;
 import com.instagenius.paymentservice.domain.*;
 import com.instagenius.paymentservice.infrastructure.config.StripeApiUtils;
 import com.instagenius.paymentservice.infrastructure.config.StripeProperties;
@@ -22,6 +24,8 @@ public class AsyncPaymentProcessAdapter implements AsyncPaymentProcessPort {
     private final PaymentRepository paymentRepository;
     private final StripeProperties stripeProperties;
     private final OrderPort orderPort;
+    private final PaymentEventProducerPort paymentEventProducerPort;
+    private final UserPort userPort;
 
     @Async
     @Transactional
@@ -69,6 +73,14 @@ public class AsyncPaymentProcessAdapter implements AsyncPaymentProcessPort {
         metadata.put("paymentMethodReceiptUrl", charge.getReceiptUrl());
         payment.setStatus(PaymentStatus.COMPLETED);
         Payment savedPayment = paymentRepository.save(payment);
+
+        UserProfile userProfile = userPort.getUserProfile(payment.getUserId());
+        PaymentEvent paymentEvent = new PaymentEvent(payment.getId(), userProfile.email(), userProfile.firstName(),
+                                                     userProfile.lastName(), payment.getStatus(), payment.getPrice(),
+                                                     payment.getCreatedAt(),
+                                                     payment.getPaymentGatewayMetadata().getOrDefault("paymentMethodReceiptUrl",null));
+        paymentEventProducerPort.publishPaymentEvent(paymentEvent);
+
         orderPort.completeOrder(savedPayment.getOrderId(), new CompleteOrder(savedPayment.getId()));
     }
 
@@ -78,6 +90,13 @@ public class AsyncPaymentProcessAdapter implements AsyncPaymentProcessPort {
         metadata.put("paymentCancellationReason", paymentData.cancellationReason());
         payment.setStatus(PaymentStatus.CANCELLED);
         Payment savedPayment = paymentRepository.save(payment);
+
+        UserProfile userProfile = userPort.getUserProfile(payment.getUserId());
+        PaymentEvent paymentEvent = new PaymentEvent(payment.getId(), userProfile.email(), userProfile.firstName(),
+                                                     userProfile.lastName(), payment.getStatus(), payment.getPrice(),
+                                                     payment.getCreatedAt(), null);
+        paymentEventProducerPort.publishPaymentEvent(paymentEvent);
+
         orderPort.cancelOrder(savedPayment.getOrderId(), new CancelOrder(savedPayment.getId()));
     }
 
@@ -86,6 +105,13 @@ public class AsyncPaymentProcessAdapter implements AsyncPaymentProcessPort {
         metadata.put("paymentGatewayPaymentId", paymentData.paymentGatewayPaymentId());
         payment.setStatus(PaymentStatus.FAILED);
         Payment savedPayment = paymentRepository.save(payment);
+
+        UserProfile userProfile = userPort.getUserProfile(payment.getUserId());
+        PaymentEvent paymentEvent = new PaymentEvent(payment.getId(), userProfile.email(), userProfile.firstName(),
+                                                     userProfile.lastName(), payment.getStatus(), payment.getPrice(),
+                                                     payment.getCreatedAt(), null);
+        paymentEventProducerPort.publishPaymentEvent(paymentEvent);
+
         orderPort.failOrder(savedPayment.getOrderId(), new FailOrder(savedPayment.getId()));
     }
 

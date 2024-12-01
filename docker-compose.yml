@@ -123,7 +123,6 @@ services:
 #      - postgres_coins
 #    networks:
 #      - instagenius-net
-
   postgres_posts:
     image: postgres:latest
     container_name: postgres_posts
@@ -138,7 +137,6 @@ services:
     networks:
       - instagenius-net
     restart: unless-stopped
-
   postgres_coins:
     image: postgres:latest
     container_name: postgres_coins
@@ -153,7 +151,6 @@ services:
     networks:
       - instagenius-net
     restart: unless-stopped
-
   postgres_orders:
     image: postgres:latest
     container_name: postgres_orders
@@ -168,7 +165,6 @@ services:
     networks:
       - instagenius-net
     restart: unless-stopped
-
   postgres_payments:
     image: postgres:latest
     container_name: postgres_payments
@@ -183,7 +179,6 @@ services:
     networks:
       - instagenius-net
     restart: unless-stopped
-
   postgres_products:
     image: postgres:latest
     container_name: postgres_products
@@ -198,7 +193,6 @@ services:
     networks:
       - instagenius-net
     restart: unless-stopped
-
   postgres_users:
     image: postgres:latest
     container_name: postgres_users
@@ -213,7 +207,19 @@ services:
     networks:
       - instagenius-net
     restart: unless-stopped
-
+  postgres_notifications:
+    image: postgres:latest
+    container_name: postgres_notifications
+    environment:
+      POSTGRES_USER: notification_service_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_notifications
+    volumes:
+      - postgres_notifications:/var/lib/postgresql/data
+    ports:
+      - "5440:5432"
+    networks:
+      - instagenius-net
   keycloak:
     image: quay.io/keycloak/keycloak:26.0.1
     container_name: keycloak
@@ -245,7 +251,6 @@ services:
       - ./keycloak-event-listener/target/keycloak-event-listener-0.0.1.jar:/opt/keycloak/providers/event-listener.jar
     networks:
       - instagenius-net
-
   postgres_keycloak:
     image: postgres:latest
     container_name: postgres_keycloak
@@ -259,7 +264,6 @@ services:
       - keycloak_db_data:/var/lib/postgresql/data
     networks:
       - instagenius-net
-
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
@@ -272,7 +276,6 @@ services:
       - "5050:80"
     networks:
       - instagenius-net
-
   zookeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
@@ -283,7 +286,6 @@ services:
       - "2181:2181"
     networks:
       - instagenius-net
-
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
@@ -301,8 +303,12 @@ services:
       - "9092:9092"
     networks:
       - instagenius-net
-
-
+  mail-dev:
+    container_name: mail-dev
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
 volumes:
   postgres_posts:
   postgres_coins:
@@ -310,9 +316,9 @@ volumes:
   postgres_payments:
   postgres_products:
   postgres_users:
+  postgres_notifications:
   keycloak_db_data:
   pgadmin_data:
-
 networks:
   instagenius-net:
     driver: bridge

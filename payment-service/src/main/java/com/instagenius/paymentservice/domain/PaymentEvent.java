@@ -1,4 +1,4 @@
-package com.instagenius.notificationservice.domain;
+package com.instagenius.paymentservice.domain;
 
 import java.time.Instant;
 import java.util.UUID;

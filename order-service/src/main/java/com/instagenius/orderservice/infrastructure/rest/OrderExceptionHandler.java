@@ -1,10 +1,7 @@
 package com.instagenius.orderservice.infrastructure.rest;
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
-import com.instagenius.orderservice.infrastructure.exception.CoinManagementException;
-import com.instagenius.orderservice.infrastructure.exception.OrderNotFoundException;
-import com.instagenius.orderservice.infrastructure.exception.PaymentException;
-import com.instagenius.orderservice.infrastructure.exception.ProductManagementException;
+import com.instagenius.orderservice.infrastructure.exception.*;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -50,6 +47,11 @@ class OrderExceptionHandler {
 
     @ExceptionHandler(CoinManagementException.class)
     ResponseEntity<ErrorResponse> handleCoinManagementException(CoinManagementException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
+    }
+
+    @ExceptionHandler(UserManagementException.class)
+    ResponseEntity<ErrorResponse> handleUserManagementException(UserManagementException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), Instant.now(), List.of()), ex.getHttpStatus());
     }
 

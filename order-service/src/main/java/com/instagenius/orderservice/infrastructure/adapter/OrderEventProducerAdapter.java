@@ -13,9 +13,10 @@ public class OrderEventProducerAdapter implements OrderEventProducerPort {
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
 
     @Value("${order-service.kafka.topic}")
-    private String orderEventsTopic; //order-events
+    private String orderEventsTopic;
 
     public void publishOrderEvent(OrderEvent orderEvent) {
+        System.out.println("Publishing order event: " + orderEvent);
         kafkaTemplate.send(orderEventsTopic, orderEvent);
     }
 }
