@@ -59,6 +59,9 @@ jobs:
           - order-service
           - payment-service
           - product-management-service
+          - keycloak-event-listener
+          - notification-service
+          - user-service
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
