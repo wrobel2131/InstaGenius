@@ -4,71 +4,28 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-.env
-
-
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
-
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
-
-# IDEs and editors
+# ----- IDE Files -----
+# IntelliJ IDEA
 .idea/
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+*.iml
 
 # Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
+.vscode/
 
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
+# Other IDE temp files
+*.log
+
+# ----- Spring Boot (Java) -----
+# Maven target directories and Gradle build outputs
+**/target/
+**/build/
+
+# ----- Angular (Frontend) -----
+# Node.js dependencies and Angular build output
+**/node_modules/
+**/dist/
 
 # System files
 .DS_Store
 Thumbs.db
+.env
