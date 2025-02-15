@@ -4,19 +4,19 @@
 @use "custom-mat-tooltip";
 @include mat.core();
 
-$instagram-post-generator-angular-primary: mat.define-palette(
-  mat.$purple-palette
+$instagram-post-generator-angular-primary: mat.m2-define-palette(
+  mat.$m2-purple-palette
 );
-$instagram-post-generator-angular-accent: mat.define-palette(
-  mat.$pink-palette,
+$instagram-post-generator-angular-accent: mat.m2-define-palette(
+  mat.$m2-pink-palette,
   500,
   A200,
   A400
 );
 
-$instagram-post-generator-angular-warn: mat.define-palette(mat.$red-palette);
+$instagram-post-generator-angular-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
-$instagram-post-generator-angular-theme: mat.define-light-theme(
+$instagram-post-generator-angular-theme: mat.m2-define-light-theme(
   (
     color: (
       primary: $instagram-post-generator-angular-primary,
