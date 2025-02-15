@@ -1,0 +1,117 @@
+{
+  "landingPage": {
+    "navigation": {
+      "home": "Strona główna",
+      "signIn": "Zaloguj się",
+      "joinUs": "Dołącz do nas"
+    },
+    "content": {
+      "slogan": "Generuj pomysły na swoje posty na Instagramie za pomocą",
+      "signUp": "Zapisz się"
+    }
+  },
+  "brandPanel": {
+    "slogan": "Odblokuj swoją kreatywność",
+    "joinNow": "Dołącz teraz!"
+  },
+  "loginPage": {
+    "form": {
+      "greetings": "Witaj!",
+      "emailLabel": "Email",
+      "passwordLabel": "Hasło",
+      "signIn": "Zaloguj się",
+      "forgotPassword": "Zapomniałeś hasła?",
+      "clickHere": "Kliknij tutaj!",
+      "socialLoginWith": "Zaloguj się przez",
+      "noAccount": "Nie masz konta?"
+    }
+  },
+  "registerPage": {
+    "form": {
+      "createNewAccount": "Stwórz nowe konto!",
+      "emailLabel": "Email",
+      "loginLabel": "Login",
+      "passwordLabel": "Hasło",
+      "confirmPasswordLabel": "Potwierdź hasło",
+      "signUp": "Zarejestruj się",
+      "haveAccount": "Masz już konto?",
+      "signIn": "Zaloguj się!"
+    }
+  },
+  "generatorPage": {
+    "title": "Jak to działa?",
+    "instruction": "Zacznij od opisania rodzaju postu, który masz na myśli. Czy to promocja produktu, zdjęcie lifestyle'owe, czy motywacyjny cytat, podaj krótki opis tekstowy swojej wizji posta.",
+    "textareaLabel": "Opisz swój pomysł na post",
+    "commonOptions": {
+      "model": "Model",
+      "premium": "Premium"
+    },
+    "graphicOptions": {
+      "title": "Opcje graficzne",
+      "style": {
+        "title": "Styl",
+        "vivid": "Żywy",
+        "natural": "Naturalny"
+      },
+      "quality": {
+        "title": "Jakość",
+        "standard": "Standard"
+      }
+    },
+    "descriptionOptions": {
+      "title": "Opcje opisu"
+    },
+    "generate": "Generuj"
+  },
+  "displayedPost": {
+    "postName": "Nazwa postu",
+    "actions": {
+      "copy": "Kopiuj opis do schowka",
+      "delete": "Usuń post",
+      "saveImage": "Zapis obraz jako",
+      "saveTitle": "Zapisz zmieniony tytuł"
+    },
+    "description": {
+      "likedBy": "Polubione przez",
+      "and": "i",
+      "others": "innych"
+    }
+  },
+  "menu": {
+    "profileSettings": "Ustawienia profilu",
+    "logout": "Wyloguj się"
+  },
+  "profileSettingsPage": {
+    "pictureSection": {
+      "upload": "Prześlij",
+      "maxSize": "Maksymalny rozmiar to"
+    },
+    "userDataSection": {
+      "title": "Ustawienia profilu",
+      "userInfoPage": {
+        "tab": "Informacje o użytkowniku",
+        "form": {
+          "firstNameLabel": "Imię",
+          "lastNameLabel": "Nazwisko",
+          "loginLabel": "Login",
+          "emailLabel": "Email",
+          "passwordLabel": "Hasło",
+          "confirmPasswordLabel": "Potwierdź hasło"
+        },
+        "upgrade": "Aktualizuj",
+        "changePassword": "Zmień hasło"
+      },
+      "billingInfoPage": {
+        "tab": "Informacje o płatnościach"
+      }
+    }
+  },
+  "buyCoins": "Kup monety",
+  "footer": {
+    "rights": "Wszelkie prawa zastrzeżone"
+  },
+  "routes": {
+    "gallery": "Galeria",
+    "generator": "Generator"
+  }
+}

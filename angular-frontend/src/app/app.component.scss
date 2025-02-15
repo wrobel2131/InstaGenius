@@ -1,0 +1,10 @@
+@use "colors";
+main {
+  position: relative;
+  text-align: center;
+  display: flex;
+  height: 100vh;
+  overflow-x: hidden;
+  background-image: colors.$gradient;
+  overflow-y: hidden;
+}

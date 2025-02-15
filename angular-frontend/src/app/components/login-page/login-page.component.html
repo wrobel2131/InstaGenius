@@ -1,0 +1,69 @@
+<app-brand-section class="brand-panel--desktop"></app-brand-section>
+<app-logo
+  class="logo--mobile"
+  [width]="'150'"
+  [height]="'auto'"
+  [routerLink]="'/'"
+></app-logo>
+<div class="language-menu">
+  <app-pick-language-menu></app-pick-language-menu>
+</div>
+
+<section class="form-container">
+  <h1 class="welcome-text">{{ "loginPage.form.greetings" | transloco }}</h1>
+  <form class="form" [formGroup]="loginForm">
+    <div class="form__controls">
+      <div class="form__control">
+        <label for="login" class="form__control--label">{{
+          "loginPage.form.loginLabel" | transloco
+        }}</label>
+        <input
+          class="form__control--input"
+          type="text"
+          name="login"
+          id="login"
+          formControlName="login"
+        />
+      </div>
+      <div class="form__control">
+        <label for="password" class="form__control--label">{{
+          "loginPage.form.passwordLabel" | transloco
+        }}</label>
+        <input
+          class="form__control--input"
+          type="password"
+          name="password"
+          id="password"
+          formControlName="password"
+        />
+      </div>
+      <a class="button" type="submit" (click)="onLogin()">{{
+        "loginPage.form.signIn" | transloco
+      }}</a>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="form__buttons">
+      <p class="text--bold">
+        {{ "loginPage.form.forgotPassword" | transloco }}
+        <span class="text--bold text--purple" (click)="onForgotPassword()">{{
+          "loginPage.form.clickHere" | transloco
+        }}</span>
+      </p>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="form__buttons">
+      <app-google-login-button></app-google-login-button>
+      <app-github-login-button></app-github-login-button>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="form__buttons">
+      <p class="text--bold">
+        {{ "loginPage.form.noAccount" | transloco }}
+        <span class="text--bold text--purple" [routerLink]="['/signup']">{{
+          "loginPage.form.clickHere" | transloco
+        }}</span>
+      </p>
+    </div>
+  </form>
+</section>
+<app-mobile-footer-dark class="footer--mobile"></app-mobile-footer-dark>

@@ -1,0 +1,31 @@
+<div cdkMenuBar class="circle">
+  <a class="circle__image" cdkMenuItem [cdkMenuTriggerFor]="menu">
+    <img src="assets/images/avatar-placeholder.png" alt="" />
+  </a>
+</div>
+<ng-template #menu>
+  <div class="menu" cdkMenu>
+    <div class="info">
+      <p class="username__title">{{ user()?.login }}</p>
+      <p class="user">
+        <span class="user__name">{{ user()?.firstName }}&nbsp;</span
+        ><span class="user__surname">{{ user()?.lastName }}</span>
+      </p>
+    </div>
+
+    <a
+      class="menu__item"
+      cdkMenuItem
+      [routerLink]="[{ outlets: { main: ['settings'] } }]"
+      ><i class="fa-solid fa-gear fa-xl" style="color: #000000"></i
+      ><span>{{ "menu.profileSettings" | transloco }}</span></a
+    >
+    <a class="menu__item" cdkMenuItem (click)="onLogout()"
+      ><i
+        class="fa-solid fa-right-from-bracket fa-xl"
+        style="color: #000000"
+      ></i
+      ><span>{{ "menu.logout" | transloco }}</span></a
+    >
+  </div>
+</ng-template>

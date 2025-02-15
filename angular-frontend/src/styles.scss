@@ -1,0 +1,33 @@
+@use "colors";
+// Custom Theming for Angular Material
+@use "@angular/material" as mat;
+@use "custom-mat-tooltip";
+@include mat.core();
+
+$instagram-post-generator-angular-primary: mat.define-palette(
+  mat.$purple-palette
+);
+$instagram-post-generator-angular-accent: mat.define-palette(
+  mat.$pink-palette,
+  500,
+  A200,
+  A400
+);
+
+$instagram-post-generator-angular-warn: mat.define-palette(mat.$red-palette);
+
+$instagram-post-generator-angular-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $instagram-post-generator-angular-primary,
+      accent: $instagram-post-generator-angular-accent,
+      warn: $instagram-post-generator-angular-warn,
+    ),
+  )
+);
+
+@include mat.all-component-themes($instagram-post-generator-angular-theme);
+
+@import "./app/styles/normalize.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Lobster+Two:ital@1&display=swap");

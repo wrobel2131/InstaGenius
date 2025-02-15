@@ -1,0 +1,25 @@
+<p class="title">
+  {{ "profileSettingsPage.userDataSection.title" | transloco }}
+</p>
+
+<mat-tab-group
+  [color]="'accent'"
+  mat-stretch-tabs="false"
+  mat-align-tabs="start"
+  [dynamicHeight]="true"
+>
+  <mat-tab
+    label="{{
+      'profileSettingsPage.userDataSection.userInfoPage.tab' | transloco
+    }}"
+  >
+    <app-user-info-page></app-user-info-page>
+  </mat-tab>
+  <mat-tab
+    label="{{
+      'profileSettingsPage.userDataSection.billingInfoPage.tab' | transloco
+    }}"
+  >
+    <app-billing-info-page></app-billing-info-page>
+  </mat-tab>
+</mat-tab-group>

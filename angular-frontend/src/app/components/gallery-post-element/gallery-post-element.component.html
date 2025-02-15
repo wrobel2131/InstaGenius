@@ -1,0 +1,43 @@
+<div class="header">
+  <div class="header__left">
+    <div class="header__circle">
+      <img src="assets/images/avatar-placeholder.png" alt="" />
+    </div>
+    <span class="header__username">{{ user()?.login }}</span>
+  </div>
+  <div class="header__right">
+    <i class="fa-solid fa-ellipsis" style="color: #000000"></i>
+  </div>
+</div>
+<div class="image">
+  <img src="{{ post?.imageUrl }}" alt="" />
+</div>
+<div class="description">
+  <div class="description__icons">
+    <div class="description__icons--left">
+      <i class="fa-regular fa-heart fa-lg" style="color: #000000"></i>
+      <i
+        class="fa-regular fa-comment fa-flip-horizontal fa-lg"
+        style="color: #000000"
+      ></i>
+      <i class="fa-regular fa-paper-plane fa-lg" style="color: #000000"></i>
+    </div>
+    <div class="description__icons--right">
+      <i class="fa-regular fa-bookmark fa-lg" style="color: #000000"></i>
+    </div>
+  </div>
+  <div class="description__likes">
+    <p>
+      {{ "displayedPost.description.likedBy" | transloco }}
+      <span class="description__likes--bold">random-user</span>
+      {{ "displayedPost.description.and" | transloco }}
+      <span class="description__likes--bold">{{
+        "displayedPost.description.others" | transloco
+      }}</span>
+    </p>
+  </div>
+  <p class="description__text">
+    <span class="description__text--username">{{ user()?.login }} &nbsp;</span>
+    <span>{{ post?.description }}</span>
+  </p>
+</div>

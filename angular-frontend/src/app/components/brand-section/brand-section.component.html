@@ -1,0 +1,16 @@
+<div class="brand">
+  <div class="brand__logo">
+    <div class="brand__logo-image" [routerLink]="'/'">
+      <app-logo [width]="logoWidth" [height]="logoHeight"></app-logo>
+    </div>
+    <p class="brand__logo-name">InstaGenius</p>
+  </div>
+
+  <div class="brand__slogan">
+    <p class="brand__slogan--light">{{ "brandPanel.slogan" | transloco }}</p>
+    <p class="brand__slogan--bold">
+      <a [routerLink]="['/signup']">{{ "brandPanel.joinNow" | transloco }}</a>
+    </p>
+  </div>
+</div>
+<app-landing-page-footer></app-landing-page-footer>

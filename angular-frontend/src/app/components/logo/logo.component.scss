@@ -1,0 +1,26 @@
+@use "colors";
+
+.animated {
+  height: 100%;
+  min-width: 100px;
+  cursor: pointer;
+  @keyframes dash {
+    from {
+      stroke-dashoffset: 3000;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  path {
+    stroke: colors.$white;
+    stroke-width: 5px;
+    stroke-dasharray: 3000;
+    stroke-dashoffset: 3000;
+    fill: none;
+
+    -webkit-animation: dash 2s ease-in-out 1s forwards;
+    animation: dash 2s ease-in-out 0.2s forwards;
+  }
+}

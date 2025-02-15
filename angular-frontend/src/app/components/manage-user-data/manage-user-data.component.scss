@@ -1,0 +1,27 @@
+@use "colors";
+@use "typography";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  min-width: 350px;
+  min-height: 700px;
+  height: min-content;
+  padding: 30px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: colors.$white;
+  box-shadow: 4px 4px 5px rgba(colors.$black, 0.1);
+  gap: 10px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: typography.$font-weight-bold;
+}
+
+mat-tab-group {
+  width: 100%;
+}

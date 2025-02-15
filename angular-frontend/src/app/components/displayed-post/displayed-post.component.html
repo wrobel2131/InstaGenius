@@ -1,0 +1,4 @@
+@if (selectedPost()) {
+<app-post-action-bar [post]="selectedPost()"></app-post-action-bar>
+<app-gallery-post-element [post]="selectedPost()"></app-gallery-post-element>
+}
