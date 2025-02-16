@@ -4,24 +4,24 @@ import { MatDividerModule } from '@angular/material/divider';
 import { RouterLink } from '@angular/router';
 import { LogoComponent } from '../logo/logo.component';
 import { MobileFooterDarkComponent } from '../mobile-footer-dark/mobile-footer-dark.component';
-import { TranslocoModule } from '@ngneat/transloco';
 import { PickLanguageMenuComponent } from '../pick-language-menu/pick-language-menu.component';
 import { FormBuilder, Validators } from '@angular/forms';
+import {TranslocoModule} from "@jsverse/transloco";
 
 @Component({
-  selector: 'app-register-page',
-  standalone: true,
-  imports: [
-    BrandSectionComponent,
-    MobileFooterDarkComponent,
-    LogoComponent,
-    MatDividerModule,
-    PickLanguageMenuComponent,
-    RouterLink,
-    TranslocoModule,
-  ],
-  templateUrl: './register-page.component.html',
-  styleUrl: './register-page.component.scss',
+    selector: 'app-register-page',
+    standalone: true,
+    imports: [
+        BrandSectionComponent,
+        MobileFooterDarkComponent,
+        LogoComponent,
+        MatDividerModule,
+        PickLanguageMenuComponent,
+        RouterLink,
+        TranslocoModule,
+    ],
+    templateUrl: './register-page.component.html',
+    styleUrl: './register-page.component.scss'
 })
 export class RegisterPageComponent {
   private formBuilder: FormBuilder = inject(FormBuilder);

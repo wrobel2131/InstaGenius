@@ -3,8 +3,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { LogoComponent } from '../logo/logo.component';
 import { RouterLink } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { TranslocoModule } from '@ngneat/transloco';
 import { PickLanguageMenuComponent } from '../pick-language-menu/pick-language-menu.component';
+import {TranslocoModule} from "@jsverse/transloco";
+
 export const fadeInAnimation = trigger('inOutAnimation', [
   transition(':enter', [
     style({ opacity: 0 }),
@@ -13,18 +14,18 @@ export const fadeInAnimation = trigger('inOutAnimation', [
 ]);
 
 @Component({
-  selector: 'app-landing-page-header',
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    LogoComponent,
-    RouterLink,
-    TranslocoModule,
-    PickLanguageMenuComponent,
-  ],
-  templateUrl: './landing-page-header.component.html',
-  styleUrl: './landing-page-header.component.scss',
-  animations: [fadeInAnimation],
+    selector: 'app-landing-page-header',
+    standalone: true,
+    imports: [
+        MatButtonModule,
+        LogoComponent,
+        RouterLink,
+        TranslocoModule,
+        PickLanguageMenuComponent,
+    ],
+    templateUrl: './landing-page-header.component.html',
+    styleUrl: './landing-page-header.component.scss',
+    animations: [fadeInAnimation]
 })
 export class LandingPageHeaderComponent {
   logoWidth = '120px';

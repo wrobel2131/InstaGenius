@@ -5,15 +5,15 @@ import { AuthenticatedLayoutHeaderComponent } from '../authenticated-layout-head
 import { GalleryPostElementComponent } from '../gallery-post-element/gallery-post-element.component';
 
 @Component({
-  selector: 'app-authenticated-layout',
-  standalone: true,
-  imports: [
-    AuthenticatedLayoutSidePanelComponent,
-    AuthenticatedLayoutHeaderComponent,
-    GalleryPostElementComponent,
-    RouterOutlet,
-  ],
-  templateUrl: './authenticated-layout.component.html',
-  styleUrl: './authenticated-layout.component.scss',
+    selector: 'app-authenticated-layout',
+    standalone: true,
+    imports: [
+        AuthenticatedLayoutSidePanelComponent,
+        AuthenticatedLayoutHeaderComponent,
+        GalleryPostElementComponent,
+        RouterOutlet,
+    ],
+    templateUrl: './authenticated-layout.component.html',
+    styleUrl: './authenticated-layout.component.scss'
 })
 export class AuthenticatedLayoutComponent {}

@@ -1,22 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
-import { TranslocoModule } from '@ngneat/transloco';
 import { UserDataService } from '../../services/user-data.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UpdateUser, User } from '../../models/user.model';
+import { UpdateUser } from '../../models/user.model';
+import {TranslocoModule} from "@jsverse/transloco";
 
 @Component({
-  selector: 'app-user-info-page',
-  standalone: true,
-  imports: [
-    TranslocoModule,
-    MatDividerModule,
-    CommonModule,
-    ReactiveFormsModule,
-  ],
-  templateUrl: './user-info-page.component.html',
-  styleUrl: './user-info-page.component.scss',
+    selector: 'app-user-info-page',
+    standalone: true,
+    imports: [
+        TranslocoModule,
+        MatDividerModule,
+        CommonModule,
+        ReactiveFormsModule,
+    ],
+    templateUrl: './user-info-page.component.html',
+    styleUrl: './user-info-page.component.scss'
 })
 export class UserInfoPageComponent {
   private userDataService: UserDataService = inject(UserDataService);

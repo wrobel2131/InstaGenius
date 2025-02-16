@@ -5,11 +5,11 @@ import { UserDataService } from '../../services/user-data.service';
 import { InstagramPost } from '../../models/instagram-post.model';
 
 @Component({
-  selector: 'app-gallery-page',
-  standalone: true,
-  imports: [GalleryPostElementComponent, RouterOutlet, RouterLink],
-  templateUrl: './gallery-page.component.html',
-  styleUrl: './gallery-page.component.scss',
+    selector: 'app-gallery-page',
+    standalone: true,
+    imports: [GalleryPostElementComponent, RouterOutlet, RouterLink],
+    templateUrl: './gallery-page.component.html',
+    styleUrl: './gallery-page.component.scss'
 })
 export class GalleryPageComponent {
   private router: Router = inject(Router);

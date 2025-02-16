@@ -5,7 +5,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
-import { TranslocoModule } from '@ngneat/transloco';
 import { UserDataService } from '../../services/user-data.service';
 import {
   FormBuilder,
@@ -14,26 +13,23 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  DescriptionOptions,
-  GenerateOptions,
-  GraphicOptions,
-} from '../../models/generated-post-options.model';
+import {TranslocoModule} from "@jsverse/transloco";
+
 
 @Component({
-  selector: 'app-generator-page',
+    selector: 'app-generator-page',
   standalone: true,
   imports: [
-    MatFormFieldModule,
-    MatDividerModule,
-    MatInputModule,
-    MatSelectModule,
-    MatExpansionModule,
-    ReactiveFormsModule,
-    TranslocoModule,
-  ],
-  templateUrl: './generator-page.component.html',
-  styleUrl: './generator-page.component.scss',
+        MatFormFieldModule,
+        MatDividerModule,
+        MatInputModule,
+        MatSelectModule,
+        MatExpansionModule,
+        ReactiveFormsModule,
+        TranslocoModule,
+    ],
+    templateUrl: './generator-page.component.html',
+    styleUrl: './generator-page.component.scss'
 })
 export class GeneratorPageComponent {
   private router: Router = inject(Router);

@@ -6,36 +6,35 @@ import { GithubLoginButtonComponent } from '../github-login-button/github-login-
 import { RouterLink, RouterModule } from '@angular/router';
 import { LogoComponent } from '../logo/logo.component';
 import { MobileFooterDarkComponent } from '../mobile-footer-dark/mobile-footer-dark.component';
-import { TranslocoModule } from '@ngneat/transloco';
 import { PickLanguageMenuComponent } from '../pick-language-menu/pick-language-menu.component';
 import {
   FormBuilder,
-  FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+
 import { UserLoginCredentials } from '../../models/user.model';
 import { UserDataService } from '../../services/user-data.service';
+import {TranslocoModule} from "@jsverse/transloco";
 
 @Component({
-  selector: 'app-login-page',
-  standalone: true,
-  imports: [
-    BrandSectionComponent,
-    LogoComponent,
-    MobileFooterDarkComponent,
-    PickLanguageMenuComponent,
-    MatDividerModule,
-    GoogleLoginButtonComponent,
-    GithubLoginButtonComponent,
-    RouterLink,
-    RouterModule,
-    TranslocoModule,
-    ReactiveFormsModule,
-  ],
-  templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.scss',
+    selector: 'app-login-page',
+    standalone: true,
+    imports: [
+        BrandSectionComponent,
+        LogoComponent,
+        MobileFooterDarkComponent,
+        PickLanguageMenuComponent,
+        MatDividerModule,
+        GoogleLoginButtonComponent,
+        GithubLoginButtonComponent,
+        RouterLink,
+        RouterModule,
+        TranslocoModule,
+        ReactiveFormsModule,
+    ],
+    templateUrl: './login-page.component.html',
+    styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent {
   private formBuilder: FormBuilder = inject(FormBuilder);

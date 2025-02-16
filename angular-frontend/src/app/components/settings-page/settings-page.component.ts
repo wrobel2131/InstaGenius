@@ -3,10 +3,10 @@ import { ManageUserDataComponent } from '../manage-user-data/manage-user-data.co
 import { ManageUserPictureComponent } from '../manage-user-picture/manage-user-picture.component';
 
 @Component({
-  selector: 'app-setting-page',
-  standalone: true,
-  imports: [ManageUserDataComponent, ManageUserPictureComponent],
-  templateUrl: './settings-page.component.html',
-  styleUrl: './settings-page.component.scss',
+    selector: 'app-setting-page',
+    standalone: true,
+    imports: [ManageUserDataComponent, ManageUserPictureComponent],
+    templateUrl: './settings-page.component.html',
+    styleUrl: './settings-page.component.scss'
 })
 export class SettingPageComponent {}

@@ -4,11 +4,11 @@ import { PostActionBarComponent } from '../post-action-bar/post-action-bar.compo
 import { UserDataService } from '../../services/user-data.service';
 
 @Component({
-  selector: 'app-displayed-post',
-  standalone: true,
-  imports: [GalleryPostElementComponent, PostActionBarComponent],
-  templateUrl: './displayed-post.component.html',
-  styleUrl: './displayed-post.component.scss',
+    selector: 'app-displayed-post',
+    standalone: true,
+    imports: [GalleryPostElementComponent, PostActionBarComponent],
+    templateUrl: './displayed-post.component.html',
+    styleUrl: './displayed-post.component.scss'
 })
 export class DisplayedPostComponent {
   private userDataService: UserDataService = inject(UserDataService);

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { TranslocoService } from '@ngneat/transloco';
 import { Language } from '../models/language.model';
 import { SUPPORTED_LANGUAGES } from '../models/supported-languages';
+import {TranslocoService} from "@jsverse/transloco";
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +47,7 @@ export class TranslationService {
 
   private checkIfLanguageAvailable(languageCode: string) {
     return (
-      this.getAvailableLanguages().map((lang) => lang.code) as string[]
+      this.getAvailableLanguages().map((lang) => lang.code)
     ).includes(languageCode);
   }
 }

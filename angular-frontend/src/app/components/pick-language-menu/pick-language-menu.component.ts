@@ -6,11 +6,11 @@ import { Language } from '../../models/language.model';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-pick-language-menu',
+    selector: 'app-pick-language-menu',
   standalone: true,
   imports: [MatFormFieldModule, MatSelectModule],
-  templateUrl: './pick-language-menu.component.html',
-  styleUrl: './pick-language-menu.component.scss',
+    templateUrl: './pick-language-menu.component.html',
+    styleUrl: './pick-language-menu.component.scss'
 })
 export class PickLanguageMenuComponent implements OnInit, OnDestroy {
   private translationService: TranslationService = inject(TranslationService);

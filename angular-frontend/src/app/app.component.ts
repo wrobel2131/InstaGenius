@@ -5,12 +5,12 @@ import { slider } from './route-animations';
 import { TranslationService } from './services/translation.service';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  animations: [slider],
+    selector: 'app-root',
+    standalone: true,
+    imports: [CommonModule, RouterLink, RouterOutlet],
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    animations: [slider]
 })
 export class AppComponent implements OnInit {
   private translationService: TranslationService = inject(TranslationService);

@@ -9,13 +9,14 @@ import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 import { TranslocoHttpLoader } from './transloco-loader';
-import { provideTransloco } from '@ngneat/transloco';
+
 import {
   DEFAULT_LANGUAGE,
   SUPPORTED_LANGUAGES,
 } from './models/supported-languages';
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './services/in-memory-data.service';
+
+
+import {provideTransloco} from "@jsverse/transloco";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -32,9 +33,6 @@ export const appConfig: ApplicationConfig = {
       loader: TranslocoHttpLoader,
     }),
     importProvidersFrom(
-      HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
-        passThruUnknownUrl: true,
-      })
     ),
   ],
 };
