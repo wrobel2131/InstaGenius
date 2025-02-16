@@ -1,0 +1,30 @@
+@use "colors";
+@use "typography";
+
+@mixin control-styles {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &--label {
+    font-size: 12px;
+    font-weight: typography.$font-weight-regular;
+    margin: 5px;
+  }
+
+  &--input {
+    width: 100%;
+    background-color: transparent;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    border: 1px solid colors.$black;
+    font-weight: typography.$font-weight-regular;
+
+    &:focus {
+      border-color: colors.$purple;
+      outline: none;
+    }
+  }
+}

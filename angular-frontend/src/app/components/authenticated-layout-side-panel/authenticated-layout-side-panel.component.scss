@@ -1,0 +1,100 @@
+@use "colors";
+@use "typography";
+@use "brand-name-mixin";
+
+:host {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: min-content min-content auto min-content;
+  box-shadow: 4px 4px 5px rgba(colors.$black, 0.1);
+  background-color: colors.$white;
+}
+
+.side-bar {
+  &__header {
+    width: 100%;
+    height: 120px;
+    background: colors.$gradient;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    &--left {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    &--right {
+      display: flex;
+      padding-top: 30px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    &--name {
+      @include brand-name-mixin.brand-name-typography-styles;
+      font-size: 36px;
+      margin: 0 8px;
+    }
+  }
+  &__tabs {
+    height: max-content;
+    border-bottom: 1px solid colors.$grey;
+  }
+
+  &__content {
+    display: block;
+    width: 100%;
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    padding: 25px 25px;
+  }
+
+  &__footer {
+    align-self: flex-end;
+    height: 60px;
+    min-height: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 25px;
+    gap: 10%;
+    box-shadow: 0px -4px 8px 0px colors.$grey;
+    .brand {
+      text-align: start;
+
+      &__name {
+        @include brand-name-mixin.brand-name-typography-styles;
+        color: colors.$black;
+        font-size: 24px;
+      }
+
+      &__copyright {
+        font-size: 10px;
+        font-weight: typography.$font-weight-light;
+      }
+    }
+    .socials {
+      display: flex;
+      width: 50%;
+      justify-content: flex-end;
+      gap: 15px;
+
+      i {
+        transition: 0.2s;
+        cursor: pointer;
+      }
+
+      i:hover {
+        color: colors.$pink !important;
+      }
+    }
+  }
+}

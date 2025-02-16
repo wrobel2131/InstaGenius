@@ -1,0 +1,13 @@
+.language-picker {
+  width: 80px;
+  background-color: transparent;
+}
+
+:host ::ng-deep.mat-mdc-text-field-wrapper {
+  background-color: transparent;
+  color: white;
+}
+
+:host ::ng-deep.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: rgba(white, 0.3);
+}

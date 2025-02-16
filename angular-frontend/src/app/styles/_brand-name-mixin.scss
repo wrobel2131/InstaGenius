@@ -1,0 +1,10 @@
+@use "typography";
+@use "colors";
+
+@mixin brand-name-typography-styles {
+  font-family: "Lobster Two", sans-serif;
+  font-style: italic;
+  font-weight: typography.$font-weight-regular;
+  line-height: normal;
+  color: colors.$white;
+}
