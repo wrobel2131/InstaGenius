@@ -30,12 +30,12 @@
     <a [routerLink]="'/'">{{ "landingPage.navigation.home" | transloco }}</a>
   </li>
   <li class="nav__item">
-    <a [routerLink]="'/signin'">{{
+    <a (click)="onLogin()">{{
       "landingPage.navigation.signIn" | transloco
     }}</a>
   </li>
   <li class="nav__item">
-    <a [routerLink]="'signup'">{{
+    <a (click)="onRegister()">{{
       "landingPage.navigation.joinUs" | transloco
     }}</a>
   </li>
@@ -49,16 +49,16 @@
   <li class="nav__item">
     <a [routerLink]="'/'">{{ "landingPage.navigation.home" | transloco }}</a>
   </li>
-  <li class="nav__item">
-    <a [routerLink]="'/signin'">{{
-      "landingPage.navigation.signIn" | transloco
-    }}</a>
-  </li>
-  <li class="nav__item">
-    <button [routerLink]="'/signup'" class="button">
-      <span>{{ "landingPage.navigation.joinUs" | transloco }}</span>
-    </button>
-  </li>
+    <li class="nav__item">
+        <a (click)="onLogin()">{{
+                "landingPage.navigation.signIn" | transloco
+            }}</a>
+    </li>
+    <li class="nav__item">
+        <a (click)="onRegister()">{{
+                "landingPage.navigation.joinUs" | transloco
+            }}</a>
+    </li>
   <li class="nav__item nav__item--languages">
     <app-pick-language-menu></app-pick-language-menu>
   </li>

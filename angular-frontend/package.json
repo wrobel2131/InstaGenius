@@ -22,6 +22,10 @@
     "@angular/router": "^19.1.6",
     "@jsverse/transloco": "^7.5.1",
     "flag-icons": "^7.1.0",
+    "install": "^0.13.0",
+    "keycloak-angular": "^19.0.2",
+    "keycloak-js": "^26.1.2",
+    "npm": "^10.9.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

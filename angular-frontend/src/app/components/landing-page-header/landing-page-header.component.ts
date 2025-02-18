@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { LogoComponent } from '../logo/logo.component';
 import { RouterLink } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { PickLanguageMenuComponent } from '../pick-language-menu/pick-language-menu.component';
 import {TranslocoModule} from "@jsverse/transloco";
+import Keycloak from "keycloak-js";
 
 export const fadeInAnimation = trigger('inOutAnimation', [
   transition(':enter', [
@@ -28,11 +29,26 @@ export const fadeInAnimation = trigger('inOutAnimation', [
     animations: [fadeInAnimation]
 })
 export class LandingPageHeaderComponent {
-  logoWidth = '120px';
-  logoHeight = '120px';
-  isMenuExpanded = false;
+  logoWidth: string = '120px';
+  logoHeight: string = '120px';
+  isMenuExpanded: boolean = false;
+  private readonly keycloak: Keycloak = inject(Keycloak);
 
-  onChangeMobileMenuState() {
+  onChangeMobileMenuState(): boolean {
     return (this.isMenuExpanded = !this.isMenuExpanded);
   }
+
+  onLogin(): void {
+      console.log("Logging in....")
+    this.keycloak.login().then(e => console.log("Logged in"));
+  }
+
+  onRegister(): void {
+      console.log("Creating new account in....")
+      this.keycloak.register().then(e => console.log("Created account in"));
+  }
+
+
+
+
 }

@@ -26,6 +26,5 @@ export class ProfileMenuComponent {
 
   onLogout() {
     console.log('component logout');
-    this.userDataService.logout();
   }
 }

@@ -1,13 +1,13 @@
 import {
   ApplicationConfig,
   importProvidersFrom,
-  isDevMode,
+  isDevMode, provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideHttpClient } from '@angular/common/http';
+import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import { TranslocoHttpLoader } from './transloco-loader';
 
 import {
@@ -17,12 +17,16 @@ import {
 
 
 import {provideTransloco} from "@jsverse/transloco";
+import {provideKC} from "./keycloak.config";
+import {includeBearerTokenInterceptor} from "keycloak-angular";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimations(),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
+    provideKC(),
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideTransloco({
       config: {
         availableLangs: SUPPORTED_LANGUAGES.map((language) => language.code),
