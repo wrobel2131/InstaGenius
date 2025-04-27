@@ -28,7 +28,7 @@ public class EventHandler {
                                                         keycloakSession);
         }
     }
-
+//TODO delete is probably admin event, so its needs to be fixed
     public void handleDeleteAccountEvent(Event event, KeycloakSession keycloakSession) {
         EventType eventType = event.getType();
         if(eventType.equals(EventType.DELETE_ACCOUNT)) {

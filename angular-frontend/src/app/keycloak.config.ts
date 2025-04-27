@@ -16,9 +16,9 @@ export const KC_CLIENT_ID = 'instagenius-frontend';
 
 export const provideKC = () => provideKeycloak({
     config: {
-        realm: 'instagenius',
-        url: 'http://localhost:8180', //TODO replace with something more abstract
-        clientId: 'instagenius-frontend' //TODO chech clientId for frontend
+        realm: KC_REALM_ID,
+        url: '/auth', //TODO replace with something more abstract
+        clientId: KC_CLIENT_ID //TODO chech clientId for frontend
     },
     initOptions: {
         onLoad: 'check-sso',

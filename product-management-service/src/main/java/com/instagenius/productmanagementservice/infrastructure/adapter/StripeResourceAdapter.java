@@ -12,6 +12,7 @@ import com.stripe.param.PriceUpdateParams;
 import com.stripe.param.ProductCreateParams;
 import com.stripe.param.ProductUpdateParams;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class StripeResourceAdapter implements PaymentGatewayResourcePort {
     private final StripeProperties stripeProperties;
 
@@ -39,7 +41,7 @@ public class StripeResourceAdapter implements PaymentGatewayResourcePort {
         RequestOptions requestOptions = StripeApiUtils.createRequestOptions(stripeProperties.getApiKey());
         com.stripe.model.Product stripeProduct = StripeApiUtils.createProduct(productCreateParams, requestOptions);
 
-        System.out.println(stripeProduct);
+        log.debug(String.valueOf(stripeProduct));
 
         PriceCreateParams priceCreateParams = PriceCreateParams
                 .builder()
@@ -51,7 +53,7 @@ public class StripeResourceAdapter implements PaymentGatewayResourcePort {
 
         Price stripePrice = StripeApiUtils.createPrice(priceCreateParams, requestOptions);
 
-        System.out.println(stripePrice);
+        log.debug(String.valueOf(stripePrice));
 
         return new PaymentGatewayProduct(stripeProduct.getId(), stripePrice.getId());
     }
@@ -97,7 +99,7 @@ public class StripeResourceAdapter implements PaymentGatewayResourcePort {
 
         Price stripePrice = StripeApiUtils.createPrice(priceCreateParams, requestOptions);
 
-        System.out.println(stripePrice);
+        log.debug(String.valueOf(stripePrice));
 
 
         return new PaymentGatewayProduct(stripeProduct.getId(), stripePrice.getId());

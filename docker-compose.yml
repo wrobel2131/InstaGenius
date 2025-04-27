@@ -221,6 +221,7 @@ services:
       KC_HOSTNAME: localhost
       KC_HOSTNAME_PORT: 8180
       KC_HTTP_ENABLED: true
+      KC_HTTP_RELATIVE_PATH: /auth
       KC_HOSTNAME_STRICT_HTTPS: false
       KEYCLOAK_SSL_REQUIRED: none
       KC_DB_URL: jdbc:postgresql://postgres_keycloak:5432/keycloak_db
@@ -234,15 +235,16 @@ services:
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_LOG_LEVEL: INFO
       EVENT_LISTENER_CLIENT_ID: instagenius-event-listener
-      EVENT_LISTENER_CLIENT_SECRET: X3YPHBRhtR1grRktSagiNSwXoO3b7S0u
+      EVENT_LISTENER_CLIENT_SECRET: t8G42kqfA9bWK7eXOot9AvmNWYuGfOD4
     ports:
       - "8180:8080"
     restart: unless-stopped
-    command: ["start-dev"]
+    command: ["start-dev","--spi-theme-static-max-age=-1","--spi-theme-cache-themes=false","--spi-theme-cache-templates=false"]
     depends_on:
       - postgres_keycloak
     volumes:
       - ./keycloak-event-listener/target/keycloak-event-listener-0.0.1.jar:/opt/keycloak/providers/event-listener.jar
+      - ./keycloak-custom-themes/instagenius:/opt/keycloak/themes/instagenius-theme
     networks:
       - instagenius-net
 #    extra_hosts:

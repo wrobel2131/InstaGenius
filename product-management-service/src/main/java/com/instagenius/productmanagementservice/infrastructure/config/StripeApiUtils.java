@@ -10,10 +10,12 @@ import com.stripe.param.PriceUpdateParams;
 import com.stripe.param.ProductCreateParams;
 import com.stripe.param.ProductUpdateParams;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 
 @UtilityClass
+@Slf4j
 public class StripeApiUtils {
 
     public RequestOptions createRequestOptions(String apiKey) {
@@ -23,7 +25,7 @@ public class StripeApiUtils {
     }
 
     public Product createProduct(ProductCreateParams productCreateParams, RequestOptions requestOptions) {
-        System.out.println("Creating stripe product");
+        log.debug("Creating stripe product");
         try {
             return Product.create(productCreateParams, requestOptions);
         } catch (StripeException e) {
@@ -32,7 +34,7 @@ public class StripeApiUtils {
     }
 
     public Product updateProduct(String productId, ProductUpdateParams productUpdateParams, RequestOptions requestOptions) {
-        System.out.println("Updating stripe product: " + productUpdateParams);
+        log.debug("Updating stripe product: {}", productUpdateParams);
         try {
             Product product = Product.retrieve(productId, requestOptions);
             return product.update(productUpdateParams, requestOptions);
@@ -42,7 +44,7 @@ public class StripeApiUtils {
     }
 
     public Price createPrice(PriceCreateParams priceCreateParams, RequestOptions requestOptions) {
-        System.out.println("Creating stripe price");
+        log.debug("Creating stripe price");
         try {
             return Price.create(priceCreateParams, requestOptions);
         } catch (StripeException e) {
@@ -51,7 +53,7 @@ public class StripeApiUtils {
     }
 
     public Price updatePrice(String priceId, PriceUpdateParams priceUpdateParams, RequestOptions requestOptions) {
-        System.out.println("Updating stripe price: " + priceUpdateParams);
+        log.debug("Updating stripe price: {}", priceUpdateParams);
         try {
             Price price = Price.retrieve(priceId, requestOptions);
             return price.update(priceUpdateParams, requestOptions);

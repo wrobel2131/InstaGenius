@@ -19,7 +19,7 @@ const isAccessAllowed = async(route: ActivatedRouteSnapshot, state: RouterStateS
     const userResourceRoles = grantedRoles.resourceRoles[KC_CLIENT_ID];
     console.log("userResourceRoles: ", userResourceRoles);
 
-    const hasRequiredRole = requiredRoles.some(r => userResourceRoles.includes(r));
+    const hasRequiredRole = requiredRoles.some(r => userResourceRoles?.includes(r));
 
     console.log("hasRequiredRole: ", hasRequiredRole);
     if(authenticated && hasRequiredRole) {
@@ -27,7 +27,7 @@ const isAccessAllowed = async(route: ActivatedRouteSnapshot, state: RouterStateS
     }
 
     const router = inject(Router);
-    return router.parseUrl('/not-authorized');
+    return router.parseUrl('');
 };
 
 export const canActivateBasedOnRole = createAuthGuard<CanActivateFn>(isAccessAllowed);

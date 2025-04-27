@@ -4,6 +4,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
 import { UserDataService } from '../../services/user-data.service';
 import {TranslocoModule} from "@jsverse/transloco";
+import Keycloak from "keycloak-js";
+import {noop} from "rxjs";
 
 @Component({
     selector: 'app-profile-menu',
@@ -21,10 +23,12 @@ import {TranslocoModule} from "@jsverse/transloco";
 })
 export class ProfileMenuComponent {
   private userDataService: UserDataService = inject(UserDataService);
+  private readonly keycloak: Keycloak = inject(Keycloak);
 
   user = this.userDataService.user;
 
   onLogout() {
-    console.log('component logout');
+    this.keycloak.logout({redirectUri: window.location.origin}).then(noop);
+
   }
 }

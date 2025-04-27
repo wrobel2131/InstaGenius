@@ -2,6 +2,7 @@ package com.instagenius.user.utils;
 
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.util.JsonSerialization;
 
@@ -12,13 +13,18 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.logging.Logger;
 
+import static jakarta.ws.rs.core.HttpHeaders.AUTHORIZATION;
+import static jakarta.ws.rs.core.HttpHeaders.CONTENT_TYPE;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+
 @UtilityClass
+@Slf4j
 public class ExternalApiUtils {
-    private static final Logger logger = Logger.getLogger(ExternalApiUtils.class.getName());
+    private static final String BEARER_TOKEN = "Bearer ";
 
     public void performExternalPOSTApiCall(String url, Object requestBody, KeycloakSession keycloakSession) {
         String signedAccessToken = TokenUtils.getAccessToken(keycloakSession);
-        logger.info("Signed access token: " + signedAccessToken);
+        log.debug("Signed access token: {}", signedAccessToken);
 
         HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -27,18 +33,18 @@ public class ExternalApiUtils {
                     .newBuilder()
                     .uri(new URI(url))
                     .timeout(Duration.ofSeconds(10))
-                    .header("Authorization", "Bearer " + signedAccessToken)
-                    .header("Content-Type", "application/json")
+                    .header(AUTHORIZATION, BEARER_TOKEN + signedAccessToken)
+                    .header(CONTENT_TYPE, APPLICATION_JSON)
                     .POST(HttpRequest.BodyPublishers.ofString(JsonSerialization.writeValueAsString(requestBody)))
                     .build();
-            logger.info("Sending created user to user-service!");
+            log.debug("Sending created user to user-service!");
 
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            logger.info("Response from API: " + response.body());
-            logger.info("Response status: " + response.statusCode());
+            log.debug("Response from API: {}", response.body());
+            log.debug("Response status: {}", response.statusCode());
 
         } catch (Exception e) {
-            logger.warning("Exception caught: " + e.getMessage());
+            log.debug("Exception caught: {}", e.getMessage());
             throw new InternalServerErrorException(e.getMessage());
         }
         httpClient.close();
@@ -54,15 +60,15 @@ public class ExternalApiUtils {
                     .newBuilder()
                     .uri(new URI(url))
                     .timeout(Duration.ofSeconds(10))
-                    .header("Authorization", "Bearer " + signedAccessToken)
+                    .header(AUTHORIZATION, BEARER_TOKEN + signedAccessToken)
                     .DELETE()
                     .build();
 
-            logger.info("Deleting user from user-service");
+            log.debug("Deleting user from user-service");
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            logger.info("Response from API: " + response.body());
+            log.debug("Response from API: {}", response.body());
         } catch (Exception e) {
-            logger.warning("Exception caught: " + e.getMessage());
+            log.debug("Exception caught: {}", e.getMessage());
             throw new InternalServerErrorException(e.getMessage());
         }
         httpClient.close();
@@ -82,11 +88,11 @@ public class ExternalApiUtils {
                     .PUT(HttpRequest.BodyPublishers.ofString(JsonSerialization.writeValueAsString(requestBody)))
                     .build();
 
-            logger.info("Updating user to user-service");
+            log.debug("Updating user to user-service");
 //            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-//            logger.info("Response from API: " + response.body());
+//            log.debug("Response from API: " + response.body());
         } catch (Exception e) {
-            logger.warning("Exception caught: " + e.getMessage());
+            log.debug("Exception caught: {}", e.getMessage());
             throw new InternalServerErrorException(e.getMessage());
         }
         httpClient.close();

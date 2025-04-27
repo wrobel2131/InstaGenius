@@ -7,7 +7,7 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 
 public class UserEventListenerProviderFactory implements EventListenerProviderFactory {
-    private final String USER_EVENT_LISTENER_ID = "user-event-listener";
+    private static final String USER_EVENT_LISTENER_ID = "user-event-listener";
 
     @Override
     public EventListenerProvider create(KeycloakSession keycloakSession) {

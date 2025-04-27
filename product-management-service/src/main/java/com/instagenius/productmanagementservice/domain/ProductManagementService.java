@@ -19,7 +19,7 @@ import java.util.UUID;
 public class ProductManagementService implements ProductManagementUseCase {
     private final ProductPersistencePort productPersistencePort;
     private final PaymentGatewayResourcePort paymentGatewayResourcePort;
-    private final FileStoragePort fileStoragePort;
+    private final FileStoragePort fileStoragePort; //TODO what is used for?
 
     public ProductManagementService(ProductPersistencePort productPersistencePort, PaymentGatewayResourcePort paymentGatewayResourcePort, FileStoragePort fileStoragePort) {
         this.productPersistencePort = productPersistencePort;

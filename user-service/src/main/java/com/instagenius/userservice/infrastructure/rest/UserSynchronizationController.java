@@ -4,6 +4,7 @@ import com.instagenius.userservice.application.UserSynchronizationUseCase;
 import com.instagenius.userservice.infrastructure.dto.CreateUserRequestDto;
 import com.instagenius.userservice.infrastructure.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,14 +15,15 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/sync/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserSynchronizationController {
     private static final UserMapper userMapper = UserMapper.INSTANCE;
     private final UserSynchronizationUseCase userSynchronizationUseCase;
 
-    @PreAuthorize("hasRole('ROLE_EVENT_LISTENER')")
+    @PreAuthorize("hasRole('ROLE_USER_SYNC')")
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createUser(@RequestBody CreateUserRequestDto createUserRequestDto) {
-        System.out.println("creaitng user");
+       log.info("creaitng user from kc");
         userSynchronizationUseCase.createUser(
                 userMapper.toCreateUser(createUserRequestDto)
         );
@@ -31,7 +33,7 @@ public class UserSynchronizationController {
     @PreAuthorize("hasRole('ROLE_EVENT_LISTENER')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") UUID id) {
-        System.out.println("deleting user");
+        log.info("deleting user from kc");
         userSynchronizationUseCase.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

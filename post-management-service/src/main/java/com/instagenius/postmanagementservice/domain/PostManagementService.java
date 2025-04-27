@@ -28,7 +28,6 @@ public class PostManagementService implements PostManagementUseCase {
     @Override
     public Post createPost(UUID userId, DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions, String title) {
         GenerationCost generationCost = calculateGenerationCost(descriptionGenerationOptions, imageGenerationOptions);
-        System.out.println("Generation cost: " + generationCost.coins());
         UUID operationId = UUID.randomUUID();
         CoinReservation coinReservation = coinManagementPort.reserveCoins(new ReserveCoins(generationCost.coins(), operationId));
 

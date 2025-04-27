@@ -8,6 +8,7 @@ import com.instagenius.paymentservice.infrastructure.mapper.PaymentMapper;
 import com.instagenius.paymentservice.infrastructure.mapper.ProductRelatedMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping ("/api/v1/payments")
+@Slf4j
 public class PaymentController {
     private final PaymentUseCase paymentUseCase;
     private static final PaymentMapper paymentMapper = PaymentMapper.INSTANCE;
@@ -42,10 +44,9 @@ public class PaymentController {
     @PostMapping(value = "/webhooks/successful-payment")
     ResponseEntity<Void> handleSuccessfulPayment(@RequestBody String eventPayload,
                                                  @RequestHeader("Stripe-Signature") String signatureHeader) {
-//        System.out.println(eventPayload);
         paymentUseCase.handlePaymentWebhook(eventPayload, signatureHeader, PaymentStatus.COMPLETED);
 
-        System.out.println("Payment successful");
+        log.debug("Payment successful");
         return ResponseEntity.ok().build();
     }
 
@@ -53,9 +54,9 @@ public class PaymentController {
     ResponseEntity<Void> handleCanceledPayment(@RequestBody String eventPayload, @RequestHeader("Stripe-Signature") String signatureHeader) {
 
 
-        System.out.println("Payment canceled");
+        log.debug("Payment canceled");
         paymentUseCase.handlePaymentWebhook(eventPayload, signatureHeader, PaymentStatus.CANCELLED);
-        System.out.println("Finished payment cancellation");
+        log.debug("Finished payment cancellation");
         return ResponseEntity.ok().build();
     }
 
@@ -63,7 +64,7 @@ public class PaymentController {
     ResponseEntity<Void> handleFailedPayment(@RequestBody String eventPayload,
                                              @RequestHeader("Stripe-Signature") String signatureHeader) {
 
-        System.out.println("Payment failed");
+        log.debug("Payment failed");
         paymentUseCase.handlePaymentWebhook(eventPayload, signatureHeader, PaymentStatus.FAILED);
         return ResponseEntity.ok().build();
     }

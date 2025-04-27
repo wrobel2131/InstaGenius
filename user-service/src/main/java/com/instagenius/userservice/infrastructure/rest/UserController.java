@@ -5,6 +5,7 @@ import com.instagenius.userservice.infrastructure.dto.UpdateUserRequestDto;
 import com.instagenius.userservice.infrastructure.dto.UserResponseDto;
 import com.instagenius.userservice.infrastructure.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 public class UserController {
     private static final UserMapper userMapper = UserMapper.INSTANCE;
     private final UserUseCase userUseCase;
@@ -34,7 +36,7 @@ public class UserController {
     public ResponseEntity<UserResponseDto> updateUserProfile(@AuthenticationPrincipal Jwt jwt, @RequestBody
     UpdateUserRequestDto updateUserRequestDto) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
-        System.out.println("userId = " + userId);
+        log.debug("userId = {}", userId);
         return ResponseEntity.ok(
                 userMapper.toUserResponseDto(
                         userUseCase.updateUser(userId, userMapper.toUpdateUser(updateUserRequestDto))
