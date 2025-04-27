@@ -24,10 +24,10 @@ export class UserInfoPageComponent {
 
   user = this.userDataService.user;
 
-  isLoginEditEnabled = this.userDataService.isLoginEditEnabled;
+  isLoginEditEnabled = false;
 
   userDataForm = this.formBuilder.group({
-    login: [{ value: '', disabled: !this.isLoginEditEnabled() }],
+    login: [{ value: '', disabled: !this.isLoginEditEnabled }],
     email: [''],
     firstName: [''],
     lastName: [''],

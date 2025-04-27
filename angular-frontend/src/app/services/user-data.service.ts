@@ -1,6 +1,5 @@
 import { DestroyRef, Injectable, effect, inject, signal } from '@angular/core';
 import { UpdateUser, User, UserLoginCredentials } from '../models/user.model';
-import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { InstagramPost } from '../models/instagram-post.model';
 import { ApiService } from './api.service';
@@ -12,20 +11,9 @@ import { GenerateOptions } from '../models/generated-post-options.model';
   providedIn: 'root',
 })
 export class UserDataService {
-  private authService: AuthService = inject(AuthService);
   private router: Router = inject(Router);
   private apiService: ApiService = inject(ApiService);
 
-  //Needs to be changed to false as defualt
-  isAuthenticated = signal<boolean>(true);
-
-  isAuthenticatedEffect = effect(() => {
-    if (!this.isAuthenticated()) {
-      this.authService.clearLocalStorage();
-    }
-  });
-
-  isLoginEditEnabled = signal<boolean>(false);
 
   userId = signal<number | undefined>(undefined);
 
@@ -45,27 +33,12 @@ export class UserDataService {
 
   selectedPost = signal<InstagramPost | undefined>(undefined);
 
-  setUserId(userId: number) {
-    this.userId.set(userId);
-  }
-
-  setIsAuthenticated(isAuthenticated: boolean): void {
-    this.isAuthenticated.set(isAuthenticated);
-  }
   setSelectedPost(post: InstagramPost) {
     this.selectedPost.set(post);
   }
 
   /* Methods which are using set methods for signals */
 
-  login(userLoginCredentials: UserLoginCredentials): void {
-    this.authService.login(userLoginCredentials).subscribe((response) => {
-      this.authService.setLocalStorage(response);
-      this.setIsAuthenticated(true);
-      this.router.navigate(['/dashboard']);
-      this.setUserId(response.userId);
-    });
-  }
 
   updateUser(updatedUser: UpdateUser): void {
     this.apiService
@@ -83,8 +56,4 @@ export class UserDataService {
       .unsubscribe();
   }
 
-  logout(): void {
-    this.setIsAuthenticated(false);
-    this.router.navigate(['']);
-  }
 }

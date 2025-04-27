@@ -1,0 +1,546 @@
+/* Fonts and Typography */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital@1&display=swap');
+
+:root {
+    /* Colors */
+    --white: #ffffff;
+    --black: #000000;
+    --dark-white: #f5f5f5;
+    --grey: #d9d9d9;
+    --semi-grey: #9e9e9e;
+    --dark-grey: #616161;
+    --pink: #dd2a7b;
+    --purple: #8a3ab9;
+    --blue: #4c68d7;
+    --light-blue: #81d8f7;
+    --input-border: #e1e1e1;
+    --input-bg: #ffffff;
+    --text-secondary: #666666;
+
+    /* Font weights */
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: var(--font-weight-regular);
+    font-size: 16px;
+    overflow: hidden;
+}
+
+body {
+    background-color: var(--dark-white);
+}
+
+.instagenius-theme {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.brand-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.brand-panel {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(45deg, #FEDA77, #F58529, #DD2A7B, #8134AF, #515BD4);
+    justify-content: space-between;
+    align-items: center;
+    width: 40%;
+    min-width: 500px;
+    max-width: 800px;
+    height: 100vh;
+    color: var(--white);
+    padding: 40px 50px;
+    overflow: hidden;
+}
+
+.brand-panel__logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.brand-panel__logo img {
+    width: 250px;
+    height: 250px;
+}
+
+.brand-panel__logo-name {
+    font-family: 'Lobster Two', cursive;
+    font-style: italic;
+    font-size: 60px;
+    text-align: center;
+    margin-top: -40px;
+    color: var(--white);
+}
+
+.brand-panel__slogan {
+    font-size: 32px;
+    text-align: center;
+    line-height: 44px;
+    margin-bottom: 40px;
+}
+
+.brand-panel__slogan a {
+    color: var(--white);
+    text-decoration: none;
+}
+
+.brand-panel__slogan--light {
+    font-weight: 300;
+}
+
+.brand-panel__slogan--bold {
+    font-weight: 700;
+}
+
+.form-container {
+    width: 60%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 40px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.welcome-text {
+    text-align: center;
+    font-size: 38px;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: 40px;
+    color: var(--black);
+}
+
+#kc-form {
+    width: 100%;
+    max-width: 90%;
+    margin-bottom: 20px;
+}
+
+#kc-form-wrapper {
+    width: 100%;
+}
+
+.form__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form__control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form__control--label {
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+    color: var(--black);
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.form__control--input {
+    width: 100%;
+    height: 50px;
+    padding: 0 45px 0 15px;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: var(--font-weight-regular);
+    background-color: var(--input-bg);
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.form__control--input:focus {
+    outline: none;
+    border-color: var(--pink);
+    box-shadow: 0 0 0 2px rgba(221, 42, 123, 0.1);
+}
+
+.form__control--input::placeholder {
+    color: var(--text-secondary);
+}
+
+.input-icon {
+    position: absolute;
+    right: 15px;
+    color: var(--dark-grey);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.input-helper {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: -5px;
+}
+
+.forgot-password {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--black);
+    display: flex;
+    gap: 5px;
+}
+
+.forgot-password-link {
+    color: var(--pink);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+}
+
+.form__buttons {
+    display: flex;
+    margin-top: 30px;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 50%;
+    min-width: 200px;
+    height: 50px;
+    border: none;
+    border-radius: 28px;
+    font-size: 16px;
+    font-weight: var(--font-weight-bold);
+    text-transform: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+}
+
+.button.primary {
+    background-color: var(--pink);
+    color: var(--white);
+}
+
+.button.primary:hover {
+    background-color: #c92470;
+}
+
+.divider-text {
+    position: relative;
+    text-align: center;
+    margin: 30px 0;
+}
+
+.divider-text span {
+    background-color: #f5f5f5;
+    padding: 0 15px;
+    color: var(--text-secondary);
+    position: relative;
+    z-index: 1;
+}
+
+.divider-text::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--input-border);
+}
+
+.social-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.social-login-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+    border-radius: 28px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: var(--font-weight-regular);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+    gap: 10px;
+    border: 1px solid var(--input-border);
+}
+
+.google-login-button {
+    background-color: var(--white);
+    color: var(--black);
+}
+
+.github-login-button {
+    background-color: var(--black);
+    color: var(--white);
+    border: none;
+}
+
+.apple-login-button {
+    background-color: var(--black);
+    color: var(--white);
+    border: none;
+}
+
+.social-login-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.social-text {
+    font-weight: var(--font-weight-medium);
+}
+
+/* Registration */
+.registration-section {
+    margin-top: 20px;
+}
+
+.registration-text {
+    font-size: 14px;
+    color: var(--black);
+}
+
+.registration-link {
+    color: var(--pink);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+}
+
+.registration-link:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: auto;
+}
+
+.footer .brand__name {
+    font-family: 'Lobster Two', cursive;
+    font-style: italic;
+    font-size: 36px;
+    margin: 0;
+}
+
+.footer .brand__copyright {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 20px;
+    letter-spacing: 0.1px;
+    opacity: 0.8;
+    margin: 5px 0 0 0;
+}
+
+.footer .socials {
+    display: flex;
+    gap: 25px;
+}
+
+.footer .socials i {
+    cursor: pointer;
+    transition: 0.2s;
+    color: var(--white);
+    font-size: 28px;
+}
+
+.footer .socials i:hover {
+    opacity: 0.8;
+}
+
+/* Error Messages */
+.form__error {
+    color: #f44336;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Alert Messages */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.alert-error {
+    background-color: #f44336;
+    color: var(--white);
+}
+
+.alert-success {
+    background-color: #4CAF50;
+    color: var(--white);
+}
+
+.alert-warning {
+    background-color: #ff9800;
+    color: var(--white);
+}
+
+.alert-info {
+    background-color: #2196F3;
+    color: var(--white);
+}
+
+/* Override Keycloak default styles */
+#kc-form-login input[type="submit"],
+#kc-register-form input[type="submit"] {
+    border: none !important;
+}
+
+/* Hide mobile elements on desktop */
+.logo--mobile {
+    display: none;
+}
+
+.footer--mobile {
+    display: none;
+}
+
+/* For screens smaller than the minimum brand panel width */
+@media screen and (max-width: 1100px) {
+    .brand-panel {
+        min-width: 400px;
+    }
+
+    .brand-panel__logo img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .brand-panel__logo-name {
+        font-size: 48px;
+    }
+
+    .brand-panel__slogan {
+        font-size: 24px;
+        line-height: 36px;
+    }
+}
+
+/* Animation for logo */
+.animated {
+    height: 100%;
+    min-width: 100px;
+    cursor: pointer;
+}
+
+@keyframes dash {
+    from {
+        stroke-dashoffset: 3000;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.animated path {
+    stroke: var(--white);
+    stroke-width: 5px;
+    stroke-dasharray: 3000;
+    stroke-dashoffset: 3000;
+    fill: none;
+    animation: dash 2s ease-in-out 0.2s forwards;
+    -webkit-animation: dash 2s ease-in-out 0.2s forwards;
+}
+
+@media screen and (max-width: 768px) {
+    .footer--mobile .brand__name {
+        font-family: 'Lobster Two', cursive;
+        font-style: italic;
+    }
+}
+
+/* Registration grid */
+.registration-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Username and Email side by side */
+.username-field,
+.email-field {
+    grid-column: auto; /* Allow to flow in the grid */
+}
+
+/* First name and last name side by side */
+.firstname-field,
+.lastname-field {
+    grid-column: auto;
+}
+
+/* Password and Confirm Password side by side */
+.password-field,
+.password-confirm-field {
+    grid-column: auto;
+}
+
+/* For mobile screens */
+@media screen and (max-width: 768px) {
+    .registration-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* All fields stack on mobile */
+    .username-field,
+    .email-field,
+    .firstname-field,
+    .lastname-field,
+    .password-field,
+    .password-confirm-field {
+        grid-column: 1;
+    }
+}

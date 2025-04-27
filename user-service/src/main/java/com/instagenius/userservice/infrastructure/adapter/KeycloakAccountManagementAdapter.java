@@ -28,7 +28,7 @@ public class KeycloakAccountManagementAdapter implements KeycloakAccountManageme
     public void updateUser(UUID id, UpdateUser updateUser) {
         String accessToken = getAccessToken().orElseThrow(() -> new NotAuthorizedException("No access token " +
                                                                                                    "available!"));
-        String url = "http://localhost:8180/realms/instagenius/account/";
+        String url = "http://localhost:8180/auth/realms/instagenius/account/";
         HttpEntity<UpdateUserAccountRequestDto> entity = getUpdateUserAccountEntity(
                 id, updateUser, accessToken);
 

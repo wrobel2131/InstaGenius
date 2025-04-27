@@ -18,6 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OrderRepository implements OrderPersistencePort {
     private final JpaOrderRepository jpaOrderRepository;
+    private static final String ORDER_NOT_FOUND_ERROR_MESSAGE = "Order not found!";
 
     @Override
     public Order save(Order order) {
@@ -32,20 +33,20 @@ public class OrderRepository implements OrderPersistencePort {
     public Order findOrderByUserIdAndReferenceId(UUID userId, String referenceId) {
         return OrderMapper.toOrder(
                 jpaOrderRepository.findOrderByUserIdAndReferenceId(userId, referenceId)
-                                  .orElseThrow(() -> new OrderNotFoundException("Order not found!"))
+                                  .orElseThrow(() -> new OrderNotFoundException(ORDER_NOT_FOUND_ERROR_MESSAGE))
         );
     }
 
     @Override
     public Order findOrderByUserIdAndId(UUID userId, UUID id) {
         return OrderMapper.toOrder(jpaOrderRepository.findOrderByUserIdAndId(userId, id).orElseThrow(
-                () -> new OrderNotFoundException("Order not found!")));
+                () -> new OrderNotFoundException(ORDER_NOT_FOUND_ERROR_MESSAGE)));
     }
 
     @Override
     public Order findOrderById(UUID id) {
         return OrderMapper.toOrder(jpaOrderRepository.findOrderById(id).orElseThrow(
-                () -> new OrderNotFoundException("Order not found!")));
+                () -> new OrderNotFoundException(ORDER_NOT_FOUND_ERROR_MESSAGE)));
     }
 
     @Override

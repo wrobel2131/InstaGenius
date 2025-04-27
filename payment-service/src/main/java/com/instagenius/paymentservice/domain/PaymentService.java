@@ -29,7 +29,7 @@ public class PaymentService implements PaymentUseCase {
     public InitializedPayment initializePayment(UUID userId, UUID orderId, String orderReferenceId, List<OrderedProduct> orderedProducts) {
         // Get products by ids from product management service
         List<Product> products = productManagementPort.getProductsByIds(orderedProducts.stream().map(OrderedProduct::productId).toList());
-        System.out.println("PaymentService.initializePayment: products = " + products);
+
 
         // Create a map of products and their quantities
         Map<Product, Integer> productQuantityMap = orderedProducts
@@ -42,22 +42,19 @@ public class PaymentService implements PaymentUseCase {
                                 .orElseThrow(() -> new PaymentGatewayException("Error while creating payment checkout session!", HttpStatus.INTERNAL_SERVER_ERROR)),
                         OrderedProduct::quantity
                 ));
-        System.out.println(
-                "PaymentService.initializePayment: productQuantityMap = " + productQuantityMap
-        );
 
         // Create a payment session
         Payment initializedPayment = paymentGatewayPort.createPaymentSession( new Payment(userId, orderId, orderReferenceId, PaymentStatus.PENDING, null, new HashMap<>(), null, null, 0), productQuantityMap);
 
         // Save the payment in the database
         Payment createdPayment = paymentPersistencePort.save(initializedPayment);
-        System.out.println("PaymentService.initializePayment: createdPayment = " + createdPayment);
+
         return new InitializedPayment(createdPayment.getId(), createdPayment.getPaymentGatewayMetadata().get("paymentGatewayCheckoutSessionId"));
     }
 
     @Override
     public void handlePaymentWebhook(String eventPayload, String signatureHeader, PaymentStatus paymentStatus) {
-        System.out.println("handle payment webhook: " + paymentStatus);
+
         PaymentData paymentData = paymentGatewayPort.getPaymentDataFromEvent(eventPayload, signatureHeader, paymentStatus);
 
         asyncPaymentProcessPort.processPaymentData(paymentData);

@@ -51,7 +51,6 @@ export class LoginPageComponent {
 
   onLogin(): void {
     if (this.loginForm.valid) {
-      this.userDataService.login(this.userLoginCredentials);
     }
   }
 

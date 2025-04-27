@@ -7,12 +7,14 @@ import com.instagenius.orderservice.infrastructure.rest.ErrorResponse;
 import feign.FeignException;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.List;
 
+@Slf4j
 @UtilityClass
 public class FeignExceptionUtils {
     public ErrorResponse parseErrorResponse(FeignException e) {
@@ -29,11 +31,11 @@ public class FeignExceptionUtils {
                 return objectMapper.readValue(responseBody, ErrorResponse.class);
 
             } catch (IOException ioException) {
-                System.out.println("Failed to parse error response: " + ioException.getMessage());
+                log.debug("Failed to parse error response: {}", ioException.getMessage());
                 return new ErrorResponse("Failed to parse error response", Instant.now(), List.of());
             }
         } else {
-            System.out.println("Response body is null or empty");
+            log.debug("Response body is null or empty");
             return new ErrorResponse("No response body", Instant.now(), List.of());
         }
     }

@@ -10,6 +10,7 @@ import com.instagenius.postgenerationservice.infrastructure.config.openai.*;
 import com.instagenius.postgenerationservice.infrastructure.exception.GenerationException;
 import com.instagenius.postgenerationservice.infrastructure.exception.InvalidGenerationOptionsException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.image.ImageModel;
 import org.springframework.ai.openai.OpenAiImageOptions;
@@ -20,18 +21,20 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
     private final ChatClient chatClient;
     private final ImageModel imageModel;
     private static final Integer NUMBER_OF_GENERATED_IMAGES = 1;
     private final GenerationConfig generationConfig;
+    private static final String INVALID_GENERATION_OPTIONS_ERROR_MESSAGE= "Invalid image or description generation options!";
 
     @Override
     public GeneratedDescription generateDescription(DescriptionGenerationOptions descriptionGenerationOptions) {
         if (!validateDescriptionOptions(descriptionGenerationOptions)) {
             return null;
         }
-        System.out.println("Description options are valid!");
+        log.debug("Description options are valid!");
 
         try {
             //TODO mocked response
@@ -53,7 +56,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
         if (!validateImageOptions(imageGenerationOptions)) {
             return null;
         }
-        System.out.println("Image options are valid!");
+        log.debug("Image options are valid!");
 
         OpenAiImageOptions.Builder imageOptionsBuilder = OpenAiImageOptions
                 .builder()
@@ -105,7 +108,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
     @Override
     public int calculateGenerationCost(DescriptionGenerationOptions descriptionGenerationOptions, ImageGenerationOptions imageGenerationOptions) {
         if(!validateImageOptions(imageGenerationOptions) || !validateDescriptionOptions(descriptionGenerationOptions)) {
-            throw new InvalidGenerationOptionsException("Invalid image or description generation options!");
+            throw new InvalidGenerationOptionsException(INVALID_GENERATION_OPTIONS_ERROR_MESSAGE);
         }
         Optional<ImageModelConfig> optionalImageModelConfig = generationConfig
                 .getImage()
@@ -128,7 +131,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .findFirst();
 
         if(optionalDescriptionModelConfig.isEmpty()) {
-            throw new InvalidGenerationOptionsException("Invalid image or description generation options!");
+            throw new InvalidGenerationOptionsException(INVALID_GENERATION_OPTIONS_ERROR_MESSAGE);
         }
 
         return optionalDescriptionModelConfig
@@ -138,7 +141,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
 
     private int calculateImageGenerationSizeCost(ImageGenerationOptions imageGenerationOptions, Optional<ImageModelConfig> optionalImageModelConfig) {
         if (optionalImageModelConfig.isEmpty()) {
-            throw new InvalidGenerationOptionsException("Invalid image or description generation options!");
+            throw new InvalidGenerationOptionsException(INVALID_GENERATION_OPTIONS_ERROR_MESSAGE);
         }
         Optional<SizeConfig> optionalSizeConfig = optionalImageModelConfig
                 .get()
@@ -147,7 +150,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .filter(s -> s.equals(new SizeConfig(imageGenerationOptions.size().width(), imageGenerationOptions.size().height())))
                 .findFirst();
         if (optionalSizeConfig.isEmpty()) {
-            throw new InvalidGenerationOptionsException("Invalid image or description generation options!");
+            throw new InvalidGenerationOptionsException(INVALID_GENERATION_OPTIONS_ERROR_MESSAGE);
         }
 
         return optionalSizeConfig
@@ -157,7 +160,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
 
     private int calculateImageGenerationQualityCost(ImageGenerationOptions imageGenerationOptions, Optional<ImageModelConfig> optionalImageModelConfig) {
         if (optionalImageModelConfig.isEmpty()) {
-            throw new InvalidGenerationOptionsException("Invalid image or description generation options!");
+            throw new InvalidGenerationOptionsException(INVALID_GENERATION_OPTIONS_ERROR_MESSAGE);
         }
 
         if(imageGenerationOptions.quality().quality() == null && optionalImageModelConfig.get().getQualities() == null) {
@@ -198,7 +201,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                 .getModels()
                 .stream()
                 .anyMatch(m -> m.getName().equals(generationOptionsModel));
-        System.out.println("isModelValid: " + isModelValid);
+        log.debug("isModelValid: {}", isModelValid);
         if(!isModelValid) {
             return false;
         }
@@ -223,7 +226,7 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
         boolean isSizeValid = imageModelConfig
                 .get()
                 .getSizes().contains(sizeConfig);
-        System.out.println("isSizeValid: " + isSizeValid);
+        log.debug("isSizeValid: {}", isSizeValid);
 
         boolean isQualityValid = qualities == null && generationOptionsImageQuality == null || qualities != null &&
                 qualities
@@ -231,12 +234,12 @@ class OpenAIPostGenerationAdapter implements PostGenerationOutputPort {
                         .map(QualityConfig::getName)
                         .toList()
                         .contains(generationOptionsImageQuality);
-        System.out.println("isQualityValid: " + isQualityValid);
+        log.debug("isQualityValid: {}", isQualityValid);
 
         boolean isStyleValid = styles == null && generationOptionsImageStyle == null ||
                 styles != null && styles.contains(generationOptionsImageStyle);
 
-        System.out.println("isStyleValid: " + isStyleValid);
+        log.debug("isStyleValid: {}", isStyleValid);
 
         return isSizeValid && isQualityValid && isStyleValid;
     }

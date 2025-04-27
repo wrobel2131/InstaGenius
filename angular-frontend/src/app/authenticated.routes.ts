@@ -8,6 +8,11 @@ export const authenticatedRoutes: Routes = [
   },
   {
     path: 'generator',
+    data: {
+      roles: [
+        'USER', 'ADMIN'
+      ],
+    },
     loadComponent: () =>
       import('./components/generator-page/generator-page.component').then(
         (c) => c.GeneratorPageComponent
@@ -15,6 +20,11 @@ export const authenticatedRoutes: Routes = [
   },
   {
     path: 'gallery',
+    data: {
+      roles: [
+        'USER', 'ADMIN'
+      ],
+    },
     loadComponent: () =>
       import('./components/gallery-page/gallery-page.component').then(
         (c) => c.GalleryPageComponent
@@ -22,6 +32,11 @@ export const authenticatedRoutes: Routes = [
   },
   {
     path: 'settings',
+    data: {
+      roles: [
+        'USER', 'ADMIN'
+      ],
+    },
     loadComponent: () =>
       import('./components/settings-page/settings-page.component').then(
         (c) => c.SettingPageComponent
@@ -30,6 +45,11 @@ export const authenticatedRoutes: Routes = [
   },
   {
     path: 'displayed',
+    data: {
+      roles: [
+        'USER', 'ADMIN'
+      ],
+    },
     loadComponent: () =>
       import('./components/displayed-post/displayed-post.component').then(
         (c) => c.DisplayedPostComponent
@@ -38,6 +58,11 @@ export const authenticatedRoutes: Routes = [
   },
   {
     path: 'buy-coins',
+    data: {
+      roles: [
+        'USER', 'ADMIN'
+      ],
+    },
     loadComponent: () =>
       import('./components/buy-coins-page/buy-coins-page.component').then(
         (c) => c.BuyCoinsPageComponent

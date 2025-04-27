@@ -4,12 +4,14 @@ import com.instagenius.orderservice.application.CoinManagementPort;
 import com.instagenius.orderservice.application.OrderCompletionHandler;
 import com.instagenius.orderservice.domain.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CoinPackageOrderCompletionHandler implements OrderCompletionHandler {
     private final CoinManagementPort coinManagementPort;
     @Override
@@ -19,14 +21,14 @@ public class CoinPackageOrderCompletionHandler implements OrderCompletionHandler
 
     @Override
     public void handleOrderItemCompletion(UUID userId, OrderItem orderItem) {
-        System.out.println("Handling order completion");
+        log.debug("Handling order completion");
         int coins = calculateCoinAmountFromOrder(orderItem);
 
         coinManagementPort.addCoins(userId, new AddCoins(coins, "PURCHASE"));
     }
 
     private int calculateCoinAmountFromOrder(OrderItem orderItem) {
-        System.out.println("Calculating coin amount");
+        log.debug("Calculating coin amount");
         return orderItem.getQuantity() * (Integer) orderItem.getProduct().attributes().getOrDefault("coins", 0);
     }
 }

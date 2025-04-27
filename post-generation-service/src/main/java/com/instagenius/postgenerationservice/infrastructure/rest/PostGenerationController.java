@@ -11,6 +11,7 @@ import com.instagenius.postgenerationservice.infrastructure.mapper.GeneratedImag
 import com.instagenius.postgenerationservice.infrastructure.mapper.ImageGenerationOptionsMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/generation")
+@Slf4j
 class PostGenerationController {
     private final PostGenerationUseCase postGenerationUseCase;
     private static final ImageGenerationOptionsMapper imageGenerationOptionsMapper = ImageGenerationOptionsMapper.INSTANCE;
@@ -56,7 +58,6 @@ class PostGenerationController {
 
     @PostMapping(value = "/calculate-generation-cost", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<GenerationCostResponseDto> calculateGenerationCost(@Valid @RequestBody PostGenerationOptionsDto postGenerationOptionsDto) {
-        System.out.println(generationConfig.toString());
         return ResponseEntity.ok(new GenerationCostResponseDto(
                 postGenerationUseCase.calculateGenerationCost(new PostGenerationOptions(
                         descriptionGenerationOptionsMapper.toDescriptionGenerationOptions(postGenerationOptionsDto.descriptionGenerationOptions()),

@@ -29,7 +29,6 @@ public class OrderService implements OrderUseCase {
     @Transactional
     @Override
     public CreatedOrder createOrder(List<OrderedProduct> orderedProducts, UUID userID) {
-        System.out.println("Creating order");
 
         /* Get list of ids from ordered products */
         List<UUID> productIds = orderedProducts.stream()
@@ -83,14 +82,12 @@ public class OrderService implements OrderUseCase {
 
     @Override
     public Order findOrderByUserIdAndReferenceId(UUID userId, String referenceId) {
-        System.out.println("Finding order");
         return orderPersistencePort.findOrderByUserIdAndReferenceId(userId, referenceId);
     }
 
     @Transactional
     @Override
     public void completeOrder(UUID id, CompleteOrder completeOrder) {
-        System.out.println("Completing order");
         Order order = orderPersistencePort.findOrderById(id);
         order.setStatus(OrderStatus.COMPLETED);
         order.setPaymentId(completeOrder.paymentId());
@@ -101,18 +98,15 @@ public class OrderService implements OrderUseCase {
 
         /* Perform some action to complete the order */
         completedOrder.getItems().forEach(o -> {
-            System.out.println("Handling order item");
             OrderCompletionHandler orderCompletionHandler =
                     orderCompletionHandlerFactory.getHandler(o.getProduct().type());
             orderCompletionHandler.handleOrderItemCompletion(userId, o);
         });
-        System.out.println("Order completed");
     }
 
     @Transactional
     @Override
     public void cancelOrder(UUID id, CancelOrder cancelOrder) {
-        System.out.println("Cancelling order");
         Order order = orderPersistencePort.findOrderById(id);
         order.setStatus(OrderStatus.CANCELED);
         order.setPaymentId(cancelOrder.paymentId());
@@ -122,7 +116,6 @@ public class OrderService implements OrderUseCase {
     @Transactional
     @Override
     public void failOrder(UUID id, FailOrder failOrder) {
-        System.out.println("Failing order");
         Order order = orderPersistencePort.findOrderById(id);
         order.setStatus(OrderStatus.FAILED);
         order.setPaymentId(failOrder.paymentId());

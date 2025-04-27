@@ -12,6 +12,7 @@ import com.stripe.model.checkout.Session;
 import com.stripe.net.RequestOptions;
 import com.stripe.param.checkout.SessionCreateParams;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class StripeAdapter implements PaymentGatewayPort {
     private final StripeProperties stripeProperties;
     private final EventPersistencePort eventPersistencePort;
@@ -60,7 +62,7 @@ public class StripeAdapter implements PaymentGatewayPort {
         SessionCreateParams sessionCreateParams = SessionCreateParams
                 .builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("https://example.com/success")
+                .setSuccessUrl("https://example.com/success") //TODO change urls
                 .setCancelUrl("https://example.com/cancel")
                 .addAllLineItem(lineItems)
                 .setExpiresAt(
@@ -83,20 +85,20 @@ public class StripeAdapter implements PaymentGatewayPort {
 
     @Override
     public PaymentData getPaymentDataFromEvent(String payload, String header, PaymentStatus paymentStatus) {
-        System.out.println("getting payment data from event");
+        log.debug("getting payment data from event");
         String webhookSigningKey = getValidWebhookSigningSecretKey(paymentStatus);
         com.stripe.model.Event stripeEvent = StripeApiUtils.constructEvent(payload, header, webhookSigningKey);
         String eventType = stripeEvent.getType();
-        System.out.println("event type: " + eventType);
-        System.out.println("payment status: " + paymentStatus);
+        log.debug("event type: " + eventType);
+        log.debug("payment status: " + paymentStatus);
         if(eventPersistencePort.existsByEventId(stripeEvent.getId())) {
-            System.out.println("Event already exists");
+            log.debug("Event already exists");
             return null;
         }
         if ((paymentStatus.equals(PaymentStatus.COMPLETED) && eventType.equals("payment_intent.succeeded")) ||
                 (paymentStatus.equals(PaymentStatus.CANCELLED) && eventType.equals("payment_intent.canceled")) ||
                 (paymentStatus.equals(PaymentStatus.FAILED) && eventType.equals("payment_intent.payment_failed"))) {
-            System.out.println("Valid type of event");
+            log.debug("Valid type of event");
             eventPersistencePort.saveEvent(new Event(null, stripeEvent.getId(), eventType, stripeEvent.getLivemode(),
                                                      stripeEvent.getCreated(), 0));
             Optional<StripeObject> stripeObject =
@@ -108,7 +110,7 @@ public class StripeAdapter implements PaymentGatewayPort {
                                        paymentIntent.getCancellationReason());
             }
         }
-        System.out.println("No valid type of event");
+        log.debug("No valid type of event");
         return null;
     }
 

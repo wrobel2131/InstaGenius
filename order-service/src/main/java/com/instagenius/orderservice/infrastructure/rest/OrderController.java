@@ -6,6 +6,7 @@ import com.instagenius.orderservice.infrastructure.mapper.OrderRelatedMapper;
 import com.instagenius.orderservice.infrastructure.mapper.OrderMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
+@Slf4j
 class OrderController {
     private final OrderUseCase orderUseCase;
     private static final OrderRelatedMapper orderRelatedMapper = OrderRelatedMapper.INSTANCE;
@@ -49,33 +51,33 @@ class OrderController {
     @PostMapping(value = "/{id}/complete", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> completeOrder(@PathVariable("id") UUID id, @RequestBody CompleteOrderRequestDto completeOrderRequestDto,
                                        @AuthenticationPrincipal Jwt jwt) {
-        System.out.println("completeOrder");
+        log.debug("completeOrder");
 
         orderUseCase.completeOrder(id, orderRelatedMapper.toCompleteOrder(completeOrderRequestDto));
 
-        System.out.println("completedOrder");
+        log.debug("completedOrder");
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping(value = "/{id}/cancel", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> cancelOrder(@PathVariable("id") UUID id, @RequestBody CancelOrderRequestDto cancelOrderRequestDto,
                                        @AuthenticationPrincipal Jwt jwt) {
-        System.out.println("cancelOrder");
+        log.debug("cancelOrder");
 
         orderUseCase.cancelOrder(id, orderRelatedMapper.toCancelOrder(cancelOrderRequestDto));
 
-        System.out.println("canceledOrder");
+        log.debug("canceledOrder");
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping(value = "/{id}/fail", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> failOrder(@PathVariable("id") UUID id, @RequestBody FailOrderRequestDto failOrderRequestDto,
                                      @AuthenticationPrincipal Jwt jwt) {
-        System.out.println("failOrder");
+        log.debug("failOrder");
 
         orderUseCase.failOrder(id, orderRelatedMapper.toFailOrder(failOrderRequestDto));
 
-        System.out.println("failedOrder");
+        log.debug("failedOrder");
         return ResponseEntity.noContent().build();
     }
 

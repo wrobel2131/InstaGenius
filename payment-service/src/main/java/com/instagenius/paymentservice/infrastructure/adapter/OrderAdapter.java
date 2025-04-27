@@ -10,6 +10,7 @@ import com.instagenius.paymentservice.infrastructure.mapper.OrderRelatedMapper;
 import com.instagenius.paymentservice.infrastructure.rest.OrderClient;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderAdapter implements OrderPort {
     private final OrderClient orderClient;
     private static final OrderRelatedMapper orderRelatedMapper = OrderRelatedMapper.INSTANCE;
@@ -24,10 +26,9 @@ public class OrderAdapter implements OrderPort {
     @Override
     public void completeOrder(UUID orderId, CompleteOrder completeOrder) {
         try {
-            System.out.println("Completing order...");
+            log.debug("Completing order...");
             orderClient.completeOrder(orderId, orderRelatedMapper.toCompleteOrderRequestDto(completeOrder));
         } catch(FeignException e) {
-            e.printStackTrace();
             String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
 
             throw new OrderException(errorMessage, HttpStatus.valueOf(e.status()));
@@ -37,10 +38,9 @@ public class OrderAdapter implements OrderPort {
     @Override
     public void cancelOrder(UUID orderId, CancelOrder cancelOrder) {
         try {
-            System.out.println("Cancelling order...");
+            log.debug("Cancelling order...");
             orderClient.cancelOrder(orderId, orderRelatedMapper.toCancelOrderRequestDto(cancelOrder));
         } catch(FeignException e) {
-            e.printStackTrace();
             String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
 
             throw new OrderException(errorMessage, HttpStatus.valueOf(e.status()));
@@ -50,10 +50,9 @@ public class OrderAdapter implements OrderPort {
     @Override
     public void failOrder(UUID orderId, FailOrder failOrder) {
         try {
-            System.out.println("Failing order...");
+            log.debug("Failing order...");
             orderClient.failOrder(orderId, orderRelatedMapper.toFailOrderRequestDto(failOrder));
         } catch(FeignException e) {
-            e.printStackTrace();
             String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
 
             throw new OrderException(errorMessage, HttpStatus.valueOf(e.status()));

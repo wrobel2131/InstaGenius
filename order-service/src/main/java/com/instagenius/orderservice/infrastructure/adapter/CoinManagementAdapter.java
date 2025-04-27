@@ -8,6 +8,7 @@ import com.instagenius.orderservice.infrastructure.mapper.CoinRelatedMapper;
 import com.instagenius.orderservice.infrastructure.rest.CoinManagementClient;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CoinManagementAdapter implements CoinManagementPort {
     private final CoinManagementClient coinManagementClient;
     private static final CoinRelatedMapper coinRelatedMapper = CoinRelatedMapper.INSTANCE;
@@ -22,11 +24,10 @@ public class CoinManagementAdapter implements CoinManagementPort {
     @Override
     public void addCoins(UUID userId, AddCoins addCoins) {
         try {
-            System.out.println("Calling addCoins from order service");
+            log.debug("Calling addCoins from order service");
             coinManagementClient.addCoins(userId, coinRelatedMapper.toAddCoinsDto(addCoins));
         } catch (FeignException e) {
-            System.out.println("Exception occurred while adding coins from order service");
-            e.printStackTrace();
+            log.debug("Exception occurred while adding coins from order service");
             String errorMessage = FeignExceptionUtils.parseErrorResponse(e).message();
             throw new CoinManagementException(errorMessage, HttpStatus.valueOf(e.status()));
         }

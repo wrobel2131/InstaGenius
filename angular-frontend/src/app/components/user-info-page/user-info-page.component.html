@@ -3,7 +3,7 @@
     <label
       class="control--label"
       for="username"
-      [ngClass]="!isLoginEditEnabled() ? 'label--disabled' : ''"
+      [ngClass]="!isLoginEditEnabled ? 'label--disabled' : ''"
       >{{
         "profileSettingsPage.userDataSection.userInfoPage.form.loginLabel"
           | transloco
@@ -16,7 +16,7 @@
       id="username"
       formControlName="login"
       [placeholder]="user()?.login"
-      [ngClass]="!isLoginEditEnabled() ? 'input--disabled' : ''"
+      [ngClass]="!isLoginEditEnabled ? 'input--disabled' : ''"
     />
   </div>
 
@@ -43,7 +43,7 @@
       class="control--input"
       type="text"
       name="firstName"
-      id="fitstName"
+      id="firstName"
       [placeholder]="user()?.firstName"
       formControlName="firstName"
     />

@@ -6,6 +6,7 @@ import com.instagenius.coinmanagementservice.infrastructure.exception.UserNotFou
 import com.instagenius.coinmanagementservice.infrastructure.mapper.UserBalanceMapper;
 import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,13 +19,14 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class UserBalanceRepository implements UserBalancePersistencePort {
     private final JpaUserBalanceRepository jpaUserBalanceRepository;
     private static final UserBalanceMapper userBalanceMapper = UserBalanceMapper.INSTANCE;
 
     @Override
     public UserBalance findUserBalanceByUserId(UUID userId) {
-        System.out.println("findUserBalanceByUserId: " + userId);
+        log.debug("findUserBalanceByUserId: {}", userId);
         return userBalanceMapper.toUserBalance(
                 jpaUserBalanceRepository.findUserBalanceEntityByUserId(userId)
                         .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found!"))
