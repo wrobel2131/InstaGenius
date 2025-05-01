@@ -23,6 +23,28 @@ public class UserSynchronizationService implements UserSynchronizationUseCase {
 
     @Transactional
     @Override
+    public void updateUser(UUID id, SyncUpdateUser syncUpdateUser) {
+        User user = userPersistencePort.findUserById(id);
+
+        if (syncUpdateUser.email() != null) {
+            user.setEmail(syncUpdateUser.email());
+        }
+        if (syncUpdateUser.firstName() != null) {
+            user.setFirstName(syncUpdateUser.firstName());
+        }
+        if (syncUpdateUser.lastName() != null) {
+            user.setLastName(syncUpdateUser.lastName());
+        }
+        if (syncUpdateUser.username() != null) {
+            user.setUsername(syncUpdateUser.username());
+        }
+        user.setEnabled(syncUpdateUser.enabled());
+        user.setEmailVerified(syncUpdateUser.emailVerified());
+        userPersistencePort.saveUser(user);
+    }
+
+    @Transactional
+    @Override
     public void deleteUser(UUID id) {
         userPersistencePort.deleteUser(id);
     }

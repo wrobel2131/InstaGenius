@@ -6,6 +6,7 @@ import com.instagenius.userservice.infrastructure.dto.UpdateUserAccountRequestDt
 import com.instagenius.userservice.infrastructure.exception.FailedUserUpdateException;
 import jakarta.ws.rs.NotAuthorizedException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class KeycloakAccountManagementAdapter implements KeycloakAccountManagementPort {
     private final RestTemplate restTemplate;
 
@@ -28,6 +30,7 @@ public class KeycloakAccountManagementAdapter implements KeycloakAccountManageme
     public void updateUser(UUID id, UpdateUser updateUser) {
         String accessToken = getAccessToken().orElseThrow(() -> new NotAuthorizedException("No access token " +
                                                                                                    "available!"));
+        log.info("Updating user with id {} for keycloak", id);
         String url = "http://localhost:8180/auth/realms/instagenius/account/";
         HttpEntity<UpdateUserAccountRequestDto> entity = getUpdateUserAccountEntity(
                 id, updateUser, accessToken);
