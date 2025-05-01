@@ -23,18 +23,11 @@
   flex-direction: column;
   height: calc(100% - 100px);
   justify-content: space-evenly;
-  // padding: 10% 0;
-  // gap: 20%;
 
   &__logo {
-    // height: 400px;
-    // width: 100%;
-    // margin-bottom: 50px;
 
     &-image {
       padding-right: 50px;
-      // width: 100%;
-      // height: 100%;
     }
     &-name {
       @include brand-name-mixin.brand-name-typography-styles;

@@ -1,17 +1,11 @@
 export interface User {
-  id: number;
+  id: string;
   email: string;
-  login: string;
+  username: string;
   firstName: string;
   lastName: string;
-  coins: number;
 }
 
-export type UpdateUser = Pick<
-  User,
-  'id' | 'login' | 'email' | 'firstName' | 'lastName'
->;
-
-export type UserLoginCredentials = Pick<User, 'login'> & { password: string };
-
-export type UserRegisterCredentials = Pick<User, 'email' | 'login'>;
+export type UpdateUser = {
+  [K in 'username' | 'email' | 'firstName' | 'lastName']?: string | null;
+};

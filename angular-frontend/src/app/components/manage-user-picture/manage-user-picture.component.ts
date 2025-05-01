@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { UserDataService } from '../../services/user-data.service';
+import {Component, computed, inject} from '@angular/core';
 import {TranslocoModule} from "@jsverse/transloco";
+import {UserFacade} from "../../facades/user.facade";
 
 @Component({
     selector: 'app-manage-user-picture',
@@ -10,7 +10,10 @@ import {TranslocoModule} from "@jsverse/transloco";
     styleUrl: './manage-user-picture.component.scss'
 })
 export class ManageUserPictureComponent {
-  private userDataService: UserDataService = inject(UserDataService);
+  private userFacade: UserFacade = inject(UserFacade);
 
-  user = this.userDataService.user;
+    username = computed(() => {
+        const user = this.userFacade.currentUser();
+        return user ? user.username : 'Anonymous user';
+    });
 }

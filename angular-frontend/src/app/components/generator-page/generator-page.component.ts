@@ -5,7 +5,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
-import { UserDataService } from '../../services/user-data.service';
 import {
   FormBuilder,
   FormGroup,
@@ -34,7 +33,6 @@ import {TranslocoModule} from "@jsverse/transloco";
 export class GeneratorPageComponent {
   private router: Router = inject(Router);
   private formBuilder: NonNullableFormBuilder = inject(NonNullableFormBuilder);
-  private UserDataService: UserDataService = inject(UserDataService);
 
   graphicOptionsForm: FormGroup = this.formBuilder.group({
     model: ['', Validators.required],

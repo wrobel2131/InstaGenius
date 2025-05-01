@@ -13,31 +13,7 @@
   "brandPanel": {
     "slogan": "Unlock Your Creativity",
     "joinNow": "Join Now!"
-  },
-  "loginPage": {
-    "form": {
-      "greetings": "Welcome!",
-      "emailLabel": "Email",
-      "passwordLabel": "Password",
-      "signIn": "Sign in",
-      "forgotPassword": "Forgot your password?",
-      "clickHere": "Click here!",
-      "socialLoginWith": "Login with",
-      "noAccount": "No account?"
-    }
-  },
-  "registerPage": {
-    "form": {
-      "createNewAccount": "Create new account!",
-      "emailLabel": "Email",
-      "loginLabel": "Login",
-      "passwordLabel": "Password",
-      "confirmPasswordLabel": "Confirm Password",
-      "signUp": "Sign up",
-      "haveAccount": "Already have an account?",
-      "signIn": "Sign in!"
-    }
-  },
+  }
   "generatorPage": {
     "title": "How does it work?",
     "instruction": "Start by describing the type of post you have in mind. Whether it's a product promotion, a lifestyle shot, or a motivational quote, provide a brief text description of your vision for the post.",
@@ -93,7 +69,7 @@
         "form": {
           "firstNameLabel": "Name",
           "lastNameLabel": "Surname",
-          "loginLabel": "Login",
+          "usernameLabel": "Username",
           "emailLabel": "Email",
           "passwordLabel": "Password",
           "confirmPasswordLabel": "Confirm Password"

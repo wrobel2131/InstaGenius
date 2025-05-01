@@ -20,6 +20,7 @@ import {provideTransloco} from "@jsverse/transloco";
 import {provideKC} from "./keycloak.config";
 import {includeBearerTokenInterceptor} from "keycloak-angular";
 
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),

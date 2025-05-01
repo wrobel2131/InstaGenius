@@ -1,7 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
-import { UserDataService } from '../../services/user-data.service';
 import { InstagramPost } from '../../models/instagram-post.model';
 import {TranslocoModule} from "@jsverse/transloco";
+import {UserFacade} from "../../facades/user.facade";
 
 @Component({
     selector: 'app-gallery-post-element',
@@ -11,8 +11,10 @@ import {TranslocoModule} from "@jsverse/transloco";
     styleUrl: './gallery-post-element.component.scss'
 })
 export class GalleryPostElementComponent {
-  @Input() post: InstagramPost | undefined = undefined;
-  private userDataService: UserDataService = inject(UserDataService);
+  @Input() post: InstagramPost | null = null;
+  private readonly userFacade: UserFacade = inject(UserFacade);
 
-  user = this.userDataService.user;
+  get user() {
+      return this.userFacade.currentUser();
+  }
 }
