@@ -82,8 +82,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=your-organization_your-repository
-            -Dsonar.organization=your-organization
+            -Dsonar.projectKey=wrobel2131_InstaGenius
+            -Dsonar.organization=wrobel2131
             -Dsonar.sources=.
             -Dsonar.java.binaries=*/target/classes,*/build/classes
             -Dsonar.java.libraries=*/target/dependency/*.jar
