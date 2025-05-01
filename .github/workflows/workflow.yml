@@ -101,6 +101,20 @@ jobs:
           fi
           echo "Class directories found: $CLASS_DIRS"
           echo "java_binaries=$CLASS_DIRS" >> $GITHUB_OUTPUT
+          
+          # Create a dummy JAR file if no libraries are found
+          echo "Checking for JAR libraries..."
+          JAR_COUNT=$(find . -name "*.jar" | wc -l)
+          if [ "$JAR_COUNT" -eq 0 ]; then
+            echo "No JAR files found, creating a dummy JAR"
+            mkdir -p ./dummy-lib
+            touch ./dummy-lib/dummy.jar
+            echo "java_libraries=./dummy-lib/*.jar" >> $GITHUB_OUTPUT
+          else
+            JAR_DIRS=$(find . -name "*.jar" -not -path "*/node_modules/*" | xargs dirname | sort | uniq | tr '\n' ',' | sed 's/,$//')
+            echo "JAR directories found: $JAR_DIRS"
+            echo "java_libraries=$JAR_DIRS/*.jar" >> $GITHUB_OUTPUT
+          fi
 
       # Run SonarCloud analysis for entire repository
       - name: SonarCloud Scan
@@ -115,7 +129,7 @@ jobs:
             -Dsonar.organization=wrobel2131
             -Dsonar.sources=.
             -Dsonar.java.binaries=${{ steps.find-classes.outputs.java_binaries }}
-            -Dsonar.java.libraries=*/target/dependency/*.jar
+            -Dsonar.java.libraries=${{ steps.find-classes.outputs.java_libraries }}
             -Dsonar.exclusions=**/node_modules/**,**/.github/**,**/target/**,**/.mvn/**,**/dist/**,**/generated/**,**/*.md,**/.git/**,**/keycloak-custom-themes/**
             -Dsonar.test.exclusions=**/node_modules/**,**/dist/**,**/*.md,**/.git/**
             -Dsonar.sourceEncoding=UTF-8
