@@ -22,7 +22,7 @@ public class UserController {
     private static final UserMapper userMapper = UserMapper.INSTANCE;
     private final UserUseCase userUseCase;
 
-    @GetMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/profile", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponseDto> getUserProfile(@AuthenticationPrincipal Jwt jwt) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
         return ResponseEntity.ok(
@@ -32,11 +32,12 @@ public class UserController {
         );
     }
 
-    @PatchMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
+            MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponseDto> updateUserProfile(@AuthenticationPrincipal Jwt jwt, @RequestBody
     UpdateUserRequestDto updateUserRequestDto) {
         UUID userId = getUserUUIDFromJwtToken(jwt);
-        log.debug("userId = {}", userId);
+        log.info("Updating user profile: {}", updateUserRequestDto);
         return ResponseEntity.ok(
                 userMapper.toUserResponseDto(
                         userUseCase.updateUser(userId, userMapper.toUpdateUser(updateUserRequestDto))

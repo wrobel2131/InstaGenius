@@ -76,6 +76,7 @@ public class ExternalApiUtils {
 
     public void performExternalPUTApiCall(String url, Object requestBody, KeycloakSession keycloakSession) {
         String signedAccessToken = TokenUtils.getAccessToken(keycloakSession);
+        log.debug("Signed access token: {}", signedAccessToken);
 
         HttpClient httpClient = HttpClient.newHttpClient();
 
@@ -84,13 +85,16 @@ public class ExternalApiUtils {
                     .newBuilder()
                     .uri(new URI(url))
                     .timeout(Duration.ofSeconds(10))
-                    .header("Authorization", "Bearer " + signedAccessToken)
+                    .header(AUTHORIZATION, BEARER_TOKEN + signedAccessToken)
+                    .header(CONTENT_TYPE, APPLICATION_JSON)
                     .PUT(HttpRequest.BodyPublishers.ofString(JsonSerialization.writeValueAsString(requestBody)))
                     .build();
+            log.debug("Updating user to sync user-service!");
 
-            log.debug("Updating user to user-service");
-//            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-//            log.debug("Response from API: " + response.body());
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            log.debug("Response from API: {}", response.body());
+            log.debug("Response status: {}", response.statusCode());
+
         } catch (Exception e) {
             log.debug("Exception caught: {}", e.getMessage());
             throw new InternalServerErrorException(e.getMessage());

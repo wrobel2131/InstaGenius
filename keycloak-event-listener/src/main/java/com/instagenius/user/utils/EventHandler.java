@@ -52,19 +52,18 @@ public class EventHandler {
             String userId = event.getUserId();
             String realmId = event.getRealmId();
             UserDto user = getUser(keycloakSession, userId, realmId);
-            UpdateUserDto updateUserDto = UpdateUserDto.builder()
-                    .email(user.email())
-                    .username(user.username())
-                    .firstName(user.firstName())
-                    .lastName(user.lastName())
-                    .enabled(user.enabled())
-                    .emailVerified(user.emailVerified())
-                    .build();
+            UpdateUserDto updateUserDto = new UpdateUserDto(user.username(),
+                                                            user.email(),
+                                                            user.firstName(),
+                                                            user.lastName(),
+                                                            user.emailVerified(),
+                                                            user.enabled());
 
             logger.info("Updating user");
 
-//            ExternalApiUtils.performExternalPUTApiCall(String.format("http://localhost:8080/api/v1/users/%s/%s", userId,
-//                    realmId), updateUserDto, keycloakSession);
+            ExternalApiUtils.performExternalPUTApiCall("http://host.docker.internal:8200/api/v1/sync/users/"+userId,
+                                                       updateUserDto,
+                                                        keycloakSession);
         }
     }
 

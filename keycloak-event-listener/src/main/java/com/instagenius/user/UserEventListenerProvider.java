@@ -1,6 +1,8 @@
 package com.instagenius.user;
 
 import com.instagenius.user.utils.EventHandler;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.events.Event;
 import org.keycloak.events.EventListenerProvider;
@@ -8,6 +10,7 @@ import org.keycloak.events.EventType;
 import org.keycloak.events.admin.AdminEvent;
 import org.keycloak.models.KeycloakSession;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
 @RequiredArgsConstructor
@@ -19,7 +22,6 @@ public class UserEventListenerProvider implements EventListenerProvider {
     public void onEvent(Event event) {
         EventType eventType = event.getType();
         logger.info("Event occurred: " + event.getType());
-
         switch (eventType) {
             case REGISTER -> {
                 logger.info("Register event");
@@ -41,10 +43,10 @@ public class UserEventListenerProvider implements EventListenerProvider {
 //                logger.info("Update email event");
 //                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
 //            }
-//            case UPDATE_PROFILE -> {
-//                logger.info("Update profile event");
-//                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
-//            }
+            case UPDATE_PROFILE -> {
+                logger.info("Update profile event");
+                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
+            }
 //            case VERIFY_EMAIL -> {
 //                logger.info("Verify email event");
 //                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);

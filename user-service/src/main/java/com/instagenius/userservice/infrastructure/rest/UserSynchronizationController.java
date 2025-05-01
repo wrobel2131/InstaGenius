@@ -2,6 +2,8 @@ package com.instagenius.userservice.infrastructure.rest;
 
 import com.instagenius.userservice.application.UserSynchronizationUseCase;
 import com.instagenius.userservice.infrastructure.dto.CreateUserRequestDto;
+import com.instagenius.userservice.infrastructure.dto.SyncUpdateUserRequestDto;
+import com.instagenius.userservice.infrastructure.dto.UpdateUserRequestDto;
 import com.instagenius.userservice.infrastructure.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +32,17 @@ public class UserSynchronizationController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('ROLE_EVENT_LISTENER')")
+    @PreAuthorize("hasRole('ROLE_USER_SYNC')")
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Void> updateUser(@PathVariable("id") UUID id,
+            @RequestBody SyncUpdateUserRequestDto syncUpdateUserRequestDto) {
+        log.info("updating user from kc");
+        userSynchronizationUseCase.updateUser(id, userMapper.toSyncUpdateUser(syncUpdateUserRequestDto));
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER_SYNC')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") UUID id) {
         log.info("deleting user from kc");
