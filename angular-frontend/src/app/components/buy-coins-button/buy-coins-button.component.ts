@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { UserDataService } from '../../services/user-data.service';
 import {TranslocoModule} from "@jsverse/transloco";
 
 @Component({
@@ -11,7 +10,5 @@ import {TranslocoModule} from "@jsverse/transloco";
     styleUrl: './buy-coins-button.component.scss'
 })
 export class BuyCoinsButtonComponent {
-  private userDataService: UserDataService = inject(UserDataService);
-
-  user = this.userDataService.user;
+    mockedCoins: number = 90;
 }

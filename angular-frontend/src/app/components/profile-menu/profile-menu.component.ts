@@ -2,10 +2,10 @@ import { Component, inject } from '@angular/core';
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
-import { UserDataService } from '../../services/user-data.service';
 import {TranslocoModule} from "@jsverse/transloco";
 import Keycloak from "keycloak-js";
 import {noop} from "rxjs";
+import {UserFacade} from "../../facades/user.facade";
 
 @Component({
     selector: 'app-profile-menu',
@@ -22,13 +22,20 @@ import {noop} from "rxjs";
     styleUrl: './profile-menu.component.scss'
 })
 export class ProfileMenuComponent {
-  private userDataService: UserDataService = inject(UserDataService);
+  private userFacade: UserFacade = inject(UserFacade);
   private readonly keycloak: Keycloak = inject(Keycloak);
 
-  user = this.userDataService.user;
+  get userProfile() {
+      return this.userFacade.currentUser();
+  }
+
+  get loadingUserProfile() {
+      return this.userFacade.loadingUser;
+  }
+
 
   onLogout() {
-    this.keycloak.logout({redirectUri: window.location.origin}).then(noop);
-
+      this.userFacade.clearUser();
+      this.keycloak.logout({redirectUri: window.location.origin}).then(noop);
   }
 }

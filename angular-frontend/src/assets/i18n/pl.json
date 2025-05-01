@@ -15,30 +15,7 @@
     "slogan": "Odblokuj swoją kreatywność",
     "joinNow": "Dołącz teraz!"
   },
-  "loginPage": {
-    "form": {
-      "greetings": "Witaj!",
-      "emailLabel": "Email",
-      "passwordLabel": "Hasło",
-      "signIn": "Zaloguj się",
-      "forgotPassword": "Zapomniałeś hasła?",
-      "clickHere": "Kliknij tutaj!",
-      "socialLoginWith": "Zaloguj się przez",
-      "noAccount": "Nie masz konta?"
-    }
-  },
-  "registerPage": {
-    "form": {
-      "createNewAccount": "Stwórz nowe konto!",
-      "emailLabel": "Email",
-      "loginLabel": "Login",
-      "passwordLabel": "Hasło",
-      "confirmPasswordLabel": "Potwierdź hasło",
-      "signUp": "Zarejestruj się",
-      "haveAccount": "Masz już konto?",
-      "signIn": "Zaloguj się!"
-    }
-  },
+
   "generatorPage": {
     "title": "Jak to działa?",
     "instruction": "Zacznij od opisania rodzaju postu, który masz na myśli. Czy to promocja produktu, zdjęcie lifestyle'owe, czy motywacyjny cytat, podaj krótki opis tekstowy swojej wizji posta.",
@@ -94,13 +71,10 @@
         "form": {
           "firstNameLabel": "Imię",
           "lastNameLabel": "Nazwisko",
-          "loginLabel": "Login",
-          "emailLabel": "Email",
-          "passwordLabel": "Hasło",
-          "confirmPasswordLabel": "Potwierdź hasło"
+          "usernameLabel": "Nazwa użytkownika",
+          "emailLabel": "Email"
         },
-        "upgrade": "Aktualizuj",
-        "changePassword": "Zmień hasło"
+        "upgrade": "Aktualizuj"
       },
       "billingInfoPage": {
         "tab": "Informacje o płatnościach"

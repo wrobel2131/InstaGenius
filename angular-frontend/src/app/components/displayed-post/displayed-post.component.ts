@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { GalleryPostElementComponent } from '../gallery-post-element/gallery-post-element.component';
 import { PostActionBarComponent } from '../post-action-bar/post-action-bar.component';
-import { UserDataService } from '../../services/user-data.service';
+import {InstagramPost} from "../../models/instagram-post.model";
 
 @Component({
     selector: 'app-displayed-post',
@@ -11,7 +11,5 @@ import { UserDataService } from '../../services/user-data.service';
     styleUrl: './displayed-post.component.scss'
 })
 export class DisplayedPostComponent {
-  private userDataService: UserDataService = inject(UserDataService);
-
-  selectedPost = this.userDataService.selectedPost;
+  selectedPost: InstagramPost | null = null; //TODO
 }

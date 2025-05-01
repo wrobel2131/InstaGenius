@@ -5,7 +5,7 @@
       for="username"
       [ngClass]="!isLoginEditEnabled ? 'label--disabled' : ''"
       >{{
-        "profileSettingsPage.userDataSection.userInfoPage.form.loginLabel"
+        "profileSettingsPage.userDataSection.userInfoPage.form.usernameLabel"
           | transloco
       }}</label
     >
@@ -14,8 +14,7 @@
       type="text"
       name="username"
       id="username"
-      formControlName="login"
-      [placeholder]="user()?.login"
+      formControlName="username"
       [ngClass]="!isLoginEditEnabled ? 'input--disabled' : ''"
     />
   </div>
@@ -30,7 +29,6 @@
       type="text"
       name="email"
       id="email"
-      [placeholder]="user()?.email"
       formControlName="email"
     />
   </div>
@@ -44,7 +42,6 @@
       type="text"
       name="firstName"
       id="firstName"
-      [placeholder]="user()?.firstName"
       formControlName="firstName"
     />
   </div>
@@ -58,7 +55,6 @@
       type="text"
       name="lastName"
       id="lastName"
-      [placeholder]="user()?.lastName"
       formControlName="lastName"
     />
   </div>
@@ -66,39 +62,7 @@
   <button class="upgrade" (click)="onUpgrade()">
     {{ "profileSettingsPage.userDataSection.userInfoPage.upgrade" | transloco }}
   </button>
-</form>
-<mat-divider></mat-divider>
-<form class="passwords" [formGroup]="userPasswordsForm">
-  <div class="control">
-    <label class="control--label" for="password">{{
-      "profileSettingsPage.userDataSection.userInfoPage.form.passwordLabel"
-        | transloco
-    }}</label>
-    <input
-      class="control--input"
-      type="password"
-      name="password"
-      id="password"
-      formControlName="password"
-    />
-  </div>
-  <div class="control">
-    <label class="control--label" for="confirm-password">{{
-      "profileSettingsPage.userDataSection.userInfoPage.form.confirmPasswordLabel"
-        | transloco
-    }}</label>
-    <input
-      class="control--input"
-      type="password"
-      name="confirm-password"
-      id="confirm-password"
-      formControlName="confirmPassword"
-    />
-  </div>
-  <button class="upgrade" (click)="onChangePassword()">
-    {{
-      "profileSettingsPage.userDataSection.userInfoPage.changePassword"
-        | transloco
-    }}
-  </button>
+    @if (updatingUser) {
+        <span>Updating user</span>
+    }
 </form>

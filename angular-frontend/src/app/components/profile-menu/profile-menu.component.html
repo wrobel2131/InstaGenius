@@ -5,13 +5,18 @@
 </div>
 <ng-template #menu>
   <div class="menu" cdkMenu>
-    <div class="info">
-      <p class="username__title">{{ user()?.login }}</p>
-      <p class="user">
-        <span class="user__name">{{ user()?.firstName }}&nbsp;</span
-        ><span class="user__surname">{{ user()?.lastName }}</span>
-      </p>
-    </div>
+      @if (loadingUserProfile()) {
+          <span class="username-placeholder">Loading...</span>
+      } @else if (userProfile) {
+          <div class="info">
+              <p class="username__title">{{ userProfile?.username }}</p>
+              <p class="user">
+                <span class="user__name">{{ userProfile?.firstName }}&nbsp;</span
+                ><span class="user__surname">{{ userProfile?.lastName }}</span>
+              </p>
+          </div>
+      }
+
 
     <a
       class="menu__item"

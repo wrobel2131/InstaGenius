@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import {Component, effect, inject, OnInit, signal} from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
-import { UserDataService } from '../../services/user-data.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UpdateUser } from '../../models/user.model';
 import {TranslocoModule} from "@jsverse/transloco";
+import {UserFacade} from "../../facades/user.facade";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
     selector: 'app-user-info-page',
@@ -19,46 +20,66 @@ import {TranslocoModule} from "@jsverse/transloco";
     styleUrl: './user-info-page.component.scss'
 })
 export class UserInfoPageComponent {
-  private userDataService: UserDataService = inject(UserDataService);
   private formBuilder: FormBuilder = inject(FormBuilder);
+  private userFacade: UserFacade = inject(UserFacade);
 
-  user = this.userDataService.user;
 
   isLoginEditEnabled = false;
+  private destroy$ = new Subject<void>();
 
   userDataForm = this.formBuilder.group({
-    login: [{ value: '', disabled: !this.isLoginEditEnabled }],
+    username: [{ value: '', disabled: !this.isLoginEditEnabled }],
     email: [''],
     firstName: [''],
     lastName: [''],
   });
 
-  userPasswordsForm = this.formBuilder.group({
-    password: ['', Validators.required],
-    confirmPassword: ['', Validators.required],
-  });
+    constructor() {
+        effect(() => {
+            const user = this.userFacade.currentUser();
+            if (user) {
+                console.log("effect on init, user: {}", user)
+                this.userDataForm.patchValue({
+                    username: user?.username,
+                    email: user?.email,
+                    firstName: user?.firstName,
+                    lastName: user?.lastName,
+                }, { emitEvent: false });
+            }
+        });
+    }
 
   onUpgrade(): void {
     if (this.userDataForm.valid) {
       console.log(this.userDataForm.value);
-      console.log(this.user());
-      this.userDataService.updateUser(this.updateUser);
+      console.log("Updating user");
+      const updateUser: UpdateUser = {
+          username: this.userDataForm.value.username,
+          email: this.userDataForm.value.email,
+          firstName: this.userDataForm.value.firstName,
+          lastName: this.userDataForm.value.lastName,
+      }
+      console.log(updateUser)
+      this.userFacade.updateUser(updateUser)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
+              {
+                  next: (updatedUser) => {
+                      if (updatedUser) {
+                          console.log("updated user");
+                      }
+                  }
+              }
+          );
     }
   }
 
-  onChangePassword(): void {
-    if (this.userPasswordsForm.valid) {
-      console.log(this.userPasswordsForm.value);
-    }
+  get updatingUser() {
+        return this.userFacade.updatingUser();
   }
 
-  private get updateUser(): UpdateUser {
-    return {
-      id: this.user()?.id!,
-      login: this.userDataForm.controls.login.value!,
-      email: this.userDataForm.controls.email.value!,
-      firstName: this.userDataForm.controls.firstName.value!,
-      lastName: this.userDataForm.controls.lastName.value!,
-    };
-  }
+  ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

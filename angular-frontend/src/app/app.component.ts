@@ -1,8 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {Component, OnInit, inject, OnDestroy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { slider } from './route-animations';
 import { TranslationService } from './services/translation.service';
+import {UserFacade} from "./facades/user.facade";
+import {Subscription} from "rxjs";
 
 @Component({
     selector: 'app-root',
@@ -12,11 +14,15 @@ import { TranslationService } from './services/translation.service';
     styleUrls: ['./app.component.scss'],
     animations: [slider]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+
   private translationService: TranslationService = inject(TranslationService);
+  private userFacade: UserFacade = inject(UserFacade);
+  private userFacadeSubscription!: Subscription;
 
   ngOnInit(): void {
     this.translationService.setDefaultLanguage();
+    this.userFacadeSubscription = this.userFacade.getUser().subscribe();
   }
 
   prepareRoute(outlet: RouterOutlet) {
@@ -26,4 +32,8 @@ export class AppComponent implements OnInit {
       outlet.activatedRouteData['animation']
     );
   }
+
+    ngOnDestroy(): void {
+      this.userFacadeSubscription.unsubscribe();
+    }
 }
