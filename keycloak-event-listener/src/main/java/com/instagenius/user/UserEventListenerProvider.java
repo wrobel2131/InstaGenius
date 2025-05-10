@@ -1,16 +1,13 @@
 package com.instagenius.user;
 
 import com.instagenius.user.utils.EventHandler;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.events.Event;
 import org.keycloak.events.EventListenerProvider;
 import org.keycloak.events.EventType;
 import org.keycloak.events.admin.AdminEvent;
+import org.keycloak.events.admin.OperationType;
 import org.keycloak.models.KeycloakSession;
-
-import java.util.Map;
 import java.util.logging.Logger;
 
 @RequiredArgsConstructor
@@ -27,30 +24,10 @@ public class UserEventListenerProvider implements EventListenerProvider {
                 logger.info("Register event");
                 EventHandler.handleRegisterEvent(event, keycloakSession);
             }
-            case DELETE_ACCOUNT -> {
-                logger.info("Delete account event");
-                EventHandler.handleDeleteAccountEvent(event, keycloakSession);
-            }
-//            case USER_DISABLED_BY_PERMANENT_LOCKOUT -> {
-//                logger.info("Permanent lockout user disabled event");
-//                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
-//            }
-//            case USER_DISABLED_BY_TEMPORARY_LOCKOUT -> {
-//                logger.info("Temporary lockout user disabled event");
-//                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
-//            }
-//            case UPDATE_EMAIL -> {
-//                logger.info("Update email event");
-//                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
-//            }
             case UPDATE_PROFILE -> {
                 logger.info("Update profile event");
                 EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
             }
-//            case VERIFY_EMAIL -> {
-//                logger.info("Verify email event");
-//                EventHandler.handleUpdateUserRelatedEvent(event, keycloakSession);
-//            }
             default -> logger.info("Other event occurred");
         }
     }
@@ -58,6 +35,21 @@ public class UserEventListenerProvider implements EventListenerProvider {
     @Override
     public void onEvent(AdminEvent adminEvent, boolean b) {
         logger.info("Admin Event occurred:" + adminEvent.getResourceTypeAsString());
+        logger.info("Admin event operation type: " + adminEvent.getOperationType());
+        OperationType operationType = adminEvent.getOperationType();
+        switch (operationType) {
+            case UPDATE -> {
+                logger.info("Update operation");
+                EventHandler.handleUpdateAdminRelatedEvent(adminEvent, keycloakSession);
+            }
+            case DELETE -> {
+                //TODO check if it's instagenius user so check if he has role from instagenius-frontend USER
+                logger.info("Delete operation");
+                EventHandler.handleDeleteAccountAdminRelatedEvent(adminEvent, keycloakSession);
+            }
+            default -> logger.info("Other operation occurred");
+        }
+
     }
 
     @Override
