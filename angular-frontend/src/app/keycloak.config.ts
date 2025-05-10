@@ -23,7 +23,7 @@ export const provideKC = () => provideKeycloak({
     initOptions: {
         onLoad: 'check-sso',
         // silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-        redirectUri: window.location.origin + '/dashboard',
+        redirectUri: window.location.origin,
     },
     features: [
         withAutoRefreshToken({
