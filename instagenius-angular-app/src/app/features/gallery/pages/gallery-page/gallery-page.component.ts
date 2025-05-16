@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './gallery-page.component.html',
-  styleUrl: './gallery-page.component.css'
+  styleUrl: './gallery-page.component.css',
 })
-export class GalleryPageComponent {
-
-}
+export class GalleryPageComponent {}

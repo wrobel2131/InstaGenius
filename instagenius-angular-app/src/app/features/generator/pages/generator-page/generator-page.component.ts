@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './generator-page.component.html',
-  styleUrl: './generator-page.component.css'
+  styleUrl: './generator-page.component.css',
 })
-export class GeneratorPageComponent {
-
-}
+export class GeneratorPageComponent {}

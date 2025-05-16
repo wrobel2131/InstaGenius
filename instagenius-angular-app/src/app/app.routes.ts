@@ -1,32 +1,45 @@
 import { RouteConfigLoadEnd, Routes } from '@angular/router';
 import { GuestLayoutComponent } from './core/layouts/guest-layout/guest-layout.component';
-import { GuestGuard } from './core/guards/guest.guard';
 import { ROUTES } from './routes';
 import { AuthLayoutComponent } from './core/layouts/auth-layout/auth-layout.component';
-import { AuthGuard } from './core/guards/auth.guard';
+import { canActivateGuest } from './core/guards/guest.guard';
+import { canActivateBasedOnRole } from './core/guards/role-based.guard';
 
 export const routes: Routes = [
   {
     path: '',
     component: GuestLayoutComponent,
-    canActivate: [GuestGuard],
+    canActivate: [canActivateGuest],
     children: [
       {
         path: '',
         loadComponent: () =>
+          import('./features/home/pages/home-page/home-page.component').then(
+            (c) => c.HomePageComponent
+          ),
+      },
+      {
+        path: ROUTES.CONTACT,
+        loadComponent: () =>
           import(
-            './features/landing/pages/landing-page/landing-page.component'
-          ).then((c) => c.LandingPageComponent),
+            './features/contact/pages/contact-page/contact-page.component'
+          ).then((c) => c.ContactPageComponent),
       },
     ],
   },
   {
     path: '',
     component: AuthLayoutComponent,
-    canActivate: [AuthGuard],
+    canActivate: [canActivateBasedOnRole],
+    data: {
+      roles: ['USER', 'ADMIN'],
+    },
     children: [
       {
         path: ROUTES.GENERATOR,
+        data: {
+          roles: ['USER', 'ADMIN'],
+        },
         loadComponent: () =>
           import(
             './features/generator/pages/generator-page/generator-page.component'
@@ -34,6 +47,9 @@ export const routes: Routes = [
       },
       {
         path: ROUTES.GALLERY,
+        data: {
+          roles: ['USER', 'ADMIN'],
+        },
         loadComponent: () =>
           import(
             './features/gallery/pages/gallery-page/gallery-page.component'
@@ -41,6 +57,9 @@ export const routes: Routes = [
       },
       {
         path: ROUTES.PROFILE,
+        data: {
+          roles: ['USER', 'ADMIN'],
+        },
         loadComponent: () =>
           import(
             './features/profile/pages/profile-page/profile-page.component'
@@ -48,6 +67,9 @@ export const routes: Routes = [
       },
       {
         path: ROUTES.COINS,
+        data: {
+          roles: ['USER', 'ADMIN'],
+        },
         loadComponent: () =>
           import(
             './features/coins/pages/buy-coins-page/buy-coins-page.component'

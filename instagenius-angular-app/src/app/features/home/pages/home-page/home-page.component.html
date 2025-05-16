@@ -1,0 +1,480 @@
+<div class="min-h-screen bg-gradient-to-b from-white to-purple-50">
+  <header>
+    <app-landing-header></app-landing-header>
+  </header>
+  <main>
+    <section id="hero" class="bg-white pt-20 pb-16 md:pt-24 md:pb-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">
+        <div
+          class="flex gap-2 text-purple-800 font-medium text-xs items-center rounded-3xl px-3 py-1.5 bg-purple-200 max-w-fit"
+        >
+          <i-lucide [size]="16" [img]="sparkle"></i-lucide>
+          <span>Nowość! Generowanie postów z AI</span>
+        </div>
+        <h1
+          class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight my-8"
+        >
+          Twórz
+          <span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600"
+            >urzekające</span
+          >
+          posty na Instagram z AI
+        </h1>
+        <p class="text-gray-600 text-xl">
+          Zakończ problem pustej kartki. Generuj kreatywne posty na Instagram w
+          sekundy i zwiększ swoje zasięgi dzięki sztucznej inteligencji.
+        </p>
+        <div class="flex flex-col md:flex-row gap-8 mt-6 md:mt-24">
+          <div class="md:w-1/2">
+            <a
+              (click)="onRegister()"
+              class="bg-purple-700 flex gap-2 items-center justify-center md:max-w-0 md:min-w-fit min-w-full text-white px-4 py-3 rounded-lg text-sm cursor-pointer font-medium hover:bg-purple-800 transition shadow-sm"
+            >
+              Rozpocznij za darmo
+              <i-lucide [size]="16" [img]="arrowRight"></i-lucide>
+            </a>
+            <ul class="flex justify-between items-center mt-4">
+              <li class="flex items-center gap-2 text-xs text-gray-600">
+                <i-lucide
+                  [size]="16"
+                  [img]="checkCheck"
+                  [color]="'green'"
+                ></i-lucide>
+                <span>Bez karty kredytowej </span>
+              </li>
+              <li class="flex items-center gap-1.5 text-xs text-gray-600">
+                <i-lucide
+                  [size]="16"
+                  [img]="checkCheck"
+                  [color]="'green'"
+                ></i-lucide>
+
+                <span>Darmowe generowanie</span>
+              </li>
+              <li class="flex items-center gap-1.5 text-xs text-gray-600">
+                <i-lucide
+                  [size]="16"
+                  [img]="checkCheck"
+                  [color]="'green'"
+                ></i-lucide>
+
+                <span>Przyjazny interfejs</span>
+              </li>
+            </ul>
+          </div>
+          <div class="md:w-1/2 mt-10 md:mt-0 px-4">
+            <div class="relative">
+              <div
+                class="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur opacity-30"
+              ></div>
+              <div
+                class="relative bg-white rounded-lg shadow-xl overflow-hidden"
+              >
+                <img
+                  src="assets/placeholder.jpg"
+                  alt="InstaGenius Dashboard"
+                  class="w-full h-auto"
+                />
+              </div>
+              <div
+                class="absolute -bottom-6 -right-6 bg-purple-100 rounded-lg p-4 shadow-lg"
+              >
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <i-lucide
+                      [img]="zap"
+                      [size]="34"
+                      class="text-purple-700"
+                    ></i-lucide>
+                  </div>
+                  <div class="ml-3">
+                    <p class="text-sm font-medium text-gray-900">
+                      Generuj posty 10x szybciej
+                    </p>
+                    <p class="text-xs text-gray-600">niż tradycyjne metody</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      id="features"
+      class="bg-gradient-to-b from-white to-purple-50 pt-20 pb-16 md:pt-24 md:pb-20 text-center"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4"
+        >
+          Wszystko, czego potrzebujesz do tworzenia doskonałych postów na
+          Instagram
+        </h2>
+        <p class="text-gray-600 text-xl">
+          InstaGenius łączy siłę sztucznej inteligencji z najpopularniejszymi
+          trendami na Instagramie, aby Twój profil wyróżniał się w tłumie.
+        </p>
+        <div class="grid md:grid-cols-2 gap-8 mt-8">
+          <div
+            class="bg-white rounded-md shadow-sm p-4 flex flex-col gap-3 text-left"
+          >
+            <div class="p-2 rounded-md bg-purple-100 w-fit">
+              <i-lucide
+                class="text-purple-700"
+                [size]="20"
+                [img]="sparkles"
+              ></i-lucide>
+            </div>
+            <span class="font-semibold text-md">AI Content Generator </span>
+            <p class="text-left text-gray-700 text-sm">
+              Generuj unikalne opisy postów, hashtagi i pomysły na contentu w
+              kilka sekund dzięki najnowocześniejszej sztucznej inteligencji.
+            </p>
+          </div>
+          <div
+            class="bg-white rounded-md shadow-sm p-4 flex flex-col gap-3 text-left"
+          >
+            <div class="p-2 rounded-md bg-purple-100 w-fit">
+              <i-lucide
+                class="text-purple-700"
+                [size]="20"
+                [img]="image"
+              ></i-lucide>
+            </div>
+            <span class="font-semibold text-md">Kreatywne Grafiki </span>
+            <p class="text-left text-gray-700 text-sm">
+              Twórz przyciągające wzrok grafiki dopasowane do Twojego branżowego
+              stylu i estetyki marki.
+            </p>
+          </div>
+          <div
+            class="bg-white rounded-md shadow-sm p-4 flex flex-col gap-3 text-left"
+          >
+            <div class="p-2 rounded-md bg-purple-100 w-fit">
+              <i-lucide
+                class="text-purple-700"
+                [size]="20"
+                [img]="messageSquare"
+              ></i-lucide>
+            </div>
+            <span class="font-semibold text-md">Trendy Hashtagi </span>
+            <p class="text-left text-gray-700 text-sm">
+              Automatycznie dodawaj najpopularniejsze i najbardziej trafne
+              hashtagi do swoich postów, aby zwiększyć ich widoczność.
+            </p>
+          </div>
+          <div
+            class="bg-white rounded-md shadow-sm p-4 flex flex-col gap-3 text-left"
+          >
+            <div class="p-2 rounded-md bg-purple-100 w-fit">
+              <i-lucide
+                class="text-purple-700"
+                [size]="20"
+                [img]="library"
+              ></i-lucide>
+            </div>
+            <span class="font-semibold text-md">Biblioteka Treści</span>
+            <p class="text-left text-gray-700 text-sm">
+              Zapisuj swoje wygenerowane grafiki i opisy w jednym miejscu, aby
+              łatwo wracać do najlepszych pomysłów.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      id="how-it-works"
+      class="bg-gradient-to-b from-white to-purple-50 pt-20 pb-16 md:pt-24 md:pb-20 text-center"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center"
+      >
+        <h2
+          class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4"
+        >
+          Jak działa InstaGenius?
+        </h2>
+        <p class="text-gray-600 text-xl">
+          Trzy proste kroki, które odmienią Twój Instagram
+        </p>
+
+        <div class="grid md:grid-cols-3 gap-8 mt-8 text-center mb-8">
+          <div class="p-4 flex flex-col gap-4 items-center">
+            <div
+              class="py-4 px-6 rounded-full bg-purple-100 font-bold text-purple-700"
+            >
+              1
+            </div>
+            <span class="font-semibold text-md">Podaj temat lub branżę</span>
+            <p class="text-left text-gray-700 text-sm">
+              Wpisz, o czym chcesz opublikować post. Możesz dodać szczegóły
+              dotyczące Twojej niszy lub marki.
+            </p>
+          </div>
+          <div class="p-4 flex flex-col gap-4 items-center">
+            <div
+              class="py-4 px-6 rounded-full bg-purple-100 font-bold text-purple-700"
+            >
+              2
+            </div>
+            <span class="font-semibold text-md">Personalizuj swój post </span>
+            <p class="text-left text-gray-700 text-sm">
+              Dostosuj ton, długość opisu, styl graficzny i liczbę hashtagów do
+              swoich preferencji.
+            </p>
+          </div>
+          <div class="p-4 flex flex-col gap-4 items-center">
+            <div
+              class="py-4 px-6 rounded-full bg-purple-100 font-bold text-purple-700"
+            >
+              3
+            </div>
+            <span class="font-semibold text-md">Generuj i publikuj</span>
+            <p class="text-left text-gray-700 text-sm">
+              Otrzymaj gotowy post na Instagram z opisem, hashtagami i grafiką -
+              gotowy do opublikowania!
+            </p>
+          </div>
+        </div>
+        <a
+          (click)="onRegister()"
+          class="bg-purple-700 flex gap-2 items-center justify-center md:max-w-0 md:min-w-fit min-w-full text-white px-4 py-3 rounded-lg text-sm cursor-pointer font-medium hover:bg-purple-800 transition shadow-sm"
+        >
+          Wypróbuj za darmo
+          <i-lucide [size]="16" [img]="arrowRight"></i-lucide>
+        </a>
+      </div>
+    </section>
+
+    <section
+      id="faq"
+      class="bg-gradient-to-b from-white to-purple-50 pt-20 pb-16 md:pt-24 md:pb-20 text-center"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4"
+        >
+          Często zadawane pytania
+        </h2>
+        <p class="text-gray-600 text-xl">
+          Wszystko, co musisz wiedzieć o InstaGenius
+        </p>
+        <div class="flex flex-col w-full mt-8">
+          @for (item of faqItems; track $index) {
+          <cdk-accordion-item
+            class="mb-4 rounded-2xl px-8 py-4 bg-white shadow-sm"
+            #accordionItem="cdkAccordionItem"
+          >
+            <button
+              class="flex items-center justify-between w-full cursor-pointer text-left"
+              (click)="accordionItem.toggle()"
+            >
+              <span class="font-semibold text-md">{{ item.question }}</span>
+              @if (accordionItem.expanded) {
+              <i-lucide
+                class="text-purple-700"
+                size="18"
+                [img]="chevronUp"
+              ></i-lucide>
+              } @else {
+              <i-lucide
+                class="text-purple-700"
+                size="18"
+                [img]="chevronDown"
+              ></i-lucide>
+              }
+            </button>
+            @if (accordionItem.expanded) {
+            <p class="text-left py-4 text-gray-700 text-sm">
+              {{ item.answer }}
+            </p>
+            }
+          </cdk-accordion-item>
+          }
+        </div>
+      </div>
+    </section>
+    <section
+      id="pricing"
+      class="bg-gradient-to-b from-white to-purple-50 pt-20 pb-16 md:pt-24 md:pb-20 text-center"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4"
+        >
+          Proste i przejrzyste ceny
+        </h2>
+        <p class="text-gray-600 text-xl">
+          Wybierz pakiet, który najlepiej odpowiada Twoim potrzebom
+        </p>
+        <div class="grid md:grid-cols-3 gap-8 mt-8 text-left mb-8">
+          <div
+            class="rounded-lg border border-gray-200 p-4 flex flex-col gap-3 shadow-sm"
+          >
+            <span class="font-semibold text-md">Starter</span>
+            <p class="text-left text-gray-700 text-sm">
+              Idealne dla początkujących
+            </p>
+            <p>
+              <span class="font-extrabold text-3xl">149 zł</span
+              ><span class="text-gray-700 text-sm">/miesiąc</span>
+            </p>
+            <ul class="flex flex-col gap-2">
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div
+            class="rounded-lg border border-gray-200 p-4 flex flex-col gap-3 shadow-sm"
+          >
+            <span class="font-semibold text-md">Starter</span>
+            <p class="text-left text-gray-700 text-sm">
+              Idealne dla początkujących
+            </p>
+            <p>
+              <span class="font-extrabold text-3xl">149 zł</span
+              ><span class="text-gray-700 text-sm">/miesiąc</span>
+            </p>
+            <ul class="flex flex-col gap-2">
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div
+            class="rounded-lg border border-gray-200 p-4 flex flex-col gap-3 shadow-sm"
+          >
+            <span class="font-semibold text-md">Starter</span>
+            <p class="text-left text-gray-700 text-sm">
+              Idealne dla początkujących
+            </p>
+            <p>
+              <span class="font-extrabold text-3xl">149 zł</span
+              ><span class="text-gray-700 text-sm">/miesiąc</span>
+            </p>
+            <ul class="flex flex-col gap-2">
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+              <li class="flex items-center gap-2">
+                <i-lucide [color]="'green'" [size]="16" [img]="check"></i-lucide
+                ><span class="text-gray-700 text-sm"
+                  >5 generowań miesięcznie</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      id="cto"
+      class="bg-gradient-to-r from-purple-700 to-pink-500 pt-20 pb-16 md:pt-24 md:pb-20"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center"
+      >
+        <h2
+          class="text-3xl md:text-4xl font-bold text-white leading-tight mb-4"
+        >
+          Gotowy na rewolucję na swoim Instagramie?
+        </h2>
+        <p class="text-gray-100 text-xl mb-8">
+          Dołącz do tysięcy twórców, którzy oszczędzają czas i zwiększają
+          zasięgi dzięki InstaGenius
+        </p>
+        <a
+          href=""
+          class="bg-white flex gap-2 items-center justify-center md:max-w-0 md:min-w-fit min-w-full text-purple-700 px-4 py-3 rounded-lg text-lg cursor-pointer font-medium hover:bg-gray-100 transition shadow-sm"
+        >
+          Rozpocznij za darmo
+        </a>
+      </div>
+    </section>
+  </main>
+  <app-landing-footer></app-landing-footer>
+  <button
+    (click)="scrollToTop()"
+    class="fixed bottom-8 right-8 bg-purple-700 text-white rounded-full p-3 shadow-xl hover:bg-purple-800 cursor-pointer transition"
+  >
+    <i-lucide [size]="24" [img]="arrowUp"></i-lucide>
+  </button>
+</div>

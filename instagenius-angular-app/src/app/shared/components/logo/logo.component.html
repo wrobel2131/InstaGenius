@@ -15,22 +15,23 @@
       stroke="#8b5cf6"
       [attr.stroke-width]="3"
       fill="none"
-      [ngClass]="{ 'animate-dash': isHovered }"
       stroke-dasharray="200"
       [attr.stroke-dashoffset]="isHovered ? '0' : '200'"
-      class="transition-all duration-1000"
+      class="transition-all duration-1500 ease-in-out"
     />
-
     <!-- Light bulb element with opacity animation -->
     <path
       d="M50,20 L50,30 M40,25 L45,32 M60,25 L55,32"
       stroke="#a855f7"
       stroke-width="2.5"
       stroke-linecap="round"
-      [ngClass]="{ 'opacity-100': isHovered, 'opacity-90': !isHovered }"
-      class="transition-opacity duration-700"
+      [ngClass]="{
+        'animate-glow': isHovered,
+        'opacity-90': !isHovered,
+        'opacity-100': isHovered
+      }"
+      class="transition-opacity duration-1500"
     />
-
     <!-- Center circle with bounce animation -->
     <circle
       cx="50"
@@ -39,10 +40,9 @@
       stroke="#d8b4fe"
       stroke-width="2.5"
       fill="none"
-      [ngClass]="{ 'scale-110': isHovered, 'scale-90': !isHovered }"
-      class="transition-transform duration-1000 origin-center"
+      [ngClass]="{ 'animate-pulse': isHovered }"
+      class="transform origin-center transition-transform duration-1500"
     />
-
     <!-- Brain wave element with flow animation -->
     <path
       d="M25,65 C33,75 40,60 50,70 C60,60 67,75 75,65"
@@ -51,8 +51,9 @@
       fill="none"
       stroke-linecap="round"
       [ngClass]="{
-        'opacity-100 translate-y-0': isHovered,
-        'opacity-90 translate-y-1': !isHovered
+        'animate-wave': isHovered,
+        'opacity-90 translate-y-1': !isHovered,
+        'opacity-100': isHovered
       }"
       class="transition-all duration-1500"
     />

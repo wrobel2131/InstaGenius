@@ -1,0 +1,48 @@
+<div
+  class="flex flex-col overflow-hidden rounded shadow-md"
+  [ngClass]="{
+    'border-l-4 border-green-500 bg-green-100': data.isSuccess,
+    'border-l-4 border-red-500 bg-red-100': !data.isSuccess
+  }"
+>
+  <div class="flex items-center p-4">
+    <div
+      [ngClass]="{
+        'text-green-500': data.isSuccess,
+        'text-red-500': !data.isSuccess
+      }"
+    >
+      @if (data.isSuccess) {
+      <i-lucide [img]="check" [size]="20" class="text-lg"></i-lucide>
+
+      } @else {
+      <i-lucide [img]="alert" [size]="20" class="text-lg"></i-lucide>
+
+      }
+    </div>
+
+    <div class="mx-3 text-gray-800 text-sm flex-grow">
+      {{ data.message }}
+    </div>
+
+    <button
+      *ngIf="data.dismissible"
+      class="flex-shrink-0 focus:outline-none text-gray-400 hover:text-gray-600 transition-colors duration-200"
+      mat-icon-button
+      (click)="closeDialog()"
+    >
+      <i-lucide [img]="close" [size]="20" class="text-base">close</i-lucide>
+    </button>
+  </div>
+
+  <div class="w-full h-0.5 bg-gray-100">
+    <div
+      class="h-full animate-shrink"
+      [ngClass]="{
+        'bg-green-500': data.isSuccess,
+        'bg-red-500': !data.isSuccess
+      }"
+      [@progressAnimation]="progressState"
+    ></div>
+  </div>
+</div>
