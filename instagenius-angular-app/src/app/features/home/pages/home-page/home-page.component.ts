@@ -17,6 +17,7 @@ import {
   CheckIcon,
 } from 'lucide-angular';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
+import Keycloak from 'keycloak-js';
 
 @Component({
   selector: 'app-landing-page',
@@ -45,6 +46,7 @@ export class HomePageComponent {
   readonly messageSquare = MessageSquareIcon;
   readonly library = LibraryIcon;
   readonly check = CheckIcon;
+  private readonly keycloak = inject(Keycloak);
 
   faqItems = [
     {
@@ -64,15 +66,13 @@ export class HomePageComponent {
     },
   ];
 
-  onLogin() {
-    console.log('login');
+  onLogin(): void {
+    console.log('Logging in....');
+    this.keycloak.login().then((e) => console.log('Logged in'));
   }
 
-  onRegister() {
-    console.log('register');
-  }
-
-  scrollToTop(): void {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  onRegister(): void {
+    console.log('Creating new account in....');
+    this.keycloak.register().then((e) => console.log('Created account in'));
   }
 }

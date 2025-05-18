@@ -1,1 +1,15 @@
-<router-outlet></router-outlet>
+<div class="min-h-screen bg-gradient-to-b from-white to-purple-50">
+  <header>
+    <app-landing-header></app-landing-header>
+  </header>
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+  <app-landing-footer></app-landing-footer>
+  <button
+    (click)="scrollToTop()"
+    class="fixed bottom-8 right-8 bg-purple-700 text-white rounded-full p-3 shadow-xl hover:bg-purple-800 cursor-pointer transition"
+  >
+    <i-lucide [size]="24" [img]="arrowUp"></i-lucide>
+  </button>
+</div>

@@ -1,0 +1,3 @@
+.nav-active a {
+  color: theme("colors.purple.700");
+}

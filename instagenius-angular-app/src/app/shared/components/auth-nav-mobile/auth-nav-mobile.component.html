@@ -1,0 +1,32 @@
+<nav
+  class="fixed bottom-0 w-full border-t border-gray-200 bg-white/80 z-1001 md:hidden"
+>
+  <div class="max-w-7xl mx-auto px-4 flex justify-between sm:px-6 lg:px-8 h-16">
+    <ul class="w-full px-4 py-4 flex items-center justify-between">
+      <li
+        [routerLink]="['generator']"
+        routerLinkActive="text-purple-700"
+        class="text-gray-600 hover:text-purple-700 text-xs flex flex-col items-center cursor-pointer transition"
+      >
+        <i-lucide [img]="sparkles" [size]="20"></i-lucide>
+        <span>Generator</span>
+      </li>
+      <li
+        [routerLink]="['gallery']"
+        routerLinkActive="text-purple-700"
+        class="text-gray-600 hover:text-purple-700 flex text-xs flex-col items-center cursor-pointer transition"
+      >
+        <i-lucide [img]="images" [size]="20"></i-lucide>
+        <span>Galeria</span>
+      </li>
+      <li
+        [routerLink]="['profile']"
+        routerLinkActive="text-purple-700"
+        class="text-gray-600 hover:text-purple-700 flex text-xs flex-col items-center cursor-pointer transition"
+      >
+        <i-lucide [img]="user" [size]="20"></i-lucide>
+        <span>Profil</span>
+      </li>
+    </ul>
+  </div>
+</nav>

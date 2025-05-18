@@ -1,0 +1,841 @@
+<div class="bg-gray-50 min-h-screen">
+  <!-- Nawigacja główna -->
+  <nav class="bg-white shadow-sm fixed w-full z-10">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0 flex items-center">
+            <svg viewBox="0 0 100 100" class="h-8 w-8 text-purple-600">
+              <circle
+                cx="50"
+                cy="50"
+                r="20"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+              <path
+                d="M30,50 C30,30 70,30 70,50 C70,70 30,70 30,50 Z"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+              <path
+                d="M30,50 C30,30 70,70 70,50"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+            </svg>
+            <span class="text-xl font-semibold text-gray-900 ml-2"
+              >InstaGenius</span
+            >
+          </div>
+          <div class="hidden md:flex md:ml-10 space-x-1">
+            <button
+              (click)="setActiveTab('generator')"
+              class="px-4 py-5 text-sm font-medium border-b-2 transition-colors"
+              [ngClass]="
+                activeTab === 'generator'
+                  ? 'border-purple-600 text-purple-700'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              "
+            >
+              Generator
+            </button>
+            <button
+              (click)="setActiveTab('gallery')"
+              class="px-4 py-5 text-sm font-medium border-b-2 transition-colors"
+              [ngClass]="
+                activeTab === 'gallery'
+                  ? 'border-purple-600 text-purple-700'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              "
+            >
+              Galeria
+            </button>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button
+            class="flex items-center bg-purple-100 text-purple-600 px-3 py-1.5 rounded-full text-sm font-medium"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="mr-1.5"
+            >
+              <rect width="20" height="14" x="2" y="5" rx="2" />
+              <line x1="2" x2="22" y1="10" y2="10" />
+            </svg>
+            <span>12</span>
+          </button>
+          <button class="text-gray-500 hover:text-gray-700 p-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+            </svg>
+          </button>
+          <div class="relative">
+            <button
+              (click)="toggleDropdown()"
+              class="flex items-center space-x-2 focus:outline-none"
+            >
+              <div
+                class="h-8 w-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center text-white font-medium"
+              >
+                A
+              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="text-gray-600"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+
+            <div
+              *ngIf="openDropdown"
+              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 ring-1 ring-black ring-opacity-5"
+            >
+              <button
+                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="mr-2"
+                >
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                Profil
+              </button>
+              <button
+                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="mr-2"
+                >
+                  <path
+                    d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+                  />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                Ustawienia
+              </button>
+              <div class="border-t border-gray-100 my-1"></div>
+              <button
+                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="mr-2"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" x2="9" y1="12" y2="12" />
+                </svg>
+                Wyloguj się
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Główna zawartość -->
+  <main class="pt-16 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Sekcja generatora -->
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Lewa kolumna - formularz -->
+        <div class="w-full lg:w-1/2 space-y-6">
+          <div class="bg-white rounded-xl shadow-sm p-6">
+            <h2
+              class="text-xl font-semibold text-gray-900 mb-4 flex items-center"
+            >
+              Jak to działa?
+              <button
+                class="ml-2 text-gray-400 hover:text-purple-600"
+                (click)="toggleInfo()"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                  <path d="M12 17h.01" />
+                </svg>
+              </button>
+            </h2>
+
+            <div
+              *ngIf="showInfo"
+              class="bg-purple-50 rounded-lg p-4 mb-4 text-sm text-purple-800"
+            >
+              <p>
+                Wpisz informacje o swoim poście, wybierz styl, a nasza sztuczna
+                inteligencja wygeneruje dla Ciebie idealny post na Instagram. To
+                proste!
+              </p>
+            </div>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  O czym ma być Twój post?
+                </label>
+                <textarea
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition resize-none"
+                  rows="4"
+                  placeholder="Np. nowy produkt w mojej kawiarni, sesja zdjęciowa w plenerze, porady dotyczące medytacji..."
+                ></textarea>
+              </div>
+
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 mb-1 flex items-center"
+                >
+                  Opcje graficzne
+                  <span class="ml-1 text-purple-600 text-xs font-medium"
+                    >opcjonalne</span
+                  >
+                </label>
+                <div class="space-y-3">
+                  <div
+                    class="flex items-center justify-between bg-white border border-gray-300 rounded-lg px-3 py-2"
+                  >
+                    <div class="flex items-center">
+                      <div class="text-gray-700">Motyw</div>
+                    </div>
+                    <div class="flex items-center text-gray-900">
+                      <span class="text-sm">Minimalistyczny</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="ml-1 text-gray-500"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div
+                    class="flex items-center justify-between bg-white border border-gray-300 rounded-lg px-3 py-2"
+                  >
+                    <div class="flex items-center">
+                      <div class="text-gray-700">Jakość</div>
+                    </div>
+                    <div class="flex items-center text-gray-900">
+                      <span class="text-sm">Wysoka</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="ml-1 text-gray-500"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div
+                    class="flex items-center justify-between bg-white border border-gray-300 rounded-lg px-3 py-2"
+                  >
+                    <div class="flex items-center">
+                      <div class="text-gray-700">Styl</div>
+                    </div>
+                    <div class="flex items-center text-gray-900">
+                      <span class="text-sm">Organiczny</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="ml-1 text-gray-500"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 mb-1 flex items-center"
+                >
+                  Opcje opisu
+                  <span class="ml-1 text-purple-600 text-xs font-medium"
+                    >opcjonalne</span
+                  >
+                </label>
+                <div class="space-y-3">
+                  <div
+                    class="flex items-center justify-between bg-white border border-gray-300 rounded-lg px-3 py-2"
+                  >
+                    <div class="flex items-center">
+                      <div class="text-gray-700">Ton</div>
+                    </div>
+                    <div class="flex items-center text-gray-900">
+                      <span class="text-sm">Przyjazny</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="ml-1 text-gray-500"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div
+                    class="flex items-center justify-between bg-white border border-gray-300 rounded-lg px-3 py-2"
+                  >
+                    <div class="flex items-center">
+                      <div class="text-gray-700">Długość</div>
+                    </div>
+                    <div class="flex items-center text-gray-900">
+                      <span class="text-sm">Średnia</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="ml-1 text-gray-500"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div
+                    class="flex items-center justify-between bg-white border border-gray-300 rounded-lg px-3 py-2"
+                  >
+                    <div class="flex items-center">
+                      <div class="text-gray-700">Hashtagi</div>
+                    </div>
+                    <div class="flex items-center text-gray-900">
+                      <span class="text-sm">5-10</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="ml-1 text-gray-500"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              class="w-full mt-6 py-3 px-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium rounded-lg shadow-sm transition flex items-center justify-center"
+              (click)="generatePost()"
+            >
+              Generuj post
+            </button>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-sm p-5">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-medium text-gray-900">
+                Historia generowania
+              </h2>
+              <button
+                class="text-gray-400 hover:text-gray-600"
+                (click)="clearHistory()"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M3 6h18" />
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                  <line x1="10" x2="10" y1="11" y2="17" />
+                  <line x1="14" x2="14" y1="11" y2="17" />
+                </svg>
+              </button>
+            </div>
+            <div class="space-y-3">
+              <div
+                class="flex items-center p-2 hover:bg-gray-50 rounded-lg transition"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-gray-400 mr-3"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <div class="flex-1 text-sm">
+                  Post o nowej kolekcji ubrań jesiennych
+                </div>
+                <button
+                  class="text-gray-400 hover:text-purple-600"
+                  (click)="editPost('Post o nowej kolekcji ubrań jesiennych')"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                    />
+                    <path
+                      d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="flex items-center p-2 hover:bg-gray-50 rounded-lg transition"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-gray-400 mr-3"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <div class="flex-1 text-sm">Przepis na cynamonowe bułeczki</div>
+                <button
+                  class="text-gray-400 hover:text-purple-600"
+                  (click)="editPost('Przepis na cynamonowe bułeczki')"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                    />
+                    <path
+                      d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="flex items-center p-2 hover:bg-gray-50 rounded-lg transition"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-gray-400 mr-3"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <div class="flex-1 text-sm">
+                  Porady dotyczące porannej rutyny
+                </div>
+                <button
+                  class="text-gray-400 hover:text-purple-600"
+                  (click)="editPost('Porady dotyczące porannej rutyny')"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                    />
+                    <path
+                      d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Prawa kolumna - podgląd -->
+        <div class="w-full lg:w-1/2">
+          <div class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">
+              Podgląd posta
+            </h2>
+
+            <div class="border border-gray-200 rounded-lg overflow-hidden">
+              <!-- Header posta -->
+              <div class="flex items-center p-3 border-b border-gray-100">
+                <div
+                  class="h-8 w-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center text-white font-medium"
+                >
+                  A
+                </div>
+                <div class="ml-2 text-sm font-medium">username</div>
+                <div class="ml-auto">
+                  <svg
+                    class="h-5 w-5 text-gray-500"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Obraz -->
+              <div
+                class="aspect-square bg-gray-100 flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-gray-300"
+                >
+                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                  <circle cx="9" cy="9" r="2" />
+                  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                </svg>
+              </div>
+
+              <!-- Akcje -->
+              <div
+                class="p-3 flex items-center space-x-4 border-b border-gray-100"
+              >
+                <!-- <circle cx="18" cy="5" r="3" />
+                <circle cx="6" cy="12" r="3" />
+                <circle cx="18" cy="19" r="3" />
+                <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
+                <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /> -->
+
+                <button class="text-gray-800 ml-auto">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Polubienia -->
+              <div class="px-3 pt-2 text-sm font-medium">
+                Polubione przez <span class="font-semibold">savannah</span> i
+                <span class="font-semibold">tysiące innych</span>
+              </div>
+
+              <!-- Opis -->
+              <div class="p-3">
+                <div class="text-sm">
+                  <span class="font-semibold">username:</span> Tu pojawi się
+                  wygenerowany opis posta. Wpisz temat w formularzu po lewej
+                  stronie i kliknij "Generuj post".
+                </div>
+                <div class="mt-1 text-sm text-blue-600">
+                  #hashtag1 #hashtag2 #hashtag3
+                </div>
+                <div class="mt-2 text-xs text-gray-500">
+                  Zobacz wszystkie komentarze (12)
+                </div>
+                <div class="mt-1 text-xs text-gray-400">2 GODZINY TEMU</div>
+              </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+              <button
+                class="mr-3 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition"
+                (click)="editCurrentPost()"
+              >
+                Edytuj
+              </button>
+              <button
+                class="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition shadow-sm"
+                (click)="savePost()"
+              >
+                Zapisz
+              </button>
+            </div>
+
+            <div class="mt-6 border-t border-gray-200 pt-4">
+              <h3 class="text-sm font-semibold text-gray-700 mb-3">
+                Sugestie AI
+              </h3>
+              <div class="space-y-3">
+                <div class="p-3 bg-purple-50 rounded-lg text-sm text-gray-800">
+                  <p>
+                    Dodaj pytanie na końcu posta, aby zwiększyć zaangażowanie
+                    odbiorców.
+                  </p>
+                </div>
+                <div class="p-3 bg-purple-50 rounded-lg text-sm text-gray-800">
+                  <p>
+                    Użyj emoji, aby dodać osobisty charakter i przyciągnąć
+                    uwagę.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- </div> -->
+
+  <!-- Mobilne menu nawigacyjne -->
+  <div
+    class="block md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10"
+  >
+    <div class="flex justify-around">
+      <button
+        (click)="setActiveTab('generator')"
+        class="flex flex-col items-center py-2 px-4"
+        [ngClass]="
+          activeTab === 'generator' ? 'text-purple-600' : 'text-gray-500'
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect width="7" height="9" x="3" y="3" rx="1" />
+          <rect width="7" height="5" x="14" y="3" rx="1" />
+          <rect width="7" height="9" x="14" y="12" rx="1" />
+          <rect width="7" height="5" x="3" y="16" rx="1" />
+        </svg>
+        <span class="text-xs mt-1">Generator</span>
+      </button>
+      <button
+        (click)="setActiveTab('gallery')"
+        class="flex flex-col items-center py-2 px-4"
+        [ngClass]="
+          activeTab === 'gallery' ? 'text-purple-600' : 'text-gray-500'
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+          <line x1="3" x2="21" y1="9" y2="9" />
+          <line x1="3" x2="21" y1="15" y2="15" />
+          <line x1="9" x2="9" y1="3" y2="21" />
+          <line x1="15" x2="15" y1="3" y2="21" />
+        </svg>
+        <span class="text-xs mt-1">Galeria</span>
+      </button>
+      <button class="flex flex-col items-center py-2 px-4 text-gray-500">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect width="18" height="18" x="3" y="3" rx="2" />
+          <line x1="8" x2="16" y1="3" y2="3" />
+          <line x1="12" x2="12" y1="8" y2="16" />
+          <line x1="8" x2="16" y1="12" y2="12" />
+        </svg>
+        <span class="text-xs mt-1">Kalendarz</span>
+      </button>
+      <button class="flex flex-col items-center py-2 px-4 text-gray-500">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span class="text-xs mt-1">Profil</span>
+      </button>
+    </div>
+  </div>
+</div>

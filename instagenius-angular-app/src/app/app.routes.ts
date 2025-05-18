@@ -13,6 +13,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
+        pathMatch: 'full',
         loadComponent: () =>
           import('./features/home/pages/home-page/home-page.component').then(
             (c) => c.HomePageComponent
@@ -25,6 +26,10 @@ export const routes: Routes = [
             './features/contact/pages/contact-page/contact-page.component'
           ).then((c) => c.ContactPageComponent),
       },
+      // {
+      //   path: '**',
+      //   redirectTo: '',
+      // },
     ],
   },
   {
@@ -74,6 +79,10 @@ export const routes: Routes = [
           import(
             './features/coins/pages/buy-coins-page/buy-coins-page.component'
           ).then((c) => c.BuyCoinsPageComponent),
+      },
+      {
+        path: '**',
+        redirectTo: ROUTES.GENERATOR,
       },
     ],
   },
