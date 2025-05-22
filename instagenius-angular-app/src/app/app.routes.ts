@@ -26,16 +26,12 @@ export const routes: Routes = [
             './features/contact/pages/contact-page/contact-page.component'
           ).then((c) => c.ContactPageComponent),
       },
-      // {
-      //   path: '**',
-      //   redirectTo: '',
-      // },
     ],
   },
   {
     path: '',
     component: AuthLayoutComponent,
-    canActivate: [canActivateBasedOnRole],
+    // canActivate: [canActivateBasedOnRole],
     data: {
       roles: ['USER', 'ADMIN'],
     },

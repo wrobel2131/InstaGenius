@@ -1,1 +1,108 @@
-generator poage works
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <app-generator-card class="order-1" title="Jak to działa?" hint="some hint">
+      @if (loading$()) {
+      <div class="flex justify-center my-8">
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"
+        ></div>
+      </div>
+      } @if (error$()) {
+      <div
+        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
+      >
+        {{ error$() }}
+      </div>
+      }
+
+      <form class="flex flex-col" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="mb-6 flex flex-col w-full">
+          <textarea
+            formControlName="description"
+            class="p-3 rounded-md border border-gray-300 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:ring-opacity-50 transition placeholder:text-gray-300 placeholder:font-light"
+            rows="4"
+            placeholder="What would you like your post to be about..."
+          ></textarea>
+        </div>
+
+        <div class="mb-6">
+          <h2 class="text-md font-medium mb-2">Graphic Options</h2>
+
+          <div class="flex flex-col gap-4">
+            @for (option of graphicOptions$(); track option.field) {
+            <app-select-dropdown
+              [option]="option"
+              [formControlName]="option.field"
+            >
+            </app-select-dropdown>
+            }
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <h2 class="text-md font-medium mb-2">Description Options</h2>
+          <div class="flex flex-col gap-4">
+            @for (option of descriptionOptions$(); track option.field) {
+            <app-select-dropdown
+              [option]="option"
+              [formControlName]="option.field"
+            >
+            </app-select-dropdown>
+            }
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <button
+            type="submit"
+            class="w-full bg-purple-600 text-white py-3 px-4 rounded-md hover:bg-purple-700 cursor-pointer transition duration-300 font-medium"
+            [disabled]="loading$() || !form.valid"
+          >
+            Generate Instagram Post
+          </button>
+        </div>
+      </form>
+      <!-- <form class="flex flex-col gap-4">
+          <div class="flex flex-col gap-1 w-full">
+            <label for="description" class="text-gray-900 text-sm"
+              >O czym ma być twój post?</label
+            >
+            <textarea
+              class="p-3 rounded-md border border-gray-300 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:ring-opacity-50 transition placeholder:text-gray-300 placeholder:font-light"
+              placeholder="Np. nowy produkt w mojej kawiarni, sesja zdjęciowa w plenerze, porady dotyczące medytacji..."
+              rows="5"
+            ></textarea>
+          </div>
+          <div class="flex flex-col gap-1 w-full">
+            <label for="graphic-options" class="text-gray-900 text-sm"
+              >Opcje graficzne</label
+            >
+            <input
+              type="text"
+              class="p-3 rounded-md border border-gray-300 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:ring-opacity-50 transition placeholder:text-gray-300 placeholder:font-light"
+              placeholder="Kowalski"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="bg-purple-700 self-end md:max-w-0 md:min-w-fit min-w-full text-white px-4 py-3 rounded-lg text-sm cursor-pointer font-medium hover:bg-purple-800 transition shadow-sm"
+          >
+            Wyślij wiadomość
+          </button>
+        </form> -->
+    </app-generator-card>
+    <app-generator-card class="order-3 lg:order-2" title="some titl2">
+      <p class="text-gray-700">This is some informational text content.</p>
+    </app-generator-card>
+    <app-generator-card
+      class="order-2 lg-order-3"
+      title="some title3"
+      hint="some hint"
+      ><div class="flex justify-between">
+        <div class="stats">start</div>
+        <div class="chart">wykresy</div>
+      </div></app-generator-card
+    >
+  </div>
+</div>

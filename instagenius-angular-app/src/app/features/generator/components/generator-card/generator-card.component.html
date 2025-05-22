@@ -1,0 +1,25 @@
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+  <div class="flex items-center pb-4 gap-2">
+    <h2 class="text-xl font-semibold m">
+      {{ title }}
+    </h2>
+    @if(hint) {
+    <i-lucide
+      class="cursor-pointer text-gray-400"
+      [img]="hintIcon"
+      [size]="20"
+      (mouseenter)="showTooltip = true"
+      (mouseleave)="showTooltip = false"
+    ></i-lucide>
+    @if(showTooltip) {
+    <span
+      class="absolute z-10 p-2 bg-gray-800 text-white text-xs rounded shadow-lg -mt-10 ml-40"
+      >{{ hint }}</span
+    >
+    } }
+  </div>
+
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
+</div>
