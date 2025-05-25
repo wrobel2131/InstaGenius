@@ -116,6 +116,7 @@ export class GeneratorApiService {
       description: 'some description # new #ig #koks',
       image: 'assets/image.png',
       title: 'My new journey to Wonderland',
+      creationDate: '2024-05-20',
     };
     return of(post);
   }

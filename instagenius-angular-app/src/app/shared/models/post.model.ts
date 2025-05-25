@@ -4,4 +4,5 @@ export interface Post {
   // b64Image: string,
   image: string;
   title: string;
+  creationDate: string;
 }

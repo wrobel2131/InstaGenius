@@ -1,0 +1,82 @@
+<div class="grid h-full grid-cols-1 grid-rows-10 md:grid-cols-2 md:grid-rows-8">
+  <div
+    class="overflow-hidden flex order-2 md:order-1 row-start-2 row-end-6 md:row-start-1 md:row-end-9 md:col-start-1 md:col-end-2"
+  >
+    <img class="w-full h-full object-cover" src="{{ post.image }}" alt="" />
+  </div>
+
+  <div
+    class="md:border-b md:border-b-gray-200 flex justify-between p-4 items-center order-1 md:order-2 row-start-1 row-end-2 md:row-start-1 md:row-end-2 md:col-start-2 md:col-end-3"
+  >
+    <div class="group flex items-center gap-2 cursor-pointer">
+      <div
+        class="flex justify-center items-center rounded-full w-8 h-8 overflow-hidden"
+      >
+        <img
+          src="assets/Profile_avatar_placeholder_large.png"
+          alt="Profile picture menu"
+        />
+      </div>
+      <div class="flex flex-col">
+        <span class="text-gray-900 text-sm font-bold">Username</span>
+        <span class="text-xs text-gray-400">20 maja 2024r</span>
+      </div>
+    </div>
+    <i-lucide [img]="dots" [size]="24"></i-lucide>
+  </div>
+
+  <div
+    class="md:border-b overflow-y-auto md:border-b-gray-200 px-4 md:py-4 flex flex-col items-start order-4 md:order-3 row-start-7 row-end-10 md:row-start-2 md:row-end-6 md:col-start-2 md:col-end-3"
+  >
+    <span class="md:text-2xl text-xl font-bold my-2 md:mb-4">{{
+      post.title
+    }}</span>
+    <span class="text-sm"> {{ description }} </span>
+  </div>
+
+  <div
+    class="flex flex-col order-3 md:order-4 row-start-6 row-end-7 md:row-start-6 md:row-end-8 md:col-start-2 md:col-end-3"
+  >
+    <div class="flex px-4 pt-4 pb-2 justify-between items-center">
+      <div class="flex gap-2 items-center">
+        <i-lucide [img]="heart" [size]="24"></i-lucide>
+        <div class="flex items-center gap-0.5">
+          <i-lucide [img]="comment" [size]="24"></i-lucide>
+          <span class="text-sm">4</span>
+        </div>
+
+        <i-lucide [img]="send" [size]="24"></i-lucide>
+      </div>
+      <i-lucide [img]="bookmark" [size]="24"></i-lucide>
+    </div>
+    <div class="flex flex-col text-sm px-4 font-light">
+      <p class="">
+        <span class="font-bold">Joel</span> i
+        <span class="font-bold">inni uzytkownicy</span> lubią to
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="grid grid-cols-4 items-start px-4 gap-4 justify-center order-5 md:order-5 row-start-10 row-end-11 md:row-start-8 md:row-end-9 md:col-start-2 md:col-end-3"
+  >
+    <button
+      type="button"
+      class="col-start-1 col-end-3 flex items-center justify-center gap-2 bg-purple-600 text-white py-3 px-4 rounded-md hover:bg-purple-700 cursor-pointer transition duration-300 font-medium"
+    >
+      <span>Zapisz post</span>
+    </button>
+    <button
+      type="button"
+      class="col-start-3 col-end-4 flex items-cente border border-purple-600 hover:border-purple-700 hover:bg-purple-50 justify-center gap-2 text-purple-600 py-3 px-4 rounded-md hover:text-purple-700 cursor-pointer transition duration-300 font-medium"
+    >
+      <span>Edytuj</span>
+    </button>
+    <button
+      type="button"
+      class="col-start-4 col-end-5 flex items-center border border-red-500 hover:border-red-600 hover:bg-red-50 justify-center gap-2 text-red-500 py-3 px-4 rounded-md hover:text-red-600 cursor-pointer transition duration-300 font-medium"
+    >
+      <span>Usuń</span>
+    </button>
+  </div>
+</div>

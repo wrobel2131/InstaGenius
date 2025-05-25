@@ -1,0 +1,428 @@
+<div class="max-w-7xl mx-auto px-6 py-8">
+  <!-- Page Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold mb-2">Twoja Galeria</h1>
+    <p class="text-gray-600">
+      Przeglądaj i zarządzaj swoimi wygenerowanymi postami
+    </p>
+  </div>
+
+  <!-- Search -->
+  <div class="mb-8">
+    <div class="relative max-w-md">
+      <svg
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+        />
+      </svg>
+      <input
+        type="text"
+        placeholder="Szukaj postów..."
+        class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+        [(ngModel)]="searchQuery"
+        (input)="filterPosts()"
+      />
+    </div>
+  </div>
+
+  <!-- Instagram-style Grid -->
+  <div class="grid grid-cols-3 gap-1 md:gap-2">
+    <div
+      *ngFor="let post of filteredPosts"
+      class="relative aspect-square cursor-pointer group overflow-hidden"
+      (click)="openPost(post)"
+    >
+      <img
+        [src]="post.image"
+        [alt]="post.title"
+        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+      />
+
+      <!-- Hover Overlay -->
+      <div
+        class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+      >
+        <h3 class="text-white text-center font-semibold text-lg leading-tight">
+          {{ post.title }}
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="filteredPosts.length === 0" class="text-center py-12">
+    <div
+      class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"
+    >
+      <svg
+        class="w-8 h-8 text-gray-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+        />
+      </svg>
+    </div>
+    <h3 class="text-lg font-medium text-gray-900 mb-2">Brak postów</h3>
+    <p class="text-gray-500">
+      Nie znaleziono postów pasujących do wyszukiwania.
+    </p>
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div
+  *ngIf="selectedPost"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+  (click)="closeModal()"
+>
+  <!-- Desktop Modal -->
+  <div
+    class="hidden md:flex bg-white rounded-lg overflow-hidden max-w-6xl max-h-[90vh] w-full shadow-2xl"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Image Section -->
+    <div
+      class="flex-1 bg-gray-100 flex items-center justify-center p-8 relative group"
+    >
+      <img
+        [src]="selectedPost.image"
+        [alt]="selectedPost.title"
+        class="max-w-full max-h-full object-contain rounded-lg shadow-lg transition-opacity duration-300 group-hover:opacity-75"
+      />
+
+      <!-- Image Hover Overlay -->
+      <div
+        class="absolute inset-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+      >
+        <div
+          class="bg-white bg-opacity-95 rounded-lg p-6 text-center shadow-lg"
+        >
+          <svg
+            class="w-12 h-12 text-purple-600 mx-auto mb-3"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          <p class="text-gray-700 font-medium mb-2">
+            Kliknij, aby zmienić zdjęcie
+          </p>
+          <p class="text-sm text-gray-500">
+            Obsługiwane formaty: JPG, PNG, GIF
+          </p>
+        </div>
+      </div>
+
+      <!-- Invisible File Input Trigger -->
+      <input
+        type="file"
+        #fileInput
+        accept="image/*"
+        (change)="onImageSelected($event)"
+        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+      />
+    </div>
+
+    <!-- Content Section -->
+    <div class="w-96 flex flex-col bg-white">
+      <!-- Header -->
+      <div
+        class="flex items-center justify-between p-6 border-b border-gray-200"
+      >
+        <div class="flex items-center gap-3">
+          <img
+            [src]="selectedPost.userAvatar"
+            [alt]="selectedPost.username"
+            class="w-10 h-10 rounded-full object-cover"
+          />
+          <div>
+            <div class="font-semibold text-gray-900">
+              {{ selectedPost.username }}
+            </div>
+            <div class="text-sm text-gray-500">
+              {{ formatDate(selectedPost.date) }}
+            </div>
+          </div>
+        </div>
+        <button
+          (click)="closeModal()"
+          class="text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Post Content -->
+      <div class="flex-1 p-6 overflow-y-auto">
+        <!-- Title -->
+        <div class="mb-6">
+          <div *ngIf="!isEditMode">
+            <h2 class="text-xl font-bold text-gray-900">
+              {{ selectedPost.title }}
+            </h2>
+          </div>
+
+          <div *ngIf="isEditMode">
+            <input
+              [(ngModel)]="editedTitle"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg font-semibold"
+              placeholder="Wpisz tytuł posta..."
+            />
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-6">
+          <div *ngIf="!isEditMode" class="text-gray-700 leading-relaxed">
+            {{ selectedPost.description }}
+          </div>
+
+          <div *ngIf="isEditMode">
+            <textarea
+              [(ngModel)]="editedDescription"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+              rows="6"
+              placeholder="Wpisz opis posta..."
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="border-t border-gray-200 p-6">
+        <div class="flex gap-3">
+          <button
+            (click)="savePost()"
+            class="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+          >
+            Zapisz post
+          </button>
+          <button
+            (click)="toggleEditMode()"
+            class="px-4 py-2 border border-purple-300 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors font-medium"
+          >
+            {{ isEditMode ? "Anuluj" : "Edytuj" }}
+          </button>
+          <button
+            (click)="deletePost()"
+            class="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors font-medium"
+          >
+            Usuń
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Modal -->
+  <div
+    class="md:hidden bg-white w-full h-full flex flex-col"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Header -->
+    <div
+      class="flex items-center justify-between p-4 bg-white border-b border-gray-200"
+    >
+      <button (click)="closeModal()" class="text-gray-600">
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+      <span class="font-semibold text-gray-900">{{ selectedPost.title }}</span>
+      <button class="text-gray-600">
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- User Info -->
+    <div class="flex items-center gap-3 p-4 bg-white border-b border-gray-200">
+      <img
+        [src]="selectedPost.userAvatar"
+        [alt]="selectedPost.username"
+        class="w-10 h-10 rounded-full object-cover"
+      />
+      <div class="flex-1">
+        <div class="font-semibold text-gray-900">
+          {{ selectedPost.username }}
+        </div>
+        <div class="text-sm text-gray-500">
+          {{ formatDate(selectedPost.date) }}
+        </div>
+      </div>
+      <button
+        (click)="toggleMobileEdit()"
+        class="text-purple-600 font-medium text-sm"
+      >
+        {{ isMobileEditMode ? "Anuluj" : "Edytuj" }}
+      </button>
+    </div>
+
+    <!-- Image -->
+    <div
+      class="flex-1 flex items-center justify-center bg-gray-100 p-4 relative group"
+    >
+      <img
+        [src]="selectedPost.image"
+        [alt]="selectedPost.title"
+        class="max-w-full max-h-full object-contain rounded-lg transition-opacity duration-300 group-hover:opacity-75"
+      />
+
+      <!-- Mobile Image Hover Overlay -->
+      <div
+        class="absolute inset-4 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+      >
+        <div
+          class="bg-white bg-opacity-95 rounded-lg p-4 text-center shadow-lg"
+        >
+          <svg
+            class="w-8 h-8 text-purple-600 mx-auto mb-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          <p class="text-sm text-gray-700 font-medium">Zmień zdjęcie</p>
+        </div>
+      </div>
+
+      <!-- Mobile File Input -->
+      <input
+        type="file"
+        #mobileFileInput
+        accept="image/*"
+        (change)="onImageSelected($event)"
+        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+      />
+    </div>
+
+    <!-- Content Section -->
+    <div class="bg-white border-t border-gray-200">
+      <!-- Title Display/Edit -->
+      <div class="p-4 border-b border-gray-100">
+        <div *ngIf="!isMobileEditMode">
+          <h2 class="text-lg font-bold text-gray-900">
+            {{ selectedPost.title }}
+          </h2>
+        </div>
+        <div *ngIf="isMobileEditMode" class="mb-3">
+          <label class="block text-sm font-medium text-gray-700 mb-2"
+            >Tytuł</label
+          >
+          <input
+            [(ngModel)]="editedTitle"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            placeholder="Wpisz tytuł posta..."
+          />
+        </div>
+      </div>
+
+      <!-- Description Section -->
+      <div class="p-4">
+        <div *ngIf="!isMobileEditMode" class="text-gray-700 mb-4">
+          <span class="font-semibold text-gray-900">{{
+            selectedPost.username
+          }}</span>
+          <span class="ml-2">{{ selectedPost.description }}</span>
+        </div>
+
+        <div *ngIf="isMobileEditMode" class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2"
+            >Opis</label
+          >
+          <textarea
+            [(ngModel)]="editedDescription"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+            rows="4"
+            placeholder="Wpisz opis posta..."
+          ></textarea>
+        </div>
+
+        <!-- Mobile Edit Buttons -->
+        <div *ngIf="isMobileEditMode" class="flex gap-2 mb-4">
+          <button
+            (click)="saveMobileEdit()"
+            class="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg font-medium text-sm"
+          >
+            Zapisz post
+          </button>
+          <button
+            (click)="cancelMobileEdit()"
+            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium text-sm"
+          >
+            Anuluj
+          </button>
+        </div>
+
+        <!-- Delete Button for Mobile -->
+        <div *ngIf="!isMobileEditMode" class="pt-2">
+          <button
+            (click)="deletePost()"
+            class="w-full px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors font-medium text-sm"
+          >
+            Usuń post
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

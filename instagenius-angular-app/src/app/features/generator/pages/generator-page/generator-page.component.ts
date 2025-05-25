@@ -10,9 +10,16 @@ import {
 import { GeneratorFacade } from '../../facades/generator.facade';
 import { GeneratorOption } from '../../models/generation-option.model';
 import {
+  BookmarkIcon,
   CheckIcon,
   ChevronDownIcon,
+  EllipsisIcon,
+  HeartIcon,
   LucideAngularModule,
+  MessageCircle,
+  MessageCircleIcon,
+  SendIcon,
+  WandSparklesIcon,
 } from 'lucide-angular';
 import { SelectDropdownComponent } from '../../components/select-dropdown/select-dropdown.component';
 
@@ -32,6 +39,15 @@ import { SelectDropdownComponent } from '../../components/select-dropdown/select
 export class GeneratorPageComponent implements OnInit {
   chevronDown = ChevronDownIcon;
   check = CheckIcon;
+  dots = EllipsisIcon;
+  bookmark = BookmarkIcon;
+  heart = HeartIcon;
+  comment = MessageCircleIcon;
+  send = SendIcon;
+  generateWand = WandSparklesIcon;
+
+  username = 'dwrb21';
+  description = 'Czego chcieć więcej. Jakis tam opis #landscape';
 
   form!: FormGroup;
   private fb = inject(FormBuilder);
@@ -55,7 +71,6 @@ export class GeneratorPageComponent implements OnInit {
     effect(() => {
       const formData = this.formData$();
       if (this.form && Object.keys(formData).length > 0) {
-        // Update form values without triggering valueChanges
         this.form.patchValue(formData, { emitEvent: false });
       }
     });

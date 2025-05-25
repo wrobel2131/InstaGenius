@@ -1,4 +1,6 @@
-<nav class="fixed w-full backdrop-blur-md bg-white/80 z-1001 shadow-sm">
+<nav
+  class="fixed left-0 top-0 w-full backdrop-blur-md bg-white/80 z-10 shadow-sm"
+>
   <div class="max-w-7xl mx-auto px-4 flex justify-between sm:px-6 lg:px-8 h-16">
     <div class="flex gap-8">
       <div routerLink="/" class="flex items-center cursor-pointer">
@@ -57,7 +59,7 @@
         <i-lucide
           class="text-gray-700 group-hover:text-gray-800 transition"
           [img]="notifications"
-          [size]="20"
+          [size]="24"
         ></i-lucide>
         <div
           *ngIf="notificationCount > 0"

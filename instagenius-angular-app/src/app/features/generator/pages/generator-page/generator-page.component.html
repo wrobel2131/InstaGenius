@@ -1,6 +1,6 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <app-generator-card class="order-1" title="Jak to działa?" hint="some hint">
+    <app-generator-card title="Generuj" hint="some hint">
       @if (loading$()) {
       <div class="flex justify-center my-8">
         <div
@@ -17,6 +17,7 @@
 
       <form class="flex flex-col" [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="mb-6 flex flex-col w-full">
+          <h2 class="text-md font-medium mb-2">O czym ma być Twój post?</h2>
           <textarea
             formControlName="description"
             class="p-3 rounded-md border border-gray-300 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:ring-opacity-50 transition placeholder:text-gray-300 placeholder:font-light"
@@ -55,54 +56,60 @@
         <div class="mt-8">
           <button
             type="submit"
-            class="w-full bg-purple-600 text-white py-3 px-4 rounded-md hover:bg-purple-700 cursor-pointer transition duration-300 font-medium"
+            class="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-3 px-4 rounded-md hover:bg-purple-700 cursor-pointer transition duration-300 font-medium"
             [disabled]="loading$() || !form.valid"
           >
-            Generate Instagram Post
+            <span>Generate post</span>
+            <i-lucide [img]="generateWand" [size]="20"></i-lucide>
           </button>
         </div>
       </form>
-      <!-- <form class="flex flex-col gap-4">
-          <div class="flex flex-col gap-1 w-full">
-            <label for="description" class="text-gray-900 text-sm"
-              >O czym ma być twój post?</label
+    </app-generator-card>
+    <app-generator-card title="Podgląd posta">
+      <div class="border border-gray-200 rounded-sm flex flex-col">
+        <div class="flex justify-between p-4 items-center">
+          <div class="group flex items-center gap-2 cursor-pointer">
+            <div
+              class="flex justify-center items-center rounded-full w-8 h-8 overflow-hidden"
             >
-            <textarea
-              class="p-3 rounded-md border border-gray-300 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:ring-opacity-50 transition placeholder:text-gray-300 placeholder:font-light"
-              placeholder="Np. nowy produkt w mojej kawiarni, sesja zdjęciowa w plenerze, porady dotyczące medytacji..."
-              rows="5"
-            ></textarea>
+              <img
+                src="assets/Profile_avatar_placeholder_large.png"
+                alt="Profile picture menu"
+              />
+            </div>
+            <div class="flex flex-col">
+              <span class="text-gray-900 text-sm font-bold">Username</span>
+              <span class="text-xs text-gray-400">20 maja 2024r</span>
+            </div>
           </div>
-          <div class="flex flex-col gap-1 w-full">
-            <label for="graphic-options" class="text-gray-900 text-sm"
-              >Opcje graficzne</label
-            >
-            <input
-              type="text"
-              class="p-3 rounded-md border border-gray-300 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:ring-opacity-50 transition placeholder:text-gray-300 placeholder:font-light"
-              placeholder="Kowalski"
-            />
-          </div>
+          <i-lucide [img]="dots" [size]="24"></i-lucide>
+        </div>
+        <div class="aspect-square w-full overflow-hidden">
+          <img src="assets/image.png" alt="" />
+        </div>
+        <div class="flex p-4 justify-between items-center">
+          <div class="flex gap-3 items-center">
+            <i-lucide [img]="heart" [size]="24"></i-lucide>
+            <div class="flex items-center gap-0.5">
+              <i-lucide [img]="comment" [size]="24"></i-lucide>
+              <span class="text-sm">4</span>
+            </div>
 
-          <button
-            type="submit"
-            class="bg-purple-700 self-end md:max-w-0 md:min-w-fit min-w-full text-white px-4 py-3 rounded-lg text-sm cursor-pointer font-medium hover:bg-purple-800 transition shadow-sm"
-          >
-            Wyślij wiadomość
-          </button>
-        </form> -->
+            <i-lucide [img]="send" [size]="24"></i-lucide>
+          </div>
+          <i-lucide [img]="bookmark" [size]="24"></i-lucide>
+        </div>
+        <div class="flex flex-col text-sm px-4 pb-4 font-light">
+          <p class="">
+            <span class="font-bold">Joel</span> i
+            <span class="font-bold">inni uzytkownicy</span> lubią to
+          </p>
+          <p>
+            <span class="font-bold">{{ username }}</span> {{ description }}
+          </p>
+          <span class="text-xs text-gray-300 mt-1"> 1 godz. temu</span>
+        </div>
+      </div>
     </app-generator-card>
-    <app-generator-card class="order-3 lg:order-2" title="some titl2">
-      <p class="text-gray-700">This is some informational text content.</p>
-    </app-generator-card>
-    <app-generator-card
-      class="order-2 lg-order-3"
-      title="some title3"
-      hint="some hint"
-      ><div class="flex justify-between">
-        <div class="stats">start</div>
-        <div class="chart">wykresy</div>
-      </div></app-generator-card
-    >
   </div>
 </div>

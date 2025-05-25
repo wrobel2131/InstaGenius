@@ -1,0 +1,9 @@
+.custom-backdrop {
+  z-index: 998 !important;
+  background-color: red;
+}
+
+.custom-dialog-container {
+  z-index: 999 !important; /* Niższy niż header */
+  background-color: red;
+}
